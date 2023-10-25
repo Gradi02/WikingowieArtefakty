@@ -21,7 +21,7 @@ public class InGame_UI : MonoBehaviour
 {
     public List<GameObject> ResourceSidebar;
     public List<TextMeshProUGUI> names;
-    public List<Image> buildings;
+    
     void Start()
     {
         Debug.Log(ResourceSidebar.Count);
