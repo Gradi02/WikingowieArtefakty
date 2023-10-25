@@ -108,4 +108,9 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
+
+    public List<GameObject> GetGroundBlocks()
+    {
+        return ground;
+    }
 }
