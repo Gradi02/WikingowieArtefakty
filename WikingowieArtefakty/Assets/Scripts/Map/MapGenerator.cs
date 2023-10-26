@@ -9,14 +9,35 @@ public class MapGenerator : MonoBehaviour
     private int seed;
     public int middleRadius;
     [Range(0, 0.5f)] public float treeOffset;
+    public int islandLevel;
 
     [Header("Base 1")]
     public GameObject[] blocks_prefabs1;
     public GameObject[] ground_prefabs1;
     public Material defaultMaterial1;
 
+    [Header("Base 2")]
+    public GameObject[] blocks_prefabs2;
+    public GameObject[] ground_prefabs2;
+    public Material defaultMaterial2;
+
+    [Header("Base 3")]
+    public GameObject[] blocks_prefabs3;
+    public GameObject[] ground_prefabs3;
+    public Material defaultMaterial3;
+
+    [Header("Base 4")]
+    public GameObject[] blocks_prefabs4;
+    public GameObject[] ground_prefabs4;
+    public Material defaultMaterial4;
+
+    [Header("Base 5")]
+    public GameObject[] blocks_prefabs5;
+    public GameObject[] ground_prefabs5;
+    public Material defaultMaterial5;
+
     [Header("Others")]
-    public GameObject firstLayer;
+    public GameObject waterLayer;
     public GameObject cam;
 
     private GameObject start;
@@ -30,6 +51,7 @@ public class MapGenerator : MonoBehaviour
         seed = Random.Range(100, 9999);
         Debug.Log("Seed: " + seed);
 
+        if(islandLevel < 1 || islandLevel > 5) islandLevel = 1;
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
         GenerateWorld();
         SetMiddleMap();
@@ -37,8 +59,8 @@ public class MapGenerator : MonoBehaviour
 
     void GenerateWorld()
     {
-        firstLayer.transform.localScale = new Vector3(size/10,size/10,size/10);
-        firstLayer.transform.position = middle + new Vector3(0,-1.25f,0);
+        waterLayer.transform.localScale = new Vector3(size/5,size/5,size/5);
+        waterLayer.transform.position = middle + new Vector3(0,0,0);
         cam.transform.position = middle;
         cam.transform.position += new Vector3(0, 20, -20);
 
@@ -71,13 +93,17 @@ public class MapGenerator : MonoBehaviour
                         ground.Add(gr);
                     }
                 }
-                else if(id == 0)
+                else if (id == 0)
                 {
-                    GameObject gr = Instantiate(ground_prefabs1[3], transform.position, Quaternion.identity, start.transform);
-                    gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                    gr.name = "Ground" + x + y;
-                    ground.Add(gr);
+                    if (x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6)
+                    {
+                        GameObject gr = Instantiate(ground_prefabs1[ground_prefabs1.Length-1], transform.position, Quaternion.identity, start.transform);
+                        gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                        gr.name = "Ground" + x + y;
+                        ground.Add(gr);
+                    }
                 }
+
             }
         }
     }
@@ -86,9 +112,9 @@ public class MapGenerator : MonoBehaviour
     {
         float nx = (seed + x * 0.15f);
         float ny = (seed + y * 0.15f);
-        float perlin = Mathf.PerlinNoise(nx, ny) * 4;
+        float perlin = Mathf.PerlinNoise(nx, ny) * (blocks_prefabs1.Length+1);
 
-        return Mathf.Clamp(Mathf.FloorToInt(perlin), 0, 3);
+        return Mathf.Clamp(Mathf.FloorToInt(perlin), 0, blocks_prefabs1.Length);
     }
     void SetMiddleMap()
     {

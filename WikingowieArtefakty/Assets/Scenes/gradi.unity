@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 663216416}
   - component: {fileID: 663216415}
   m_Layer: 0
-  m_Name: FirstLayer
+  m_Name: WaterLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -290,7 +290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bba72c04a9484584a8e364bcbf6728f4, type: 2}
+  - {fileID: 2100000, guid: 53b2426bfe020c2449fb12cdf53890dc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -367,17 +367,32 @@ MonoBehaviour:
   size: 70
   middleRadius: 10
   treeOffset: 0.215
+  islandLevel: 0
   blocks_prefabs1:
   - {fileID: 3011893055005935424, guid: 7bc1d3857b3b6254d9c0391636a195cb, type: 3}
   - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
   - {fileID: 843265801024923960, guid: 5b601b70a02071346a76638125880ffa, type: 3}
+  - {fileID: 843265801024923960, guid: d15d8c80bf755ce44b3242515764c953, type: 3}
   ground_prefabs1:
-  - {fileID: 7353198989879196355, guid: 7ddc7873990feb54bafe2afaca875191, type: 3}
-  - {fileID: 3346332780006226273, guid: 87dfb2f23474b7a4283d0d4c0c48f5fc, type: 3}
-  - {fileID: 3346332780006226273, guid: 87dfb2f23474b7a4283d0d4c0c48f5fc, type: 3}
-  - {fileID: 8524941574229280610, guid: 3572114857b276d4f8b6548d69c19b81, type: 3}
+  - {fileID: 4936650255284283978, guid: 1f352037363b89448b47a16d0ae8ee86, type: 3}
+  - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
+  - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
+  - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
+  - {fileID: 3776711458049546244, guid: 6f7eded46b427cc4787340143c36676b, type: 3}
   defaultMaterial1: {fileID: 2100000, guid: ce5f931a2ce87b34aab92adb7d90041a, type: 2}
-  firstLayer: {fileID: 663216414}
+  blocks_prefabs2: []
+  ground_prefabs2: []
+  defaultMaterial2: {fileID: 0}
+  blocks_prefabs3: []
+  ground_prefabs3: []
+  defaultMaterial3: {fileID: 0}
+  blocks_prefabs4: []
+  ground_prefabs4: []
+  defaultMaterial4: {fileID: 0}
+  blocks_prefabs5: []
+  ground_prefabs5: []
+  defaultMaterial5: {fileID: 0}
+  waterLayer: {fileID: 663216414}
   cam: {fileID: 261472641}
 --- !u!4 &988246188
 Transform:
