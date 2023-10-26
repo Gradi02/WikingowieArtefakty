@@ -411,6 +411,7 @@ MonoBehaviour:
   defaultMaterial5: {fileID: 0}
   waterLayer: {fileID: 663216414}
   player: {fileID: 2028137014}
+  air: {fileID: 3945946977855608217, guid: 1a9aa9d5d8031b543b9de3e153aba9fb, type: 3}
 --- !u!4 &988246188
 Transform:
   m_ObjectHideFlags: 0
