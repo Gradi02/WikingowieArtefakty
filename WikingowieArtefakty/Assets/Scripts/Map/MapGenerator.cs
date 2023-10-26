@@ -38,7 +38,7 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Others")]
     public GameObject waterLayer;
-    public GameObject cam;
+    public GameObject player;
 
     private GameObject start;
     private Vector3 middle;
@@ -61,8 +61,6 @@ public class MapGenerator : MonoBehaviour
     {
         waterLayer.transform.localScale = new Vector3(size/5,size/5,size/5);
         waterLayer.transform.position = middle + new Vector3(0,0,0);
-        cam.transform.position = middle;
-        cam.transform.position += new Vector3(0, 20, -20);
 
         for (int x = 0; x < size; x++)
         {
@@ -106,6 +104,8 @@ public class MapGenerator : MonoBehaviour
 
             }
         }
+
+        player.GetComponent<PlayerMovement>().SetStartPosition(middle);
     }
 
     int GetIdPerlinNoise(int x, int y)
