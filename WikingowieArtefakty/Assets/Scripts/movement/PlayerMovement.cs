@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
             Vector3 direction = new Vector3(Vertical, 0, -Horizontal);
 
-            transform.Translate(direction * speed * Time.deltaTime);
+            transform.position += direction * speed * Time.deltaTime;
             SetRotation();
         }
     }

@@ -39,11 +39,13 @@ public class MapGenerator : MonoBehaviour
     [Header("Others")]
     public GameObject waterLayer;
     public GameObject player;
+    public GameObject air;
 
     private GameObject start;
     private Vector3 middle;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
+    private List<GameObject> airBlocks = new List<GameObject>();
 
     private void Start()
     {
@@ -95,10 +97,18 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6)
                     {
-                        GameObject gr = Instantiate(ground_prefabs1[ground_prefabs1.Length-1], transform.position, Quaternion.identity, start.transform);
+                        GameObject gr = Instantiate(ground_prefabs1[ground_prefabs1.Length - 1], transform.position, Quaternion.identity, start.transform);
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
+
+                    }
+                    else
+                    {
+                        GameObject a = Instantiate(air, transform.position, Quaternion.identity, start.transform);
+                        a.transform.localPosition = new Vector3(x, 0.25f, y);
+                        a.name = "Air" + x + y;
+                        airBlocks.Add(a);
                     }
                 }
 
