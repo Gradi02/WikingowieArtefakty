@@ -73,11 +73,13 @@ public class MapGenerator : MonoBehaviour
 
                 if (x <= 3 || y <= 3 || x >= size - 3 || y >= size - 3) id = 0;
                 if ((x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6) && id > 1) id = 1;
+                //Debug.Log("Odleglosc: " + Vector3.Distance(middle, new Vector3(x,0,y)) + " middle: " + middle + " x,y: " + x + ";" + y);
+                if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) id = 1;
 
                 if (id > 0)
                 {
                     GameObject new_obj = Instantiate(blocks_prefabs1[id - 1], transform.position, Quaternion.identity, start.transform);
-                    new_obj.transform.localPosition = new Vector3(x, 0.25f, y);
+                    new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
                     new_obj.name = "Object" + x + y;
 
                     if (id == 1 && ifTree == 1) Destroy(new_obj);
@@ -101,7 +103,6 @@ public class MapGenerator : MonoBehaviour
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
-
                     }
                     else
                     {
