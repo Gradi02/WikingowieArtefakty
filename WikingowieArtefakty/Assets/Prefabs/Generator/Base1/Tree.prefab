@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3879761137711635855}
   - component: {fileID: 7357017359272615485}
   - component: {fileID: 2989547976420484110}
+  - component: {fileID: 5052313509000474704}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -103,5 +104,22 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5052313509000474704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3011893055005935424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 730f2898ac6a4fa46a3caa4f3a6bf004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxBreakStatus: 3
+  breakingTool: 0
+  maxNumberOfLoot: 2
+  loot: {fileID: 1855252431164562674, guid: b365db96e87439f48b9e5902287dd53a, type: 3}
+  destroyParticles: {fileID: 3066103022588316011, guid: 83d4c8cc9baacfb4686c9a34a462a10e, type: 3}

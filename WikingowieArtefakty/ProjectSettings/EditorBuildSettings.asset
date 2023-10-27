@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/gradi.unity
+    guid: 75835b4113a4c0f4caa5a3e7778907d2
   m_configObjects: {}
