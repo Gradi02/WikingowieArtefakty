@@ -29,16 +29,21 @@ public class PlayerMovement : MonoBehaviour
             Horizontal = Input.GetAxis("Horizontal");
             Vertical = Input.GetAxis("Vertical");
 
-            direction = new Vector3(Vertical, 0, -Horizontal);
-            Vector3 targtPos = transform.position + speed * Time.deltaTime * direction;
+            direction = new Vector3(Vertical, 0, -Horizontal).normalized;
+            
+            if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed, ForceMode.Force);
+            
+            Debug.Log(rb.velocity);
+            if (Mathf.Abs(rb.velocity.x) > 4 || Mathf.Abs(rb.velocity.z) > 4) rb.mass = 1.5f;
+            else rb.mass = 1f;
 
+            SetRotation(direction);
+
+            //Vector3 targtPos = transform.position + speed * Time.deltaTime * direction;
             //transform.position += direction * speed * Time.deltaTime;
             //rb.velocity = new Vector2(targtPos.x, targtPos.z);
             //rb.MovePosition(targtPos);
-            //rb.AddForce(direction, ForceMode.VelocityChange);
-            transform.position = Vector3.Lerp(transform.position, targtPos, speed);
-            SetRotation(direction);
-
+            //transform.position = Vector3.Lerp(transform.position, targtPos, speed);
 
             //Dash
             if(Input.GetKeyDown(KeyCode.LeftShift) && Time.time >= nextDash && direction != Vector3.zero)
