@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
             
             if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
             
-            Debug.Log(rb.velocity);
+            //Debug.Log(rb.velocity);
             if (Mathf.Abs(rb.velocity.x) > 4 || Mathf.Abs(rb.velocity.z) > 4) rb.mass = 1.5f;
             else rb.mass = 1f;
 
