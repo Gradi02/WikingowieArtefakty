@@ -28,6 +28,7 @@ public class scaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void Start()
     {
+        Building.gameObject.SetActive(false);
         for(int i = 0; i<resoruces_img.Count; i++)
         {
             resoruces_img[i].gameObject.SetActive(false);
