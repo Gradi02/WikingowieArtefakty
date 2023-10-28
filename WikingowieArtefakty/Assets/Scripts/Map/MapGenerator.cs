@@ -10,11 +10,13 @@ public class MapGenerator : MonoBehaviour
     public int middleRadius;
     [Range(0, 0.5f)] public float treeOffset;
     public int islandLevel;
+    [Range(1, 100)]  public int oresChance;
 
     [Header("Base 1")]
     public GameObject[] blocks_prefabs1;
     public GameObject[] ground_prefabs1;
     public Material defaultMaterial1;
+    public Material[] oresMaterials;
 
     [Header("Base 2")]
     public GameObject[] blocks_prefabs2;
@@ -64,6 +66,8 @@ public class MapGenerator : MonoBehaviour
         waterLayer.transform.localScale = new Vector3(size/5,size/5,size/5);
         waterLayer.transform.position = middle + new Vector3(0,0,0);
 
+        int oresTypes = oresMaterials.Length;
+
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
@@ -84,6 +88,14 @@ public class MapGenerator : MonoBehaviour
 
                     if (id == 1 && ifTree == 1) Destroy(new_obj);
                     else if (id == 1) new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), 0, Random.Range(-treeOffset, treeOffset));
+                    else if (id == 2)
+                    {
+                        int randore = Random.Range(1, 100);
+                        if(oresChance > randore)
+                        {
+                            new_obj.transform.GetComponent<MeshRenderer>().material = oresMaterials[Random.Range(0, oresTypes)];
+                        }
+                    }
 
                     if (new_obj != null)
                     {

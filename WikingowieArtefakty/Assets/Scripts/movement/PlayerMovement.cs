@@ -26,12 +26,12 @@ public class PlayerMovement : MonoBehaviour
         if (canMove)
         {
             //Movement Basic
-            Horizontal = Input.GetAxis("Horizontal");
-            Vertical = Input.GetAxis("Vertical");
+            Horizontal = Input.GetAxisRaw("Horizontal");
+            Vertical = Input.GetAxisRaw("Vertical");
 
             direction = new Vector3(Vertical, 0, -Horizontal).normalized;
             
-            if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed, ForceMode.Force);
+            if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
             
             Debug.Log(rb.velocity);
             if (Mathf.Abs(rb.velocity.x) > 4 || Mathf.Abs(rb.velocity.z) > 4) rb.mass = 1.5f;
