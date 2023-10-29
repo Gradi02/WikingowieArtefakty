@@ -10,11 +10,13 @@ public class MapGenerator : MonoBehaviour
     public int middleRadius;
     [Range(0, 0.5f)] public float treeOffset;
     public int islandLevel;
+    [Range(1, 100)]  public int oresChance;
 
     [Header("Base 1")]
     public GameObject[] blocks_prefabs1;
     public GameObject[] ground_prefabs1;
     public Material defaultMaterial1;
+    public Material[] oresMaterials;
 
     [Header("Base 2")]
     public GameObject[] blocks_prefabs2;
@@ -40,12 +42,14 @@ public class MapGenerator : MonoBehaviour
     public GameObject waterLayer;
     public GameObject player;
     public GameObject air;
+    public GameObject Trees, Rocks, Air, Ground; 
 
     private GameObject start;
     private Vector3 middle;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
+
 
     private void Start()
     {
@@ -64,6 +68,9 @@ public class MapGenerator : MonoBehaviour
         waterLayer.transform.localScale = new Vector3(size/5,size/5,size/5);
         waterLayer.transform.position = middle + new Vector3(0,0,0);
 
+
+        int oresTypes = oresMaterials.Length;
+
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
@@ -79,17 +86,29 @@ public class MapGenerator : MonoBehaviour
                 if (id > 0)
                 {
                     GameObject new_obj = Instantiate(blocks_prefabs1[id - 1], transform.position, Quaternion.identity, start.transform);
+
+                    if (id == 1) new_obj.transform.parent = Trees.transform;
+                    else new_obj.transform.parent = Rocks.transform;
+
                     new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
                     new_obj.name = "Object" + x + y;
 
                     if (id == 1 && ifTree == 1) Destroy(new_obj);
                     else if (id == 1) new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), 0, Random.Range(-treeOffset, treeOffset));
+                    else if (id == 2)
+                    {
+                        int randore = Random.Range(1, 100);
+                        if(oresChance > randore)
+                        {
+                            new_obj.transform.GetComponent<MeshRenderer>().material = oresMaterials[Random.Range(0, oresTypes)];
+                        }
+                    }
 
                     if (new_obj != null)
                     {
                         blocks.Add(new_obj);
 
-                        GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity, start.transform);
+                        GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity, Ground.transform);
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
@@ -99,14 +118,14 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6)
                     {
-                        GameObject gr = Instantiate(ground_prefabs1[ground_prefabs1.Length - 1], transform.position, Quaternion.identity, start.transform);
+                        GameObject gr = Instantiate(ground_prefabs1[ground_prefabs1.Length - 1], transform.position, Quaternion.identity, Ground.transform);
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
                     }
                     else
                     {
-                        GameObject a = Instantiate(air, transform.position, Quaternion.identity, start.transform);
+                        GameObject a = Instantiate(air, transform.position, Quaternion.identity, Air.transform);
                         a.transform.localPosition = new Vector3(x, 0.25f, y);
                         a.name = "Air" + x + y;
                         airBlocks.Add(a);
