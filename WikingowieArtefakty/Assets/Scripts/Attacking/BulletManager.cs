@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BulletManager : MonoBehaviour
 {
+    private float damage = 5;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name != "player")
@@ -13,5 +14,15 @@ public class BulletManager : MonoBehaviour
             GetComponent<BoxCollider>().enabled = false;
             Destroy(this.gameObject, 2);
         }
+    }
+
+    public void SetDamage(float dmgin)
+    {
+        damage = dmgin;
+    }
+
+    public float GetDamage()
+    {
+        return damage;
     }
 }
