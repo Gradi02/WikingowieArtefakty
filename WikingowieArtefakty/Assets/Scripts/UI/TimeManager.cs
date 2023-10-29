@@ -4,7 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Time : MonoBehaviour
+public class TimeManager : MonoBehaviour
 {
     public TextMeshProUGUI timeTMP;
     public TextMeshProUGUI dayTMP;
