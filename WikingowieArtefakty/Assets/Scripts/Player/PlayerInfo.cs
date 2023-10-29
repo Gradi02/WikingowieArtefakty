@@ -25,7 +25,8 @@ public class PlayerInfo : MonoBehaviour
 
         if(Physics.Raycast(transform.position, transform.right, out hit, 1))
         {
-            hit.transform.GetComponent<Bridge>().BuildBridge();
+            if(hit.transform.GetComponent<Bridge>() != null)
+                hit.transform.GetComponent<Bridge>().BuildBridge();
         }
     }
 }

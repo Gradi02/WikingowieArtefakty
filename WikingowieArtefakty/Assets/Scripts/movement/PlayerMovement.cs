@@ -59,7 +59,16 @@ public class PlayerMovement : MonoBehaviour
     }
     void SetRotation(Vector3 dir)
     {
-        if (dir != Vector3.zero)
+        if (dir == Vector3.zero || Input.GetKey(KeyCode.Mouse0))
+        {
+            Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+            Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            float angle = -AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) - 90;
+            Quaternion targetRotation = Quaternion.Euler(0f, angle, 0f);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
+        }
+        else
         {
             float angle = Mathf.Atan2(dir.x, dir.z);
 
@@ -70,15 +79,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(0, angleDegrees-90, 0);
 
             // Interpolujemy p³ynnie obrotu gracza
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
-        }
-        else
-        {
-            Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-            Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            float angle = -AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) - 90;
-            Quaternion targetRotation = Quaternion.Euler(0f, angle, 0f);
-
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
         }
     }

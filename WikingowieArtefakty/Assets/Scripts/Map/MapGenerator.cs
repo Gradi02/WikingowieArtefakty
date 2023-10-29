@@ -42,12 +42,14 @@ public class MapGenerator : MonoBehaviour
     public GameObject waterLayer;
     public GameObject player;
     public GameObject air;
+    public GameObject Trees, Rocks, Air, Ground; 
 
     private GameObject start;
     private Vector3 middle;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
+
 
     private void Start()
     {
@@ -66,6 +68,7 @@ public class MapGenerator : MonoBehaviour
         waterLayer.transform.localScale = new Vector3(size/5,size/5,size/5);
         waterLayer.transform.position = middle + new Vector3(0,0,0);
 
+
         int oresTypes = oresMaterials.Length;
 
         for (int x = 0; x < size; x++)
@@ -83,6 +86,10 @@ public class MapGenerator : MonoBehaviour
                 if (id > 0)
                 {
                     GameObject new_obj = Instantiate(blocks_prefabs1[id - 1], transform.position, Quaternion.identity, start.transform);
+
+                    if (id == 1) new_obj.transform.parent = Trees.transform;
+                    else new_obj.transform.parent = Rocks.transform;
+
                     new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
                     new_obj.name = "Object" + x + y;
 
@@ -101,7 +108,7 @@ public class MapGenerator : MonoBehaviour
                     {
                         blocks.Add(new_obj);
 
-                        GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity, start.transform);
+                        GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity, Ground.transform);
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
@@ -111,14 +118,14 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6)
                     {
-                        GameObject gr = Instantiate(ground_prefabs1[ground_prefabs1.Length - 1], transform.position, Quaternion.identity, start.transform);
+                        GameObject gr = Instantiate(ground_prefabs1[ground_prefabs1.Length - 1], transform.position, Quaternion.identity, Ground.transform);
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
                     }
                     else
                     {
-                        GameObject a = Instantiate(air, transform.position, Quaternion.identity, start.transform);
+                        GameObject a = Instantiate(air, transform.position, Quaternion.identity, Air.transform);
                         a.transform.localPosition = new Vector3(x, 0.25f, y);
                         a.name = "Air" + x + y;
                         airBlocks.Add(a);
