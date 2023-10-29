@@ -24,7 +24,7 @@ public class InGame_UI : MonoBehaviour
     
     void Start()
     {
-        Debug.Log(ResourceSidebar.Count);
+      //  Debug.Log(ResourceSidebar.Count);
         for (int i = 0; i < ResourceSidebar.Count; i++)
         {
             ResourceSidebar[i].transform.position += new Vector3(-100f, 0, 0);
@@ -57,18 +57,18 @@ public class InGame_UI : MonoBehaviour
         for (int i = 0; i < ResourceSidebar.Count; i++)
         {
             yield return new WaitForSeconds(0.1f);
-            Debug.Log(i);
+     //       Debug.Log(i);
             StartCoroutine(Mover(i));
         }
     }
     IEnumerator Mover(int i)
     {
-        Debug.Log("NORMAL"+ResourceSidebar[i].transform.position);
-        Debug.Log("LOCAL"+ResourceSidebar[i].transform.localPosition);
+   //     Debug.Log("NORMAL"+ResourceSidebar[i].transform.position);
+    //    Debug.Log("LOCAL"+ResourceSidebar[i].transform.localPosition);
         while (ResourceSidebar[i].transform.localPosition.x <= -170f)
         {
             yield return new WaitForSeconds(0.005f);
-            Debug.Log("MOVER I:  " + i);
+   //         Debug.Log("MOVER I:  " + i);
             ResourceSidebar[i].transform.position += new Vector3(1f, 0, 0);
         }
     }
