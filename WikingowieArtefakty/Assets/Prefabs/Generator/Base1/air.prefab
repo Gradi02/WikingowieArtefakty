@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6079796612268693663}
   - component: {fileID: 2081955019264123588}
   - component: {fileID: 1970249581358836379}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4897,7 +4897,7 @@ GameObject:
   - component: {fileID: 2065555306112266290}
   - component: {fileID: 899406962369289026}
   - component: {fileID: 1321075335411901956}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: air
   m_TagString: Untagged
   m_Icon: {fileID: 0}

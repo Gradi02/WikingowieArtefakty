@@ -10,7 +10,7 @@ public class BulletManager : MonoBehaviour
         {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             GetComponent<Rigidbody>().useGravity = false;
-            GetComponent<SphereCollider>().enabled = false;
+            GetComponent<BoxCollider>().enabled = false;
             Destroy(this.gameObject, 2);
         }
     }

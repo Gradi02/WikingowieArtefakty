@@ -6,13 +6,18 @@ public class BowShooting : MonoBehaviour
 {
     private float ShotCooldown = 0.1f;
     public GameObject arrow;
+    public GameObject bowPowerUI;
+    public Animation anim;
 
     private float nextShot;
     private float power = 1;
     private float maxPower = 8;
     private bool next = true;
 
-    // Update is called once per frame
+    private void Start()
+    {
+        bowPowerUI.transform.localScale = Vector3.zero;
+    }
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.Mouse0) && !next)
@@ -23,6 +28,8 @@ public class BowShooting : MonoBehaviour
         
         if(Time.time >= nextShot && next) 
         {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                anim.Play();
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
@@ -46,20 +53,19 @@ public class BowShooting : MonoBehaviour
 
     void ShotArrow()
     {
-        GameObject a = Instantiate(arrow, transform.position, Quaternion.identity);
+        GameObject a = Instantiate(arrow, transform.position, transform.rotation);
 
-        float playerRotation = transform.eulerAngles.y + 90;
+        Vector3 mousePosition = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        Vector3 hitPoint = Vector3.zero;
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        if (groundPlane.Raycast(ray, out float distance)) hitPoint = ray.GetPoint(distance);
 
-        float angleInRadians = playerRotation * Mathf.Deg2Rad;
-
-        float directionX = Mathf.Sin(angleInRadians);
-        float directionZ = Mathf.Cos(angleInRadians);
-        Vector3 playerDirection = new Vector3(directionX, 0.02f, directionZ).normalized;
-
-        Debug.Log(power + "; " + playerDirection);
-        //a.transform.LookAt(mousePos);
+        Vector3 playerDirection = new Vector3(hitPoint.x - transform.position.x, 0.02f, hitPoint.z - transform.position.z).normalized;
         a.GetComponent<Rigidbody>().AddForce(playerDirection * power, ForceMode.Impulse);
 
+        anim.Stop();
+        bowPowerUI.transform.localScale = Vector3.zero;
         power = 1;
         nextShot = Time.time + ShotCooldown;
     }
