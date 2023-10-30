@@ -14,8 +14,8 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: DefaultCompany
   productName: WikingowieArtefakty
-  defaultCursor: {fileID: 0}
-  cursorHotspot: {x: 0, y: 0}
+  defaultCursor: {fileID: 2800000, guid: 401887acdbfafcc45a2a804aa57a18e2, type: 3}
+  cursorHotspot: {x: 9, y: 9}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1

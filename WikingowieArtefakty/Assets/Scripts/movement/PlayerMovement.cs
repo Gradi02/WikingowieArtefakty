@@ -26,14 +26,14 @@ public class PlayerMovement : MonoBehaviour
         if (canMove)
         {
             //Movement Basic
-            Horizontal = Input.GetAxis("Horizontal");
-            Vertical = Input.GetAxis("Vertical");
+            Horizontal = Input.GetAxisRaw("Horizontal");
+            Vertical = Input.GetAxisRaw("Vertical");
 
             direction = new Vector3(Vertical, 0, -Horizontal).normalized;
             
-            if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed, ForceMode.Force);
+            if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
             
-            Debug.Log(rb.velocity);
+            //Debug.Log(rb.velocity);
             if (Mathf.Abs(rb.velocity.x) > 4 || Mathf.Abs(rb.velocity.z) > 4) rb.mass = 1.5f;
             else rb.mass = 1f;
 
@@ -59,7 +59,16 @@ public class PlayerMovement : MonoBehaviour
     }
     void SetRotation(Vector3 dir)
     {
-        if (dir != Vector3.zero)
+        if (dir == Vector3.zero || Input.GetKey(KeyCode.Mouse0))
+        {
+            Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+            Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            float angle = -AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) - 90;
+            Quaternion targetRotation = Quaternion.Euler(0f, angle, 0f);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
+        }
+        else
         {
             float angle = Mathf.Atan2(dir.x, dir.z);
 
@@ -70,15 +79,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(0, angleDegrees-90, 0);
 
             // Interpolujemy p³ynnie obrotu gracza
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
-        }
-        else
-        {
-            Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-            Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            float angle = -AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) - 90;
-            Quaternion targetRotation = Quaternion.Euler(0f, angle, 0f);
-
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
         }
     }
