@@ -20,8 +20,15 @@ public class HandItem : MonoBehaviour
     void Update()
     {
         selectedItemSlot = GetSelectedItem();
+
         if (selectedItemSlot.GetItemName() == "Bow") bowscript.enableBow = true;
         else bowscript.enableBow = false;
+
+        if (selectedItemSlot.GetItemName() == "Axe") GetComponent<DestroyBlock>().enableAxe = true;
+        else GetComponent<DestroyBlock>().enableAxe = false;
+
+        if (selectedItemSlot.GetItemName() == "Pickaxe") GetComponent<DestroyBlock>().enablePickaxe = true;
+        else GetComponent<DestroyBlock>().enablePickaxe = false;
     }
 
     Slot GetSelectedItem()

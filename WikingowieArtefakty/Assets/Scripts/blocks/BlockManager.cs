@@ -65,4 +65,9 @@ public class BlockManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void DestroyAnimation()
+    {
+
+    }
 }
