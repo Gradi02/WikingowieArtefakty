@@ -64,4 +64,9 @@ public class PlayerInfo : MonoBehaviour
     {
         inventoryManager.DropSelectedItem();
     }
+
+    public void ChopAnimation()
+    {
+
+    }
 }
