@@ -22,7 +22,7 @@ public class DestroyBlock : MonoBehaviour
             if (enableAxe)
             {
                 RaycastHit hit;
-                if(Physics.Raycast(transform.position - offset, transform.right, out hit, 1))
+                if(Physics.Raycast(transform.position - offset, transform.right, out hit, 0.5f))
                 {
                     if(hit.transform.GetComponent<BlockManager>() != null && hit.transform.GetComponent<BlockManager>().breakingTool == BlockManager.Tools.Axe)
                     {
@@ -40,7 +40,7 @@ public class DestroyBlock : MonoBehaviour
             else if (enablePickaxe)
             {
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position - offset, transform.right, out hit, 1))
+                if (Physics.Raycast(transform.position - offset, transform.right, out hit, 0.5f))
                 {
                     if (hit.transform.GetComponent<BlockManager>() != null && hit.transform.GetComponent<BlockManager>().breakingTool == BlockManager.Tools.Pickaxe)
                     {
