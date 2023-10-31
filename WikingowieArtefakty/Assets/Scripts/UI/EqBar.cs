@@ -6,13 +6,20 @@ using UnityEngine.UI;
 
 public class EqBar : MonoBehaviour
 {
-    public List<Image> eq;
-    public int slot;
+    public List<Image> eqFight;
+    public List<Image> eqBuild;
+    public int slotFight;
+    public int slotBuild;
     void Start()
     {
-        for(int i = 0; i<eq.Count; i++)
+        for(int i = 0; i<eqFight.Count; i++)
         {
-            eq[i].gameObject.SetActive(false);
+            eqFight[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < eqBuild.Count; i++)
+        {
+            eqBuild[i].gameObject.SetActive(false);
         }
     }
 
@@ -23,24 +30,46 @@ public class EqBar : MonoBehaviour
 
         if (scrollInput > 0)
         {
-            for (int i = 0; i < eq.Count; i++)
+            for (int i = 0; i < eqFight.Count; i++)
             {
-                eq[i].gameObject.SetActive(false);
+                eqFight[i].gameObject.SetActive(false);
             }
-            slot++;
-            if(slot>eq.Count-1)slot = 0;
-            eq[slot].gameObject.SetActive(true);
+            slotFight++;
+            if(slotFight>eqFight.Count-1)slotFight = 0;
+            eqFight[slotFight].gameObject.SetActive(true);
         }
 
         else if (scrollInput < 0)
         {
-            for (int i = 0; i < eq.Count; i++)
+            for (int i = 0; i < eqFight.Count; i++)
             {
-                eq[i].gameObject.SetActive(false);
+                eqFight[i].gameObject.SetActive(false);
             }
-            slot--;
-            if (slot < 0) slot = 6;
-            eq[slot].gameObject.SetActive(true);
+            slotFight--;
+            if (slotFight < 0) slotFight = eqFight.Count-1;
+            eqFight[slotFight].gameObject.SetActive(true);
+        }
+        //BUILD EQ
+        if (scrollInput > 0)
+        {
+            for (int i = 0; i < eqBuild.Count; i++)
+            {
+                eqBuild[i].gameObject.SetActive(false);
+            }
+            slotBuild++;
+            if (slotBuild > eqBuild.Count - 1) slotBuild = 0;
+            eqBuild[slotBuild].gameObject.SetActive(true);
+        }
+
+        else if (scrollInput < 0)
+        {
+            for (int i = 0; i < eqBuild.Count; i++)
+            {
+                eqBuild[i].gameObject.SetActive(false);
+            }
+            slotBuild--;
+            if (slotBuild < 0) slotBuild = eqBuild.Count - 1;
+            eqBuild[slotBuild].gameObject.SetActive(true);
         }
     }
 }
