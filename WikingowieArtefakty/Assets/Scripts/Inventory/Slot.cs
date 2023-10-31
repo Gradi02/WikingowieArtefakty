@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    private ItemManager currentItem;
-    
+    [SerializeField] private ItemManager currentItem;
+
+    public Sprite slotIcon;
+
 
 
 
@@ -13,6 +15,7 @@ public class Slot : MonoBehaviour
     public void SetItem(ItemManager new_item)
     {
         currentItem = new_item;
+        SetItemInfo();
     }
 
     public ItemManager GetItem()
@@ -20,14 +23,29 @@ public class Slot : MonoBehaviour
         return currentItem;
     }
 
+    public string GetItemName()
+    {
+        return currentItem.name;
+    }
+
     public void RemoveItem()
     {
         currentItem = null;
+        ClearItemInfo();
     }
 
     public bool isEmpty()
     {
         if (currentItem == null) return true;
         return false;
+    }
+    private void ClearItemInfo()
+    {
+        slotIcon = null;
+    }
+
+    private void SetItemInfo()
+    {
+        slotIcon = currentItem.itemIcon;
     }
 }

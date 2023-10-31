@@ -5,10 +5,12 @@ using UnityEngine;
 public class PlayerInfo : MonoBehaviour
 {
     private PlayerMovement move;
+    private InventoryManager inventoryManager;
 
     private void Start()
     {
         move = GetComponent<PlayerMovement>();
+        inventoryManager = GetComponent<InventoryManager>();
     }
     void Update()
     {
@@ -20,13 +22,17 @@ public class PlayerInfo : MonoBehaviour
 
     void CheckForBridge()
     {
-        RaycastHit hit;
-        Debug.DrawRay(transform.position, transform.right);
-
-        if(Physics.Raycast(transform.position, transform.right, out hit, 1))
+        if (inventoryManager.FindItem("wood") == null)
         {
-            if(hit.transform.GetComponent<Bridge>() != null)
-                hit.transform.GetComponent<Bridge>().BuildBridge();
+            inventoryManager.RemoveItem("wood");
+            RaycastHit hit;
+            Debug.DrawRay(transform.position, transform.right);
+
+            if (Physics.Raycast(transform.position, transform.right, out hit, 1))
+            {
+                if (hit.transform.GetComponent<Bridge>() != null)
+                    hit.transform.GetComponent<Bridge>().BuildBridge();
+            }
         }
     }
 }
