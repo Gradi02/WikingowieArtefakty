@@ -13,7 +13,12 @@ public class TimeManager : MonoBehaviour
     public TextMeshProUGUI PreviousDayTMP;
     public TextMeshProUGUI NextDayTMP;
 
-    private float delay = 0.5f;
+    public TextMeshProUGUI LandTMP;
+    public TextMeshProUGUI DescTMP;
+    public TextMeshProUGUI ClockTMP;
+    public TextMeshProUGUI AccDayTMP;
+
+    private float delay = 0.2f;
     int hour = 20;
     int min = 0;
     int day = 1;
@@ -23,8 +28,13 @@ public class TimeManager : MonoBehaviour
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
         timeTMP.text = hour.ToString() +":"+min.ToString();
-        StartCoroutine(Timer());
 
+        LandTMP.gameObject.transform.localPosition = new Vector3(0, +100, 0);
+        DescTMP.gameObject.transform.localPosition = new Vector3(0, +150, 0);
+        ClockTMP.gameObject.transform.localPosition = new Vector3(0, +200, 0);
+        AccDayTMP.gameObject.transform.localPosition = new Vector3(0, +250, 0);
+        StartCoroutine(Timer());
+        StartCoroutine(StartTransInfo());
     }
     //
     void DayChange()
@@ -32,15 +42,12 @@ public class TimeManager : MonoBehaviour
         PreviousDayTMP.gameObject.SetActive(true);
         NextDayTMP.gameObject.SetActive(true);
         DayChangeTMP.gameObject.SetActive(true);
+        PreviousDayTMP.text = (day - 1).ToString();
+        NextDayTMP.text = day.ToString();
 
-        LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad)
-            .setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
+        LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
 
-        LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad)
-            .setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
-
-        LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad)
-            .setOnUpdate((float alpha) => UpdateTextAlpha(NextDayTMP, alpha));
+        LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
         StartCoroutine(Cooldown());
     }
 
@@ -51,18 +58,36 @@ public class TimeManager : MonoBehaviour
         textObject.color = color;
     }
 
+    IEnumerator StartTransInfo()
+    {
+        yield return new WaitForSeconds(0.2f);
+        LeanTween.moveLocalY(AccDayTMP.gameObject, -250f, 0.5f).setEase(LeanTweenType.easeInCirc);
+        yield return new WaitForSeconds(0.2f);
+        LeanTween.moveLocalY(ClockTMP.gameObject, -198f, 0.5f).setEase(LeanTweenType.easeInCirc);
+        yield return new WaitForSeconds(0.2f);
+        LeanTween.moveLocalY(DescTMP.gameObject, -150f, 0.5f).setEase(LeanTweenType.easeInCirc);
+        yield return new WaitForSeconds(0.2f);
+        LeanTween.moveLocalY(LandTMP.gameObject, -100f, 0.5f).setEase(LeanTweenType.easeInCirc);
+    }
+
     IEnumerator Cooldown()
     {
         yield return new WaitForSeconds(0.5f);
-        LeanTween.moveLocalY(PreviousDayTMP.gameObject, -150f, 1f).setEase(LeanTweenType.easeInCirc);
+        LeanTween.moveLocalY(PreviousDayTMP.gameObject, -150f, 1f).setEase(LeanTweenType.easeInCirc);//easeinsine
         LeanTween.moveLocalY(NextDayTMP.gameObject, 0, 1f).setEase(LeanTweenType.easeInCirc);
+        yield return new WaitForSeconds(0.2f);
+        LeanTween.value(0f, 1f, 2.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(NextDayTMP, alpha));
+        
 
         yield return new WaitForSeconds(0.5f);
-        LeanTween.value(1f, 0f, 2.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
+        LeanTween.value(1f, 0f, 0.5f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
         yield return new WaitForSeconds(2.5f);
-        LeanTween.value(1f, 0f, 2.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
-        LeanTween.value(1f, 0f, 2.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(NextDayTMP, alpha));
+        LeanTween.value(1f, 0f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
+        LeanTween.value(1f, 0f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(NextDayTMP, alpha));
         yield return new WaitForSeconds(2f);
+        LeanTween.moveLocalY(PreviousDayTMP.gameObject, 0f, 0.1f).setEase(LeanTweenType.easeInCirc);
+        LeanTween.moveLocalY(NextDayTMP.gameObject, 150f, 0.1f).setEase(LeanTweenType.easeInCirc);
+        yield return new WaitForSeconds(0.1f);
         PreviousDayTMP.gameObject.SetActive(false);
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
