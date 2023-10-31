@@ -8,7 +8,6 @@ public class Bridge : MonoBehaviour
     public ParticleSystem buildParticle;
     private GameObject bridgeObj;
 
-    [ContextMenu("build")]
     public void BuildBridge()
     {
         if (bridgeObj != null)
