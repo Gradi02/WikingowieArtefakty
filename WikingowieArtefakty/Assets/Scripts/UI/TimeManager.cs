@@ -26,7 +26,7 @@ public class TimeManager : MonoBehaviour
         StartCoroutine(Timer());
 
     }
-
+    //
     void DayChange()
     {
         PreviousDayTMP.gameObject.SetActive(true);
