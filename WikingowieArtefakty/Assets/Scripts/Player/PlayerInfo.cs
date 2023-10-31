@@ -14,15 +14,28 @@ public class PlayerInfo : MonoBehaviour
     }
     void Update()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            CheckForBridge();
+            CheckForBridge();           
+        }
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            CheckForItems();
+        }
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            DropItem();
         }
     }
 
     void CheckForBridge()
     {
         if (inventoryManager.FindItem("wood") == null)
+        {
+            Debug.Log("nie masz matsów kurwo");
+            return;
+        }
+        else
         {
             inventoryManager.RemoveItem("wood");
             RaycastHit hit;
@@ -34,5 +47,21 @@ public class PlayerInfo : MonoBehaviour
                     hit.transform.GetComponent<Bridge>().BuildBridge();
             }
         }
+    }
+
+    void CheckForItems()
+    {
+        foreach(GameObject g in GameObject.FindGameObjectsWithTag("item"))
+        {
+            if(Vector3.Distance(transform.position, g.transform.position) <= 10)
+            {
+                inventoryManager.PickUpItem(g);
+            }
+        }
+    }
+
+    void DropItem()
+    {
+        inventoryManager.DropSelectedItem();
     }
 }

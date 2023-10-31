@@ -24,6 +24,7 @@ public class EqBar : MonoBehaviour
         {
             eqBuild[i].gameObject.SetActive(false);
         }
+        SetDefaultSlotSelected();
     }
 
    
@@ -31,19 +32,14 @@ public class EqBar : MonoBehaviour
     {
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
 
-        if (Input.GetKey(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            bar1= true;
-            bar2= false;
+            bar1= !bar1;
+            bar2= !bar2;
+            SetDefaultSlotSelected();
         }
 
-        if (Input.GetKey(KeyCode.Alpha2))
-        {
-            bar1 = false;
-            bar2 = true;
-        }
-
-        if (scrollInput > 0 && bar1)
+        if (scrollInput < 0 && bar1)
         {
             for (int i = 0; i < eqFight.Count; i++)
             {
@@ -54,7 +50,7 @@ public class EqBar : MonoBehaviour
             eqFight[slotFight].gameObject.SetActive(true);
         }
 
-        else if (scrollInput < 0 && bar1)
+        else if (scrollInput > 0 && bar1)
         {
             for (int i = 0; i < eqFight.Count; i++)
             {
@@ -64,8 +60,10 @@ public class EqBar : MonoBehaviour
             if (slotFight < 0) slotFight = eqFight.Count-1;
             eqFight[slotFight].gameObject.SetActive(true);
         }
+
+
         //BUILD EQ
-        if (scrollInput > 0 && bar2)
+        if (scrollInput < 0 && bar2)
         {
             for (int i = 0; i < eqBuild.Count; i++)
             {
@@ -76,7 +74,7 @@ public class EqBar : MonoBehaviour
             eqBuild[slotBuild].gameObject.SetActive(true);
         }
 
-        else if (scrollInput < 0 && bar2)
+        else if (scrollInput > 0 && bar2)
         {
             for (int i = 0; i < eqBuild.Count; i++)
             {
@@ -86,5 +84,33 @@ public class EqBar : MonoBehaviour
             if (slotBuild < 0) slotBuild = eqBuild.Count - 1;
             eqBuild[slotBuild].gameObject.SetActive(true);
         }
+    }
+
+    private void SetDefaultSlotSelected()
+    {
+        if(bar1)
+        {
+            eqBuild[slotBuild].gameObject.SetActive(false);
+            eqFight[slotFight].gameObject.SetActive(true);
+        }
+        else if(bar2)
+        {
+            eqFight[slotFight].gameObject.SetActive(false);
+            eqBuild[slotBuild].gameObject.SetActive(true);
+        }
+    }
+
+    public int GetSelectedSlot()
+    {
+        if(bar1)
+        {
+            return slotFight;
+        }
+        else if(bar2)
+        {
+            return (slotBuild + 3);
+        }
+
+        return 0;
     }
 }

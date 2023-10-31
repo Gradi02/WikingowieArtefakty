@@ -5,32 +5,38 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     public Slot[] slots;
-
-    
-
-
+    public EqBar selection;
+    public GameObject[] itemList;
 
 
-    public void PickUpItem(ItemManager item)
+
+    public void PickUpItem(GameObject itemObj)
     {
         Slot emptySlot = FindEmptySlot();
-        emptySlot.SetItem(item);
+
+        if (emptySlot != null)
+        {
+            emptySlot.SetItem(itemObj);
+        }
     }
 
     private Slot FindEmptySlot()
     {
         for(int i = 0; i < slots.Length; i++)
         {
-            if(slots[i].isEmpty()) return slots[i];
+            if(slots[i].IsEmpty()) return slots[i];
         }
         return null;
     }
 
     public Slot FindItem(string name)
     {
-        for (int i = 0; i < slots.Length; i++)
+        foreach(Slot slot in slots)
         {
-            if (slots[i].GetItemName() == name) return slots[i];
+            if (slot.GetItemName() == name)
+            {
+                return slot;
+            }
         }
         return null;
     }
@@ -40,6 +46,34 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i].GetItemName() == name) slots[i].RemoveItem();
+        }
+    }
+
+    public GameObject GetItemFromList(string name)
+    {
+        foreach(GameObject item in itemList)
+        {
+            if (item.GetComponent<ItemManager>().itemName == name) return item;
+        }
+        return null;
+    }
+
+    public Slot GetSelectedSlot()
+    {
+        int num = selection.GetSelectedSlot();
+
+        return slots[num];
+    }
+
+    public void DropSelectedItem()
+    {
+        Slot drop = GetSelectedSlot();
+        
+        if(drop.Droppable() && !drop.IsEmpty())
+        {
+            GameObject dropped = GetItemFromList(drop.GetItemName());
+            Instantiate(dropped, transform.position, transform.rotation);
+            drop.RemoveItem();
         }
     }
 }

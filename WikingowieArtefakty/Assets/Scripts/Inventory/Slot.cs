@@ -1,51 +1,93 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
-    [SerializeField] private ItemManager currentItem;
+    private ItemManager currentItem;
+    public ItemManager staticSlotItem;
+    
+    private Image slotIcon;
 
-    public Sprite slotIcon;
+    public bool staticSlot = false;
 
 
+    private InventoryManager inventoryManager;
 
-
-
-    public void SetItem(ItemManager new_item)
+    private void Start()
     {
-        currentItem = new_item;
+        slotIcon = transform.Find("Icon").GetComponent<Image>();
+        inventoryManager = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>();
+
+        if (staticSlotItem != null) currentItem = staticSlotItem;
+    }
+
+
+
+    public void SetItem(GameObject new_item)
+    {
+        if(staticSlot)
+        {
+            Debug.LogWarning("You cant edit static slot!");
+            return;
+        }
+
+        currentItem = inventoryManager.GetItemFromList(new_item.GetComponent<ItemManager>().itemName).GetComponent<ItemManager>();
+        new_item.GetComponent<ItemManager>().DestroyItem();
         SetItemInfo();
     }
 
     public ItemManager GetItem()
     {
-        return currentItem;
+        if(currentItem != null)
+            return currentItem;
+
+        return null;
     }
 
     public string GetItemName()
     {
-        return currentItem.name;
+        if(currentItem != null)
+            return currentItem.itemName;
+
+        return null;
     }
 
     public void RemoveItem()
     {
+        if (staticSlot)
+        {
+            Debug.LogWarning("You cant edit static slot!");
+            return;
+        }
+
         currentItem = null;
         ClearItemInfo();
     }
 
-    public bool isEmpty()
+    public bool IsEmpty()
     {
+        if (staticSlot) return false;
+
         if (currentItem == null) return true;
         return false;
     }
     private void ClearItemInfo()
     {
-        slotIcon = null;
+        slotIcon.sprite = null;
+        slotIcon.color = Color.black;
     }
 
     private void SetItemInfo()
     {
-        slotIcon = currentItem.itemIcon;
+        slotIcon.sprite = currentItem.itemIcon;
+        slotIcon.color = Color.white;
+    }
+
+    public bool Droppable()
+    {
+        if (staticSlot) return false;
+        return true;
     }
 }

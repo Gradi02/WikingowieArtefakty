@@ -7,4 +7,9 @@ public class ItemManager : MonoBehaviour
 {
     public string itemName;
     public Sprite itemIcon;
+
+    public void DestroyItem()
+    {
+        Destroy(gameObject);
+    }
 }

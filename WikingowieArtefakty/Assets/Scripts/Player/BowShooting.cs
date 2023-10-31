@@ -15,12 +15,15 @@ public class BowShooting : MonoBehaviour
     private bool next = true;
     private GameObject bp;
 
+    public bool enableBow = false;
+
     private void Start()
     {
         bowPowerUI.transform.localScale = Vector3.zero;
     }
     void Update()
     {
+        if (!enableBow) return;
         if (Input.GetKeyUp(KeyCode.Mouse0) && !next)
         {
             next = true;
