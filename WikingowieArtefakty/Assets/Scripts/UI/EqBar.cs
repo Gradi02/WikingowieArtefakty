@@ -10,6 +10,9 @@ public class EqBar : MonoBehaviour
     public List<Image> eqBuild;
     public int slotFight;
     public int slotBuild;
+
+    private bool bar1 = false;
+    private bool bar2 = true;
     void Start()
     {
         for(int i = 0; i<eqFight.Count; i++)
@@ -28,7 +31,19 @@ public class EqBar : MonoBehaviour
     {
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scrollInput > 0)
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            bar1= true;
+            bar2= false;
+        }
+
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            bar1 = false;
+            bar2 = true;
+        }
+
+        if (scrollInput > 0 && bar1)
         {
             for (int i = 0; i < eqFight.Count; i++)
             {
@@ -39,7 +54,7 @@ public class EqBar : MonoBehaviour
             eqFight[slotFight].gameObject.SetActive(true);
         }
 
-        else if (scrollInput < 0)
+        else if (scrollInput < 0 && bar1)
         {
             for (int i = 0; i < eqFight.Count; i++)
             {
@@ -50,7 +65,7 @@ public class EqBar : MonoBehaviour
             eqFight[slotFight].gameObject.SetActive(true);
         }
         //BUILD EQ
-        if (scrollInput > 0)
+        if (scrollInput > 0 && bar2)
         {
             for (int i = 0; i < eqBuild.Count; i++)
             {
@@ -61,7 +76,7 @@ public class EqBar : MonoBehaviour
             eqBuild[slotBuild].gameObject.SetActive(true);
         }
 
-        else if (scrollInput < 0)
+        else if (scrollInput < 0 && bar2)
         {
             for (int i = 0; i < eqBuild.Count; i++)
             {
