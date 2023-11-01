@@ -4177,11 +4177,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 70
   middleRadius: 10
-  treeOffset: 0.215
+  treeOffset: 0.15
   islandLevel: 0
   oresChance: 5
   blocks_prefabs1:
-  - {fileID: 3011893055005935424, guid: 7bc1d3857b3b6254d9c0391636a195cb, type: 3}
+  - {fileID: 4075102254770810201, guid: acec58c90d3e0f34aa59a8d0906c03c0, type: 3}
   - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
   - {fileID: 843265801024923960, guid: 5b601b70a02071346a76638125880ffa, type: 3}
   - {fileID: 843265801024923960, guid: d15d8c80bf755ce44b3242515764c953, type: 3}
