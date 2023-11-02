@@ -94,11 +94,29 @@ public class MapGenerator : MonoBehaviour
                     new_obj.name = "Object" + x + y;
 
                     if (id == 1 && ifTree == 1) Destroy(new_obj);
-                    else if (id == 1) new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), 0, Random.Range(-treeOffset, treeOffset));
+                    else if (id == 1)
+                    {
+                        new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
+                        
+                        float randscale = Random.Range(1f, 1.5f);
+                        new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
+
+                        int randrot = Random.Range(1, 4);
+                        new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+
+                    }
                     else if (id == 2)
                     {
                         int randore = Random.Range(1, 100);
-                        if(oresChance > randore)
+
+                        float randscale = Random.Range(0.5f, 0.62f);
+                        new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
+
+                        int randrot = Random.Range(1, 4);
+                        new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+
+                        new_obj.transform.localPosition = new Vector3(x, 0.25f, y);
+                        if (oresChance > randore)
                         {
                             new_obj.transform.GetComponent<MeshRenderer>().material = oresMaterials[Random.Range(0, oresTypes)];
                         }
@@ -110,6 +128,13 @@ public class MapGenerator : MonoBehaviour
 
                         GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity, Ground.transform);
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
+
+                        if (id == 2 || id == 3 || id == 4)
+                        {
+                            int randrot = Random.Range(1, 4);
+                            gr.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+                        }
+
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
                     }
@@ -131,7 +156,7 @@ public class MapGenerator : MonoBehaviour
                         airBlocks.Add(a);
                     }
                 }
-
+            
             }
         }
 

@@ -4177,21 +4177,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 70
   middleRadius: 10
-  treeOffset: 0.215
+  treeOffset: 0.15
   islandLevel: 0
   oresChance: 5
   blocks_prefabs1:
-  - {fileID: 3011893055005935424, guid: 7bc1d3857b3b6254d9c0391636a195cb, type: 3}
-  - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
+  - {fileID: 4075102254770810201, guid: acec58c90d3e0f34aa59a8d0906c03c0, type: 3}
+  - {fileID: 8439371162162775129, guid: 2d2566dc833c8ef47b908b2f6dcb2bdd, type: 3}
   - {fileID: 843265801024923960, guid: 5b601b70a02071346a76638125880ffa, type: 3}
   - {fileID: 843265801024923960, guid: d15d8c80bf755ce44b3242515764c953, type: 3}
   ground_prefabs1:
   - {fileID: 4936650255284283978, guid: 1f352037363b89448b47a16d0ae8ee86, type: 3}
-  - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
-  - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
-  - {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
+  - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
+  - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
+  - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
   - {fileID: 3776711458049546244, guid: 6f7eded46b427cc4787340143c36676b, type: 3}
-  defaultMaterial1: {fileID: 2100000, guid: ce5f931a2ce87b34aab92adb7d90041a, type: 2}
+  defaultMaterial1: {fileID: 2100000, guid: 2ae21ea97d61ab246b1c4279b5b132fd, type: 2}
   oresMaterials:
   - {fileID: 2100000, guid: 929b5c134d4ed1c4f935cf3b8ec450cc, type: 2}
   - {fileID: 2100000, guid: 53b2426bfe020c2449fb12cdf53890dc, type: 2}
@@ -8120,7 +8120,7 @@ MonoBehaviour:
   speed: 1.8
   canMove: 1
   dashCooldown: 3
-  dashPower: 8
+  dashPower: 6
   dashParticle: {fileID: 3066103022588316011, guid: 8bd5dafa6d717db43acb94e4bc1cf2ce, type: 3}
 --- !u!54 &2028137021
 Rigidbody:

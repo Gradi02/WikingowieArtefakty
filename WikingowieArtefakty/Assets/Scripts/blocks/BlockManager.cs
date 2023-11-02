@@ -16,7 +16,8 @@ public class BlockManager : MonoBehaviour
     public Tools breakingTool;
     public int maxNumberOfLoot;
     public GameObject loot;
-    public ParticleSystem destroyParticles; 
+    public ParticleSystem destroyParticles;
+    public float resizeOffset = 0;
     
     
     private Vector3 normalScale, breakStep;
@@ -26,7 +27,7 @@ public class BlockManager : MonoBehaviour
     private void Start()
     {
         normalScale = transform.localScale;
-        breakStep = normalScale / maxBreakStatus;
+        breakStep = normalScale / maxBreakStatus / 3;
         currentBreakStatus = 0;
     }
 
@@ -36,7 +37,7 @@ public class BlockManager : MonoBehaviour
         //if player tools
         currentBreakStatus++;
         transform.localScale -= breakStep;
-        transform.position -= new Vector3(0f,FindGroundY(transform.position.y)-transform.localScale.y/2,0f);
+        transform.position -= new Vector3(0f,FindGroundY(transform.position.y) - resizeOffset,0f);
         CheckForDestroy();
     }
 

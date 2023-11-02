@@ -31,31 +31,33 @@ public class PlayerMovement : MonoBehaviour
 
             direction = new Vector3(Vertical, 0, -Horizontal).normalized;
             
-            if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
+            //if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
+            //transform.position += direction * speed * Time.deltaTime;
+            rb.MovePosition(transform.position + speed * Time.deltaTime * direction);
             
             //Debug.Log(rb.velocity);
-            if (Mathf.Abs(rb.velocity.x) > 4 || Mathf.Abs(rb.velocity.z) > 4) rb.mass = 1.5f;
-            else rb.mass = 1f;
+            //if (Mathf.Abs(rb.velocity.x) > 4 || Mathf.Abs(rb.velocity.z) > 4) rb.mass = 1.5f;
+            //else rb.mass = 1f;
 
             SetRotation(direction);
 
             //Vector3 targtPos = transform.position + speed * Time.deltaTime * direction;
-            //transform.position += direction * speed * Time.deltaTime;
             //rb.velocity = new Vector2(targtPos.x, targtPos.z);
-            //rb.MovePosition(targtPos);
             //transform.position = Vector3.Lerp(transform.position, targtPos, speed);
-
-            //Dash
-            if(Input.GetKeyDown(KeyCode.LeftShift) && Time.time >= nextDash && direction != Vector3.zero)
-            {
-                nextDash = Time.time + dashCooldown;
-                rb.AddForce(direction * dashPower, ForceMode.Impulse);
-                ParticleSystem dash = Instantiate(dashParticle, transform.position, player.transform.rotation);
-                dash.transform.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles - new Vector3(0f, 90f, 0f));
-                dash.Play();
-            }
         }
         
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time >= nextDash && direction != Vector3.zero)
+        {
+            nextDash = Time.time + dashCooldown;
+            rb.AddForce(direction * dashPower, ForceMode.Impulse);
+            ParticleSystem dash = Instantiate(dashParticle, transform.position, player.transform.rotation);
+            dash.transform.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles - new Vector3(0f, 90f, 0f));
+            dash.Play();
+        }
     }
     void SetRotation(Vector3 dir)
     {
