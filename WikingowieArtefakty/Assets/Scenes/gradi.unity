@@ -4182,9 +4182,9 @@ MonoBehaviour:
   oresChance: 5
   blocks_prefabs1:
   - {fileID: 4075102254770810201, guid: acec58c90d3e0f34aa59a8d0906c03c0, type: 3}
-  - {fileID: 8439371162162775129, guid: 2d2566dc833c8ef47b908b2f6dcb2bdd, type: 3}
-  - {fileID: 843265801024923960, guid: 5b601b70a02071346a76638125880ffa, type: 3}
-  - {fileID: 843265801024923960, guid: d15d8c80bf755ce44b3242515764c953, type: 3}
+  - {fileID: 5190943920081329877, guid: b2143eb72b3878646b0c7f8842750029, type: 3}
+  - {fileID: 5190943920081329877, guid: b2143eb72b3878646b0c7f8842750029, type: 3}
+  - {fileID: 5190943920081329877, guid: b2143eb72b3878646b0c7f8842750029, type: 3}
   ground_prefabs1:
   - {fileID: 4936650255284283978, guid: 1f352037363b89448b47a16d0ae8ee86, type: 3}
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
@@ -6346,7 +6346,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1543943140}
   - component: {fileID: 1543943139}
-  - component: {fileID: 1543943138}
   - component: {fileID: 1543943137}
   - component: {fileID: 1543943136}
   m_Layer: 0
@@ -6401,30 +6400,6 @@ MonoBehaviour:
   - {fileID: 1540139611}
   slotFight: 0
   slotBuild: 0
---- !u!114 &1543943138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543943135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3d6a2f14f9ec841b8505a048dd4b7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Building: {fileID: 0}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
-  Name: 
-  Description: 
-  resources_name: []
-  resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
 --- !u!114 &1543943139
 MonoBehaviour:
   m_ObjectHideFlags: 0
