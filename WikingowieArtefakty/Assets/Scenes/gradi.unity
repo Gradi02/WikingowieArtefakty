@@ -4178,13 +4178,20 @@ MonoBehaviour:
   size: 70
   middleRadius: 10
   treeOffset: 0.15
+  rockOffset: 0
   islandLevel: 0
   oresChance: 5
   blocks_prefabs1:
   - {fileID: 4075102254770810201, guid: acec58c90d3e0f34aa59a8d0906c03c0, type: 3}
-  - {fileID: 5190943920081329877, guid: b2143eb72b3878646b0c7f8842750029, type: 3}
-  - {fileID: 5190943920081329877, guid: b2143eb72b3878646b0c7f8842750029, type: 3}
-  - {fileID: 5190943920081329877, guid: b2143eb72b3878646b0c7f8842750029, type: 3}
+  - {fileID: 133260629164837768, guid: 544dce29792221f45857509f1daf6407, type: 3}
+  - {fileID: 133260629164837768, guid: d6bf4c43a24e9bc47aceb0154358aafd, type: 3}
+  - {fileID: 133260629164837768, guid: d6bf4c43a24e9bc47aceb0154358aafd, type: 3}
+  rocks_variants1:
+  - {fileID: 133260629164837768, guid: 2665e047eb388a44892308669b67e40a, type: 3}
+  - {fileID: 133260629164837768, guid: 544dce29792221f45857509f1daf6407, type: 3}
+  - {fileID: 133260629164837768, guid: b89cde8447b187b48bcb6dda45e544af, type: 3}
+  - {fileID: 133260629164837768, guid: aec791f371643f24e920207b2c30ebda, type: 3}
+  - {fileID: 133260629164837768, guid: b47d88ec5a1bd4a4cbff4eccd4192033, type: 3}
   ground_prefabs1:
   - {fileID: 4936650255284283978, guid: 1f352037363b89448b47a16d0ae8ee86, type: 3}
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
@@ -4193,8 +4200,7 @@ MonoBehaviour:
   - {fileID: 3776711458049546244, guid: 6f7eded46b427cc4787340143c36676b, type: 3}
   defaultMaterial1: {fileID: 2100000, guid: 2ae21ea97d61ab246b1c4279b5b132fd, type: 2}
   oresMaterials:
-  - {fileID: 2100000, guid: 929b5c134d4ed1c4f935cf3b8ec450cc, type: 2}
-  - {fileID: 2100000, guid: 53b2426bfe020c2449fb12cdf53890dc, type: 2}
+  - {fileID: 2100000, guid: 2922d83a76d2073428c3a989fd3757ec, type: 2}
   blocks_prefabs2: []
   ground_prefabs2: []
   defaultMaterial2: {fileID: 0}
@@ -8092,7 +8098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b53d3541314acea4ba733755be303374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.8
+  speed: 2
   canMove: 1
   dashCooldown: 3
   dashPower: 6
@@ -8176,6 +8182,7 @@ MonoBehaviour:
   selection: {fileID: 1543943137}
   itemList:
   - {fileID: 1855252431164562674, guid: b365db96e87439f48b9e5902287dd53a, type: 3}
+  - {fileID: 1855252431164562674, guid: 2b4e4a2eeb6b38948926ecef5fd1fe58, type: 3}
 --- !u!114 &2028137025
 MonoBehaviour:
   m_ObjectHideFlags: 0

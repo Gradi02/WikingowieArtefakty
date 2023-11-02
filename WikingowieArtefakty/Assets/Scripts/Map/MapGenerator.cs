@@ -9,11 +9,13 @@ public class MapGenerator : MonoBehaviour
     private int seed;
     public int middleRadius;
     [Range(0, 0.5f)] public float treeOffset;
+    [Range(0, 0.5f)] public float rockOffset;
     public int islandLevel;
     [Range(1, 100)]  public int oresChance;
 
     [Header("Base 1")]
     public GameObject[] blocks_prefabs1;
+    public GameObject[] rocks_variants1;
     public GameObject[] ground_prefabs1;
     public Material defaultMaterial1;
     public Material[] oresMaterials;
@@ -85,7 +87,16 @@ public class MapGenerator : MonoBehaviour
 
                 if (id > 0)
                 {
-                    GameObject new_obj = Instantiate(blocks_prefabs1[id - 1], transform.position, Quaternion.identity, start.transform);
+                    GameObject new_obj;
+                    if (id == 2)
+                    {
+                        int randvar = Random.Range(0, rocks_variants1.Length);
+                        new_obj = Instantiate(rocks_variants1[randvar], transform.position, Quaternion.identity, start.transform);
+                    }
+                    else
+                    {
+                        new_obj = Instantiate(blocks_prefabs1[id - 1], transform.position, Quaternion.identity, start.transform);
+                    }
 
                     if (id == 1) new_obj.transform.parent = Trees.transform;
                     else new_obj.transform.parent = Rocks.transform;
@@ -105,16 +116,24 @@ public class MapGenerator : MonoBehaviour
                         new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
 
                     }
-                    else if (id == 2 || id == 3 || id == 4)
+                    else if(id == 2)
+                    {
+                        int randrot = Random.Range(1, 4);
+                        new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+
+                        new_obj.transform.localPosition = new Vector3(x, 0.2f, y);
+                        new_obj.transform.localPosition += new Vector3(Random.Range(-rockOffset, rockOffset), 0, Random.Range(-rockOffset, rockOffset));
+                    }
+                    else if (id == 3 || id == 4)
                     {
                         int randore = Random.Range(1, 100);
 
-                        new_obj.transform.localScale = new Vector3(0.32f, (GetFloatPerlinNoise(x, y) / blocks_prefabs1.Length) - 0.25f, 0.32f);
+                        new_obj.transform.localScale = new Vector3(1, GetFloatPerlinNoise(x, y) / 2 - 0.2f, 1);
 
                         int randrot = Random.Range(1, 4);
                         new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
 
-                        new_obj.transform.localPosition = new Vector3(x, 0.25f, y);
+                        new_obj.transform.localPosition = new Vector3(x, 0.5f, y);
                         if (oresChance > randore)
                         {
                             new_obj.transform.GetComponent<MeshRenderer>().material = oresMaterials[Random.Range(0, oresTypes)];
