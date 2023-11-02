@@ -105,12 +105,11 @@ public class MapGenerator : MonoBehaviour
                         new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
 
                     }
-                    else if (id == 2)
+                    else if (id == 2 || id == 3 || id == 4)
                     {
                         int randore = Random.Range(1, 100);
 
-                        float randscale = Random.Range(0.5f, 0.62f);
-                        new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
+                        new_obj.transform.localScale = new Vector3(0.32f, (GetFloatPerlinNoise(x, y) / blocks_prefabs1.Length) - 0.25f, 0.32f);
 
                         int randrot = Random.Range(1, 4);
                         new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
@@ -171,8 +170,18 @@ public class MapGenerator : MonoBehaviour
 
         return Mathf.Clamp(Mathf.FloorToInt(perlin), 0, blocks_prefabs1.Length);
     }
+
+    float GetFloatPerlinNoise(int x, int y)
+    {
+        float nx = (seed + x * 0.15f);
+        float ny = (seed + y * 0.15f);
+        float perlin = Mathf.PerlinNoise(nx, ny) * (blocks_prefabs1.Length + 1);
+
+        return Mathf.Clamp(perlin, 0, blocks_prefabs1.Length);
+    }
     void SetMiddleMap()
     {
+        
         foreach (GameObject g in blocks)
         {
             if (Vector3.Distance(g.transform.position, middle) < middleRadius)
