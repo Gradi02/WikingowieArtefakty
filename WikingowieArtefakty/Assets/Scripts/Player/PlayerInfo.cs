@@ -30,14 +30,15 @@ public class PlayerInfo : MonoBehaviour
 
     void CheckForBridge()
     {
-        if (inventoryManager.FindItem("wood") == null)
+        Slot selected = inventoryManager.GetSelectedSlot();
+
+        if (selected.GetItemName() != "wood")
         {
             Debug.Log("nie masz matsów kurwo");
             return;
         }
         else
         {
-            inventoryManager.RemoveItem("wood");
             RaycastHit hit;
             Debug.DrawRay(transform.position, transform.right);
 
@@ -45,6 +46,7 @@ public class PlayerInfo : MonoBehaviour
             {
                 if (hit.transform.GetComponent<Bridge>() != null)
                     hit.transform.GetComponent<Bridge>().BuildBridge();
+                selected.RemoveItem();
             }
         }
     }
