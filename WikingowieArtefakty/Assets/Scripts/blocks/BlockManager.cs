@@ -9,8 +9,7 @@ public class BlockManager : MonoBehaviour
     public enum Tools
     {
         Axe,
-        Pickaxe,
-        Sword
+        Pickaxe
     }
 
     public Tools breakingTool;

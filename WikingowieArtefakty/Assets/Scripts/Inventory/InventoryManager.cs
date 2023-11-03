@@ -51,9 +51,10 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject GetItemFromList(string name)
     {
-        foreach(GameObject item in itemList)
+        for(int i=0; i<itemList.Length; i++)
         {
-            if (item.GetComponent<ItemManager>().itemName == name) return item;
+            Debug.Log(itemList[i]);
+            if (itemList[i].GetComponent<ItemManager>().itemName == name) return itemList[i];
         }
         return null;
     }

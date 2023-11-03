@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4075102254770810201
+--- !u!1 &9202604211109465504
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,25 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5060784388390780514}
-  - component: {fileID: 7992952326270601000}
-  - component: {fileID: 6902067608281867196}
-  - component: {fileID: 9113131347770776872}
-  - component: {fileID: 6027619614236201755}
+  - component: {fileID: 2055916750192985420}
+  - component: {fileID: 8160897966120503923}
+  - component: {fileID: 7074341345510625236}
+  - component: {fileID: -3457631395380834491}
+  - component: {fileID: -7278182685144406735}
   m_Layer: 0
-  m_Name: tree1Prefab
+  m_Name: treevariant 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5060784388390780514
+--- !u!4 &2055916750192985420
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4075102254770810201}
+  m_GameObject: {fileID: 9202604211109465504}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
@@ -35,21 +35,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7992952326270601000
+--- !u!33 &8160897966120503923
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4075102254770810201}
-  m_Mesh: {fileID: -2432090755550338912, guid: 1eb473392c4ab59438c77c4b9a9431e6, type: 3}
---- !u!23 &6902067608281867196
+  m_GameObject: {fileID: 9202604211109465504}
+  m_Mesh: {fileID: -2432090755550338912, guid: c620495869e90e940a79b0240df9b3e1, type: 3}
+--- !u!23 &7074341345510625236
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4075102254770810201}
+  m_GameObject: {fileID: 9202604211109465504}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ee998675641d8ee4c954e95a2ab278a5, type: 2}
+  - {fileID: 2100000, guid: 5f994e3b346e46d4a9fc8806bfeff663, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,31 +85,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9113131347770776872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4075102254770810201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 730f2898ac6a4fa46a3caa4f3a6bf004, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxBreakStatus: 5
-  breakingTool: 0
-  maxNumberOfLoot: 1
-  loot: {fileID: 1855252431164562674, guid: b365db96e87439f48b9e5902287dd53a, type: 3}
-  destroyParticles: {fileID: 3066103022588316011, guid: 83d4c8cc9baacfb4686c9a34a462a10e, type: 3}
-  resizeOffset: 0.25
---- !u!65 &6027619614236201755
+--- !u!65 &-3457631395380834491
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4075102254770810201}
+  m_GameObject: {fileID: 9202604211109465504}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -122,5 +104,23 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4, y: 1.5, z: 0.4}
-  m_Center: {x: 0, y: 0.75, z: 0}
+  m_Size: {x: 1, y: 2.2, z: 1}
+  m_Center: {x: 0, y: 1.1, z: 0}
+--- !u!114 &-7278182685144406735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9202604211109465504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 730f2898ac6a4fa46a3caa4f3a6bf004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxBreakStatus: 5
+  breakingTool: 0
+  maxNumberOfLoot: 1
+  loot: {fileID: 1855252431164562674, guid: b365db96e87439f48b9e5902287dd53a, type: 3}
+  destroyParticles: {fileID: 3066103022588316011, guid: 83d4c8cc9baacfb4686c9a34a462a10e, type: 3}
+  resizeOffset: 0.25
