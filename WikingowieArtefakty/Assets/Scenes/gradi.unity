@@ -1249,6 +1249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gen: {fileID: 988246187}
+  player: {fileID: 2028137019}
+  showAll: 1
 --- !u!114 &261472646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4175,17 +4177,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67134ddfe269c4741be5d981fd1eeded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  islandLevel: 0
   size: 70
   middleRadius: 10
   treeOffset: 0.15
   rockOffset: 0.1
-  islandLevel: 0
   oresChance: 5
-  blocks_prefabs1:
-  - {fileID: 4075102254770810201, guid: acec58c90d3e0f34aa59a8d0906c03c0, type: 3}
-  - {fileID: 133260629164837768, guid: 544dce29792221f45857509f1daf6407, type: 3}
-  - {fileID: 133260629164837768, guid: d6bf4c43a24e9bc47aceb0154358aafd, type: 3}
-  - {fileID: 133260629164837768, guid: d6bf4c43a24e9bc47aceb0154358aafd, type: 3}
   trees_variants1:
   - {fileID: 2551570784844344749, guid: 270aa20491d98d94daa58417330afd35, type: 3}
   - {fileID: 9202604211109465504, guid: 7c0c8c8b32d68dc458a8a07de3bf8b91, type: 3}
@@ -4205,20 +4202,27 @@ MonoBehaviour:
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
   defaultMaterial1: {fileID: 2100000, guid: 2ae21ea97d61ab246b1c4279b5b132fd, type: 2}
-  oresMaterials:
-  - {fileID: 2100000, guid: 2922d83a76d2073428c3a989fd3757ec, type: 2}
-  blocks_prefabs2: []
+  oresMaterials1: []
+  trees_variants2: []
+  rocks_variants2: []
   ground_prefabs2: []
   defaultMaterial2: {fileID: 0}
-  blocks_prefabs3: []
+  oresMaterials2: []
+  trees_variants3: []
+  rocks_variants3: []
   ground_prefabs3: []
   defaultMaterial3: {fileID: 0}
-  blocks_prefabs4: []
+  oresMaterials3: []
+  trees_variants4: []
+  rocks_variants4: []
   ground_prefabs4: []
   defaultMaterial4: {fileID: 0}
-  blocks_prefabs5: []
+  oresMaterials4: []
+  trees_variants5: []
+  rocks_variants5: []
   ground_prefabs5: []
   defaultMaterial5: {fileID: 0}
+  oresMaterials5: []
   waterLayer: {fileID: 663216414}
   player: {fileID: 2028137014}
   air: {fileID: 3945946977855608217, guid: 1a9aa9d5d8031b543b9de3e153aba9fb, type: 3}
