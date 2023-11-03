@@ -12,4 +12,10 @@ public class ItemManager : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    [ContextMenu("pick")]
+    public void PickUp()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>().PickUpItem(this.gameObject);
+    }
 }
