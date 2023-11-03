@@ -4181,7 +4181,7 @@ MonoBehaviour:
   size: 70
   middleRadius: 10
   treeOffset: 0.15
-  rockOffset: 0.1
+  rockOffset: 0.08
   oresChance: 5
   trees_variants1:
   - {fileID: 2551570784844344749, guid: 270aa20491d98d94daa58417330afd35, type: 3}
@@ -4434,12 +4434,12 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
+    m_Type: 1
+    m_Resolution: 3
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
-    m_NormalBias: 0.4
+    m_NormalBias: 0
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
       e00: 1
