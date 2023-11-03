@@ -14,8 +14,8 @@ public class UpgradeInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public TextMeshProUGUI DescTMP;
     public string Name;
     public string Desc;
-    private bool activated= false;
 
+    public bool hover=false;
     void Update()
     {
         mouseScreenPosition = Input.mousePosition;
@@ -24,16 +24,13 @@ public class UpgradeInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UpgradePlace.SetActive(true);
-        LeanTween.scale(UpgradePlace, new Vector3(1,1,1), 0.2f).setEase(LeanTweenType.easeInOutSine);
+        LeanTween.moveLocalY(UpgradePlace, 350f, 0.1f).setEase(LeanTweenType.easeInOutSine);
         NameTMP.text = Name;
         DescTMP.text = Desc;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        LeanTween.scale(UpgradePlace, new Vector3(0, 0, 0), 0.2f).setEase(LeanTweenType.easeInOutSine);
-        UpgradePlace.SetActive(false);
-
+        LeanTween.moveLocalY(UpgradePlace, 700f, 0.1f).setEase(LeanTweenType.easeInOutSine);
     }
 }
