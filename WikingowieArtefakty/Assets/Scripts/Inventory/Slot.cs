@@ -33,6 +33,12 @@ public class Slot : MonoBehaviour
             return;
         }
 
+        if (inventoryManager.GetItemFromList(new_item.GetComponent<ItemManager>().itemName) == null)
+        {
+            Debug.Log("dodaj item do listy itemów!");
+            return;
+        }
+
         currentItem = inventoryManager.GetItemFromList(new_item.GetComponent<ItemManager>().itemName).GetComponent<ItemManager>();
         new_item.GetComponent<ItemManager>().DestroyItem();
         SetItemInfo();

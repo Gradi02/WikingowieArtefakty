@@ -20,9 +20,9 @@ public class PlayerInfo : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            CheckForItems();
+            PickUpClosestItem();
         }
-        if(Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             DropItem();
         }
@@ -51,15 +51,21 @@ public class PlayerInfo : MonoBehaviour
         }
     }
 
-    void CheckForItems()
+    void PickUpClosestItem()
     {
-        foreach(GameObject g in GameObject.FindGameObjectsWithTag("item"))
+        GameObject closestItem = GameObject.FindGameObjectWithTag("item");
+        GameObject[] items = GameObject.FindGameObjectsWithTag("item");
+
+        for(int i=0; i<items.Length; i++)
         {
-            if(Vector3.Distance(transform.position, g.transform.position) <= 10)
+            if (Vector3.Distance(items[i].transform.position, transform.position) < Vector3.Distance(closestItem.transform.position, transform.position))
             {
-                inventoryManager.PickUpItem(g);
+                closestItem = items[i];
             }
         }
+
+        if(closestItem != null)
+            closestItem.GetComponent<ItemManager>().PickUp();
     }
 
     void DropItem()
