@@ -106,8 +106,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 10, z: 1}
+  m_Center: {x: 0, y: 5, z: 0}
 --- !u!114 &4656909689010848058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,8 +137,6 @@ GameObject:
   - component: {fileID: 4922685099269245129}
   - component: {fileID: 1551497908025636605}
   - component: {fileID: 5625721101412258178}
-  - component: {fileID: 6556227612110136634}
-  - component: {fileID: 304815022149189217}
   m_Layer: 0
   m_Name: Cube 1
   m_TagString: Untagged
@@ -211,45 +209,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6556227612110136634
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4571216816573444846}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &304815022149189217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4571216816573444846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 730f2898ac6a4fa46a3caa4f3a6bf004, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxBreakStatus: 5
-  breakingTool: 1
-  maxNumberOfLoot: 1
-  loot: {fileID: 1855252431164562674, guid: 2b4e4a2eeb6b38948926ecef5fd1fe58, type: 3}
-  destroyParticles: {fileID: 3066103022588316011, guid: 7ada4bcc0e46e5142a8c8a688e5ddb87, type: 3}
-  resizeOffset: 0
 --- !u!1 &7244481322197622385
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,8 +220,6 @@ GameObject:
   - component: {fileID: 154288691080126665}
   - component: {fileID: 7501434743147725123}
   - component: {fileID: 3511345650804184629}
-  - component: {fileID: 5508747459069874804}
-  - component: {fileID: 8726884296365642863}
   m_Layer: 0
   m_Name: Cube 1 (1)
   m_TagString: Untagged
@@ -335,42 +292,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5508747459069874804
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7244481322197622385}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8726884296365642863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7244481322197622385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 730f2898ac6a4fa46a3caa4f3a6bf004, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxBreakStatus: 5
-  breakingTool: 1
-  maxNumberOfLoot: 1
-  loot: {fileID: 1855252431164562674, guid: 2b4e4a2eeb6b38948926ecef5fd1fe58, type: 3}
-  destroyParticles: {fileID: 3066103022588316011, guid: 7ada4bcc0e46e5142a8c8a688e5ddb87, type: 3}
-  resizeOffset: 0
