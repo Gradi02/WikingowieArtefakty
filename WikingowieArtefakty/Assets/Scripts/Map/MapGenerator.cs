@@ -69,7 +69,13 @@ public class MapGenerator : MonoBehaviour
 
         if(islandLevel < 1 || islandLevel > 5) islandLevel = 1;
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
-        GenerateWorld1();
+
+        if(islandLevel == 1) GenerateWorld1();
+        else if (islandLevel == 2) GenerateWorld2();
+        else if (islandLevel == 3) GenerateWorld3();
+        else if (islandLevel == 4) GenerateWorld4();
+        else if (islandLevel == 5) GenerateWorld5();
+
         SetMiddleMap();
     }
     void GenerateWorld1()
@@ -125,7 +131,7 @@ public class MapGenerator : MonoBehaviour
                             new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
 
                             //Losowa skala
-                            float randscale = Random.Range(0.5f, 1f);
+                            float randscale = Random.Range(0.5f, 0.75f);
                             new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
 
                             //Losowa rotacja
@@ -190,7 +196,7 @@ public class MapGenerator : MonoBehaviour
                         new_obj = Instantiate(rocks_variants1[0], transform.position, Quaternion.identity, start.transform);
 
                         //Skala na bazie noise
-                        new_obj.transform.localScale = new Vector3(1, GetFloatPerlinNoise(x, y) / 2 - 0.2f, 1);
+                        new_obj.transform.localScale = new Vector3(1, GetHeightByNoise(x,y) , 1);
                         new_obj.transform.localPosition = new Vector3(x, 0.5f, y);
 
                         //Losowa rotacja
@@ -223,6 +229,26 @@ public class MapGenerator : MonoBehaviour
         player.GetComponent<PlayerMovement>().SetStartPosition(middle);
     }
 
+    void GenerateWorld2()
+    {
+
+    }
+
+    void GenerateWorld3()
+    {
+
+    }
+
+    void GenerateWorld4()
+    {
+
+    }
+
+    void GenerateWorld5()
+    {
+
+    }
+
     int GetIdPerlinNoise(int x, int y)
     {
         float nx = (seed + x * 0.15f);
@@ -232,6 +258,12 @@ public class MapGenerator : MonoBehaviour
         return Mathf.Clamp(Mathf.FloorToInt(perlin), 0, 5);
     }
 
+    float GetHeightByNoise(int x, int y)
+    {
+        float h = GetFloatPerlinNoise(x, y) / 2 - 0.2f;
+
+        return (Mathf.Round(h*10)/10);
+    }
     float GetFloatPerlinNoise(int x, int y)
     {
         float nx = (seed + x * 0.15f);
