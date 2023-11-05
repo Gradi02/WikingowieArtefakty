@@ -64,8 +64,6 @@ public class MapGenerator : MonoBehaviour
     private void Start()
     {
         start = this.gameObject;
-        seed = Random.Range(100, 9999);
-        Debug.Log("Seed: " + seed);
 
         if(islandLevel < 1 || islandLevel > 5) islandLevel = 1;
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
@@ -80,6 +78,9 @@ public class MapGenerator : MonoBehaviour
     }
     void GenerateWorld1()
     {
+        seed = Random.Range(100, 9999);
+        Debug.Log("Seed: " + seed);
+
         waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
         waterLayer.transform.position = middle + new Vector3(0, 0, 0);
 
@@ -231,7 +232,156 @@ public class MapGenerator : MonoBehaviour
 
     void GenerateWorld2()
     {
+        seed = Random.Range(100, 9999);
+        Debug.Log("Seed: " + seed);
 
+        waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
+        waterLayer.transform.position = middle + new Vector3(0, 0, 0);
+
+        int oresTypes = oresMaterials1.Length;
+
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                int id = GetIdPerlinNoise(x, y);
+                int ifempty = Random.Range(0, 3);
+
+                if (x <= 3 || y <= 3 || x >= size - 3 || y >= size - 3) id = 0;
+                if ((x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6) && id > 1) id = 1;
+                if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) id = 1;
+                if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius + 1 && id > 2) id = 2;
+
+                if (id >= 0)
+                {
+                    GameObject new_obj;
+
+                    if (id == 0) //Blok Powietrza
+                    {
+                        if (x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6)
+                        {
+                            GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity, Ground.transform);
+                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                            gr.name = "Sand" + x + y;
+                            ground.Add(gr);
+                        }
+                        else
+                        {
+                            GameObject a = Instantiate(air, transform.position, Quaternion.identity, Air.transform);
+                            a.transform.localPosition = new Vector3(x, 0.25f, y);
+                            a.name = "Air" + x + y;
+                            airBlocks.Add(a);
+                        }
+                    }
+                    else if (id == 1) //Blok Trawy/Drzewa 
+                    {
+                        if (ifempty == 1 || ifempty == 2)
+                        {
+                            //Losowanie drzewa
+                            int randvar = Random.Range(0, trees_variants1.Length);
+                            new_obj = Instantiate(trees_variants1[randvar], transform.position, Quaternion.identity, start.transform);
+
+                            //Offset drzewa na kratce
+                            new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
+                            new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
+
+                            //Losowa skala
+                            float randscale = Random.Range(0.5f, 0.75f);
+                            new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
+
+                            //Losowa rotacja
+                            int randrot = Random.Range(1, 4);
+                            new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+
+                            //Przypisanie do rodzica
+                            new_obj.name = "Tree" + x + y;
+                            new_obj.transform.parent = Trees.transform;
+                            blocks.Add(new_obj);
+                        }
+
+                        //Pod這瞠
+                        GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
+                        gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                        gr.name = "Ground" + x + y;
+                        ground.Add(gr);
+                    }
+                    else if (id == 2) //Blok ma貫go kamienia
+                    {
+                        if (ifempty == 1 || ifempty == 2)
+                        {
+                            //Losowanie kamienia
+                            int randvar = Random.Range(1, rocks_variants1.Length);
+                            new_obj = Instantiate(rocks_variants1[randvar], transform.position, Quaternion.identity, start.transform);
+
+                            //Losowa rotacja
+                            int randrot = Random.Range(1, 4);
+                            new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+
+                            //Pozycja
+                            new_obj.transform.localPosition = new Vector3(x, 0.19f, y);
+
+                            //Offset kamienia na kratce
+                            new_obj.transform.localPosition += new Vector3(Random.Range(-rockOffset, rockOffset), 0, Random.Range(-rockOffset, rockOffset));
+
+                            //Przypisanie do rodzica
+                            new_obj.name = "Rock" + x + y;
+                            new_obj.transform.parent = Rocks.transform;
+                            blocks.Add(new_obj);
+
+
+                            //Pod這瞠
+                            GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
+                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                            gr.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+                            gr.name = "Ground" + x + y;
+                            ground.Add(gr);
+                        }
+                        else
+                        {
+                            //Pod這瞠
+                            GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity, Ground.transform);
+                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                            gr.name = "Ground" + x + y;
+                            ground.Add(gr);
+                        }
+                    }
+                    else //Blok ska造
+                    {
+                        //Spawn kamienia
+                        new_obj = Instantiate(rocks_variants1[0], transform.position, Quaternion.identity, start.transform);
+
+                        //Skala na bazie noise
+                        new_obj.transform.localScale = new Vector3(1, GetHeightByNoise(x, y), 1);
+                        new_obj.transform.localPosition = new Vector3(x, 0.5f, y);
+
+                        //Losowa rotacja
+                        int randrot = Random.Range(1, 4);
+                        new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+
+                        //Losowanie rudy
+                        int randore = Random.Range(1, 100);
+                        if (oresChance > randore && oresMaterials1.Length < 0)
+                        {
+                            new_obj.transform.GetComponent<MeshRenderer>().material = oresMaterials1[Random.Range(0, oresTypes)];
+                        }
+
+                        //Przypisanie do rodzica
+                        new_obj.name = "Mountain" + x + y;
+                        new_obj.transform.parent = Rocks.transform;
+                        blocks.Add(new_obj);
+
+                        //Pod這瞠
+                        GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
+                        gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                        gr.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
+                        gr.name = "Ground" + x + y;
+                        ground.Add(gr);
+                    }
+                }
+            }
+        }
+
+        player.GetComponent<PlayerMovement>().SetStartPosition(middle);
     }
 
     void GenerateWorld3()
