@@ -14,9 +14,11 @@ public class Slot : MonoBehaviour
 
 
     private InventoryManager inventoryManager;
+    private Color empty = Color.white;
 
     private void Start()
     {
+        empty.a = 0;
         slotIcon = transform.Find("Icon").GetComponent<Image>();
         inventoryManager = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>();
 
@@ -82,7 +84,7 @@ public class Slot : MonoBehaviour
     private void ClearItemInfo()
     {
         slotIcon.sprite = null;
-        slotIcon.color = Color.black;
+        slotIcon.color = empty;
     }
 
     private void SetItemInfo()

@@ -52,7 +52,7 @@ public class TimeManager : MonoBehaviour
         DayChangeTMP.gameObject.SetActive(true);
         PreviousDayTMP.text = (day - 1).ToString();
         NextDayTMP.text = day.ToString();
-
+        
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
 
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
