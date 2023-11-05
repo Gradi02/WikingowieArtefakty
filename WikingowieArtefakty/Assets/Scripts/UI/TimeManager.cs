@@ -27,10 +27,10 @@ public class TimeManager : MonoBehaviour
     int min = 0;
     int day = 1;
 
-    public float fogDensity;
+    //public float fogDensity;
     void Start()
     {
-        fogDensity = RenderSettings.fogDensity;
+        //fogDensity = RenderSettings.fogDensity;
         
         PreviousDayTMP.gameObject.SetActive(false);
         NextDayTMP.gameObject.SetActive(false);
@@ -111,7 +111,8 @@ public class TimeManager : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             yield return new WaitForSeconds((delay-0.01f)/10);
-            Debug.Log("Fog Density: " + fogDensity);
+            //RenderSettings.fogDensity += 0.1f;
+            Debug.Log("Fog Density: " + RenderSettings.fogDensity);
             Sun.Rotate(Vector3.right, 360f / 480f);
         }
     }
