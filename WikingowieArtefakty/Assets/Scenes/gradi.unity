@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 1555406}
   - component: {fileID: 1555405}
   m_Layer: 5
-  m_Name: bar
+  m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,17 +175,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
+  NameTMP: {fileID: 1351201295}
+  DescriptionTMP: {fileID: 392286943}
+  ResourcesTMP:
+  - {fileID: 561321106}
+  - {fileID: 1180210974}
+  - {fileID: 1090573796}
+  - {fileID: 48666768}
   Name: 
   Description: 
-  resources_name: []
+  resources_name:
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
   resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
+  resoruces_img:
+  - {fileID: 1524836571}
+  - {fileID: 887915403}
+  - {fileID: 826898458}
+  - {fileID: 1563812388}
+  resources_icon:
+  - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
+  - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
+  - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
+  building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
+  building_icon_place: {fileID: 1614922754}
 --- !u!114 &1555406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -620,7 +636,7 @@ GameObject:
   - component: {fileID: 148641253}
   - component: {fileID: 148641252}
   m_Layer: 5
-  m_Name: tower
+  m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -659,17 +675,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
+  NameTMP: {fileID: 1351201295}
+  DescriptionTMP: {fileID: 392286943}
+  ResourcesTMP:
+  - {fileID: 561321106}
+  - {fileID: 1180210974}
+  - {fileID: 1090573796}
+  - {fileID: 48666768}
   Name: 
   Description: 
-  resources_name: []
+  resources_name:
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
   resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
+  resoruces_img:
+  - {fileID: 1524836571}
+  - {fileID: 887915403}
+  - {fileID: 826898458}
+  - {fileID: 1563812388}
+  resources_icon:
+  - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
+  - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
+  - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
+  building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
+  building_icon_place: {fileID: 1614922754}
 --- !u!114 &148641253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -915,7 +947,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d88f8acf1185dd140a93abcbcd4a7e10, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9dfd09d433b3f9044bf43a8996dacc69, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2110,7 +2142,7 @@ GameObject:
   - component: {fileID: 616886443}
   - component: {fileID: 616886442}
   m_Layer: 5
-  m_Name: altar
+  m_Name: Altar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2149,17 +2181,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
+  NameTMP: {fileID: 1351201295}
+  DescriptionTMP: {fileID: 392286943}
+  ResourcesTMP:
+  - {fileID: 561321106}
+  - {fileID: 1180210974}
+  - {fileID: 1090573796}
+  - {fileID: 48666768}
   Name: 
   Description: 
-  resources_name: []
+  resources_name:
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
   resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
+  resoruces_img:
+  - {fileID: 1524836571}
+  - {fileID: 887915403}
+  - {fileID: 826898458}
+  - {fileID: 1563812388}
+  resources_icon:
+  - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
+  - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
+  - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
+  building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
+  building_icon_place: {fileID: 1614922754}
 --- !u!114 &616886443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3103,7 +3151,7 @@ GameObject:
   - component: {fileID: 739827753}
   - component: {fileID: 739827752}
   m_Layer: 5
-  m_Name: barracks
+  m_Name: Monument
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3142,17 +3190,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
+  NameTMP: {fileID: 1351201295}
+  DescriptionTMP: {fileID: 392286943}
+  ResourcesTMP:
+  - {fileID: 561321106}
+  - {fileID: 1180210974}
+  - {fileID: 1090573796}
+  - {fileID: 48666768}
   Name: 
   Description: 
-  resources_name: []
+  resources_name:
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
   resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
+  resoruces_img:
+  - {fileID: 1524836571}
+  - {fileID: 887915403}
+  - {fileID: 826898458}
+  - {fileID: 1563812388}
+  resources_icon:
+  - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
+  - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
+  - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
+  building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
+  building_icon_place: {fileID: 1614922754}
 --- !u!114 &739827753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3370,6 +3434,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1936475459}
     m_Modifications:
+    - target: {fileID: 1858589062483336853, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1858589062483336853, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 185
+      objectReference: {fileID: 0}
     - target: {fileID: 2781468690162483041, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
       propertyPath: m_Name
       value: BUILDING
@@ -3474,6 +3546,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4356788913109603868, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4356788913109603868, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 185
+      objectReference: {fileID: 0}
     - target: {fileID: 6238880381399042320, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -3501,6 +3581,22 @@ PrefabInstance:
     - target: {fileID: 6238880381399042320, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8420321257928708182, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8420321257928708182, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 185
+      objectReference: {fileID: 0}
+    - target: {fileID: 8451510566430462471, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8451510566430462471, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 185
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3700,7 +3796,7 @@ GameObject:
   - component: {fileID: 869814113}
   - component: {fileID: 869814112}
   m_Layer: 5
-  m_Name: lumber
+  m_Name: Factory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3739,17 +3835,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
+  NameTMP: {fileID: 1351201295}
+  DescriptionTMP: {fileID: 392286943}
+  ResourcesTMP:
+  - {fileID: 561321106}
+  - {fileID: 1180210974}
+  - {fileID: 1090573796}
+  - {fileID: 48666768}
   Name: 
   Description: 
-  resources_name: []
+  resources_name:
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
   resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
+  resoruces_img:
+  - {fileID: 1524836571}
+  - {fileID: 887915403}
+  - {fileID: 826898458}
+  - {fileID: 1563812388}
+  resources_icon:
+  - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
+  - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
+  - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
+  building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
+  building_icon_place: {fileID: 1614922754}
 --- !u!114 &869814113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3946,7 +4058,7 @@ GameObject:
   - component: {fileID: 952997615}
   - component: {fileID: 952997614}
   m_Layer: 5
-  m_Name: mine
+  m_Name: Laboratory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3985,17 +4097,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
-  Name: 
-  Description: 
-  resources_name: []
-  resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
+  NameTMP: {fileID: 1351201295}
+  DescriptionTMP: {fileID: 392286943}
+  ResourcesTMP:
+  - {fileID: 561321106}
+  - {fileID: 1180210974}
+  - {fileID: 1090573796}
+  - {fileID: 48666768}
+  Name: Laboratory
+  Description: Improve your knowledge
+  resources_name:
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
+  resources: 05000000050000000200000001000000
+  resoruces_img:
+  - {fileID: 1524836571}
+  - {fileID: 887915403}
+  - {fileID: 826898458}
+  - {fileID: 1563812388}
+  resources_icon:
+  - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
+  - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
+  - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
+  building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
+  building_icon_place: {fileID: 1614922754}
 --- !u!114 &952997615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4553,7 +4681,7 @@ GameObject:
   - component: {fileID: 1113349940}
   - component: {fileID: 1113349939}
   m_Layer: 5
-  m_Name: factory
+  m_Name: Barracks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4592,17 +4720,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
-  NameTMP: {fileID: 0}
-  DescriptionTMP: {fileID: 0}
-  ResourcesTMP: []
+  NameTMP: {fileID: 1351201295}
+  DescriptionTMP: {fileID: 392286943}
+  ResourcesTMP:
+  - {fileID: 561321106}
+  - {fileID: 1180210974}
+  - {fileID: 1090573796}
+  - {fileID: 48666768}
   Name: 
   Description: 
-  resources_name: []
+  resources_name:
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
   resources: 
-  resoruces_img: []
-  resources_icon: []
-  building_icon: {fileID: 0}
-  building_icon_place: {fileID: 0}
+  resoruces_img:
+  - {fileID: 1524836571}
+  - {fileID: 887915403}
+  - {fileID: 826898458}
+  - {fileID: 1563812388}
+  resources_icon:
+  - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
+  - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
+  - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
+  building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
+  building_icon_place: {fileID: 1614922754}
 --- !u!114 &1113349940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4698,7 +4842,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e53def097ff47c944b9381b5a583989a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 310c7292d8c464d4881c60c09c542896, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5705,9 +5849,9 @@ RectTransform:
   - {fileID: 1555404}
   - {fileID: 869814111}
   - {fileID: 952997613}
-  - {fileID: 739827751}
   - {fileID: 148641251}
   - {fileID: 1113349938}
+  - {fileID: 739827751}
   - {fileID: 616886441}
   m_Father: {fileID: 1936475459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6514,7 +6658,7 @@ GameObject:
   - component: {fileID: 1599716861}
   - component: {fileID: 1599716860}
   m_Layer: 5
-  m_Name: house
+  m_Name: Lumber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6611,14 +6755,14 @@ MonoBehaviour:
   - {fileID: 1180210974}
   - {fileID: 1090573796}
   - {fileID: 48666768}
-  Name: house
-  Description: produces money
+  Name: Lumber
+  Description: Produce a wood
   resources_name:
-  - wojtyla
-  - papiez
-  - pudz
-  - drugi
-  resources: 020000000e000000
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
+  resources: 0300000002000000
   resoruces_img:
   - {fileID: 1524836571}
   - {fileID: 887915403}
@@ -6626,9 +6770,9 @@ MonoBehaviour:
   - {fileID: 1563812388}
   resources_icon:
   - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
-  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
   - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
   - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
   building_icon: {fileID: 21300000, guid: df491a08364cb7d43bf9dfd92b578a9b, type: 3}
   building_icon_place: {fileID: 1614922754}
 --- !u!222 &1599716863
@@ -8530,7 +8674,7 @@ GameObject:
   - component: {fileID: 2106525166}
   - component: {fileID: 2106525165}
   m_Layer: 5
-  m_Name: anvil
+  m_Name: Mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8576,14 +8720,14 @@ MonoBehaviour:
   - {fileID: 1180210974}
   - {fileID: 1090573796}
   - {fileID: 48666768}
-  Name: mill
-  Description: test2
+  Name: Mine
+  Description: Produce a rocks
   resources_name:
-  - wojtyla
-  - papiez
-  - pudz
-  - drugi
-  resources: 05000000000000001d000000
+  - planks
+  - rocks
+  - iron bars
+  - diamonds
+  resources: 0200000003000000
   resoruces_img:
   - {fileID: 1524836571}
   - {fileID: 887915403}
@@ -8591,9 +8735,9 @@ MonoBehaviour:
   - {fileID: 1563812388}
   resources_icon:
   - {fileID: 21300000, guid: b2e4c584e1a16b847b85af425740d80f, type: 3}
-  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
   - {fileID: 21300000, guid: 75e4d553a3b91a34e87580ba4f4c941f, type: 3}
   - {fileID: 21300000, guid: a511e8b42b8bc8e49afcf87872ed06c1, type: 3}
+  - {fileID: 21300000, guid: 7bd6baafed7f21e4fad1fe4d1c122b5b, type: 3}
   building_icon: {fileID: 21300000, guid: 51801c0d01f0e1b448b6030d26af45dd, type: 3}
   building_icon_place: {fileID: 1614922754}
 --- !u!114 &2106525166

@@ -112,7 +112,7 @@ public class TimeManager : MonoBehaviour
         {
             yield return new WaitForSeconds((delay-0.01f)/10);
             //RenderSettings.fogDensity += 0.1f;
-            Debug.Log("Fog Density: " + RenderSettings.fogDensity);
+            //Debug.Log("Fog Density: " + RenderSettings.fogDensity);
             Sun.Rotate(Vector3.right, 360f / 480f);
         }
     }
