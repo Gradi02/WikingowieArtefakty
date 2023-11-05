@@ -18,12 +18,20 @@ public class TimeManager : MonoBehaviour
     public TextMeshProUGUI ClockTMP;
     public TextMeshProUGUI AccDayTMP;
 
+    public Transform Sun;
+    public GameObject Player;
+
     private float delay = 0.2f;
-    int hour = 20;
+    private float Daydelay = 0f;
+    int hour = 8;
     int min = 0;
     int day = 1;
+
+    public float fogDensity;
     void Start()
     {
+        fogDensity = RenderSettings.fogDensity;
+        
         PreviousDayTMP.gameObject.SetActive(false);
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
@@ -50,6 +58,12 @@ public class TimeManager : MonoBehaviour
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
         StartCoroutine(Cooldown());
     }
+
+    private void Update()
+    {
+        Sun.transform.position = Player.transform.position + new Vector3(0, 10, 0);
+    }
+
 
     private void UpdateTextAlpha(TextMeshProUGUI textObject, float alpha)
     {
@@ -92,9 +106,17 @@ public class TimeManager : MonoBehaviour
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
     }
+    IEnumerator SunMove()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            yield return new WaitForSeconds((delay-0.01f)/10);
+            Debug.Log("Fog Density: " + fogDensity);
+            Sun.Rotate(Vector3.right, 360f / 480f);
+        }
+    }
 
-
-    IEnumerator Timer()
+        IEnumerator Timer()
     {
         while (true) { 
             int temp = 0;
@@ -111,6 +133,7 @@ public class TimeManager : MonoBehaviour
             while (temp < 2)
             {
                 yield return new WaitForSeconds(delay);
+                StartCoroutine(SunMove());
                 temp++;
                 min += 30;
                 if(min==60)min= 0;
@@ -119,7 +142,6 @@ public class TimeManager : MonoBehaviour
             min = 0;
             hour++;
             timeTMP.text = hour.ToString() + ":" + min.ToString("D2");
-
         }
     }
 }
