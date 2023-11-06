@@ -21,8 +21,8 @@ public class UpgradeInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         LeanTween.moveLocalY(UpgradePlace, 350f, 0.1f).setEase(LeanTweenType.easeInOutSine);
         if (!UpgradePlaceBGC.activeSelf) gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
-        NameTMP.text = Name;
-        DescTMP.text = Desc;
+        if (Name!=null)   NameTMP.text = Name;
+        if (Desc!= null) DescTMP.text = Desc;
     }
 
     public void OnPointerExit(PointerEventData eventData)
