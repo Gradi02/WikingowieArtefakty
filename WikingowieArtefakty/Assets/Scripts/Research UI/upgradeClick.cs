@@ -7,6 +7,7 @@ public class UpgradeClick : MonoBehaviour
 {
     public Image line1;
     public Image line2;
+    public Image line3;
     public Image UpgradeBGC;
     public Image Upgrade;
     public ParticleSystem PSys;
@@ -20,13 +21,14 @@ public class UpgradeClick : MonoBehaviour
     {
         foreach (GameObject u in unlocked_nodes)
         {
-            if (u != null) 
+            if (u != null)
             {
                 if (u.activeSelf)
                 {
                     unlockedd = true;
                 }
             }
+            else Debug.Log("brak polaczenia");
         }
 
         if (!UpgradeBGC.gameObject.activeSelf) { 
@@ -36,8 +38,9 @@ public class UpgradeClick : MonoBehaviour
                         Upgrade.color = Color.white;
                         if (line1 != null) line1.color = Color.white;
                         if (line2 != null) line2.color = Color.white;
+                        if (line3 != null) line3.color = Color.white;
                         UpgradeBGC.gameObject.SetActive(true);
-                        UpgradeBGC.color = Color.cyan;
+                        //UpgradeBGC.color = Color.cyan;
                         PSys.Play();
                 }
         }
