@@ -19,7 +19,7 @@ public class UpgradeInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        LeanTween.moveLocalY(UpgradePlace, 350f, 0.1f).setEase(LeanTweenType.easeInOutSine);
+        LeanTween.moveLocalY(UpgradePlace, -440f, 0.1f).setEase(LeanTweenType.easeInOutSine);
         if (!UpgradePlaceBGC.activeSelf) gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
         if (Name!=null)   NameTMP.text = Name;
         if (Desc!= null) DescTMP.text = Desc;
@@ -27,7 +27,7 @@ public class UpgradeInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        LeanTween.moveLocalY(UpgradePlace, 700f, 0.1f).setEase(LeanTweenType.easeInOutSine);
+        LeanTween.moveLocalY(UpgradePlace, -800f, 0.1f).setEase(LeanTweenType.easeInOutSine);
         gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 }
