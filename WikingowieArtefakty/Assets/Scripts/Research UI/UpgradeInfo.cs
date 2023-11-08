@@ -9,28 +9,25 @@ public class UpgradeInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
 {
     public GameObject UpgradePlace;
-    private Vector3 mouseScreenPosition;
+    public GameObject UpgradePlaceBGC;
     public TextMeshProUGUI NameTMP;
     public TextMeshProUGUI DescTMP;
     public string Name;
     public string Desc;
 
-    public bool hover=false;
-    void Update()
-    {
-        mouseScreenPosition = Input.mousePosition;
-        Debug.Log(mouseScreenPosition);
-    }
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        LeanTween.moveLocalY(UpgradePlace, 350f, 0.1f).setEase(LeanTweenType.easeInOutSine);
-        NameTMP.text = Name;
-        DescTMP.text = Desc;
+        LeanTween.moveLocalY(UpgradePlace, -440f, 0.1f).setEase(LeanTweenType.easeInOutSine);
+        if (!UpgradePlaceBGC.activeSelf) gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        if (Name!=null)   NameTMP.text = Name;
+        if (Desc!= null) DescTMP.text = Desc;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        LeanTween.moveLocalY(UpgradePlace, 700f, 0.1f).setEase(LeanTweenType.easeInOutSine);
+        LeanTween.moveLocalY(UpgradePlace, -800f, 0.1f).setEase(LeanTweenType.easeInOutSine);
+        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 }
