@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class blueprintObject : MonoBehaviour
 {
@@ -26,6 +27,10 @@ public class blueprintObject : MonoBehaviour
 
         toBuild = Instantiate(buildingPrefab);
         toBuild.SetActive(false);
+
+        BuildingManager m = toBuild.getComponent<BuildingManager>();
+        m.isFixed = false;
+        m.SetPlacementMode(PlacementMode.Valid);
     }
     
     private void setBuildingPrefab(GameObject prefab)
@@ -43,11 +48,20 @@ public class blueprintObject : MonoBehaviour
     {
         if (buildingPrefab != null)
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                if(toBuild.activeSelf) 
+                    toBuild.SetActive(false);
+            }
+            
+            else if (!toBuild.activeSelf)
+                toBuild.SetActive(true);
+            
             ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 1000f, groundLayerMask))
             {
                 if (!toBuild.activeSelf)
-                    toBuild.activeSelf(true);
+                    toBuild.SetActive(true);
                 toBuild.transform.position = hit.point;
             }
         }
