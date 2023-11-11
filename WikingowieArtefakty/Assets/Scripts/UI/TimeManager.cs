@@ -65,7 +65,7 @@ public class TimeManager : MonoBehaviour
         Sun.transform.position = Player.transform.position + new Vector3(0, 10, 0);
 
 
-
+        //pauza
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Debug.Log("KLIKAM PAUZE");
