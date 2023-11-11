@@ -62,6 +62,7 @@ public class TimeManager : MonoBehaviour
     private void Update()
     {
         Sun.transform.position = Player.transform.position + new Vector3(0, 10, 0);
+
     }
 
 
@@ -143,5 +144,15 @@ public class TimeManager : MonoBehaviour
             hour++;
             timeTMP.text = hour.ToString() + ":" + min.ToString("D2");
         }
+    }
+
+    public void TurnOn()
+    {
+        Time.timeScale = 1;
+    }
+
+    public void TurnOff()
+    {
+        Time.timeScale = 0;
     }
 }
