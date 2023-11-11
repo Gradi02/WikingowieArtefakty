@@ -22,10 +22,11 @@ public class TimeManager : MonoBehaviour
     public GameObject Player;
 
     private float delay = 0.2f;
-    private float Daydelay = 0f;
     int hour = 8;
     int min = 0;
     int day = 1;
+
+    private bool paused = false; 
 
     //public float fogDensity;
     void Start()
@@ -62,6 +63,24 @@ public class TimeManager : MonoBehaviour
     private void Update()
     {
         Sun.transform.position = Player.transform.position + new Vector3(0, 10, 0);
+
+
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("KLIKAM PAUZE");
+            if (paused == false)
+            {
+                Time.timeScale = 0f;
+                paused = true;
+            }
+
+            else if (paused == true)
+            {
+                Time.timeScale = 1f;
+                paused = false;
+            }
+        }
     }
 
 
