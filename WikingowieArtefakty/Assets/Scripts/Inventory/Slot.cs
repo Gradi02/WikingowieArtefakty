@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
-    private ItemManager currentItem;
+    public ItemManager currentItem = null;
     public ItemManager staticSlotItem;
     
     private Image slotIcon;
@@ -20,12 +20,18 @@ public class Slot : MonoBehaviour
     {
         empty.a = 0;
         slotIcon = transform.Find("Icon").GetComponent<Image>();
-        inventoryManager = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>();
+        //inventoryManager = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>();
 
         if (staticSlotItem != null) currentItem = staticSlotItem;
+        //Debug.Log(currentItem + " " + GetItemName());
     }
 
-
+    private void Update()
+    {
+        if (inventoryManager == null)
+            if (GameObject.FindGameObjectWithTag("Player") != null)
+                inventoryManager = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>();
+    }
 
     public void SetItem(GameObject new_item)
     {
@@ -51,6 +57,7 @@ public class Slot : MonoBehaviour
         if(currentItem != null)
             return currentItem;
 
+        Debug.Log(this);
         return null;
     }
 
@@ -77,7 +84,7 @@ public class Slot : MonoBehaviour
     public bool IsEmpty()
     {
         if (staticSlot) return false;
-
+        //return true;
         if (currentItem == null) return true;
         return false;
     }

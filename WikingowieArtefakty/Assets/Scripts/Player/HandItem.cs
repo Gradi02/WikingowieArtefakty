@@ -21,13 +21,15 @@ public class HandItem : MonoBehaviour
     {
         selectedItemSlot = GetSelectedItem();
 
-        if (selectedItemSlot.GetItemName() == "Bow") bowscript.enableBow = true;
+        //Debug.Log(selectedItemSlot);
+
+        if (selectedItemSlot.GetItemName() == "bow") bowscript.enableBow = true;
         else bowscript.enableBow = false;
 
-        if (selectedItemSlot.GetItemName() == "Axe") GetComponent<DestroyBlock>().enableAxe = true;
+        if (selectedItemSlot.GetItemName() == "axe") GetComponent<DestroyBlock>().enableAxe = true;
         else GetComponent<DestroyBlock>().enableAxe = false;
 
-        if (selectedItemSlot.GetItemName() == "Pickaxe") GetComponent<DestroyBlock>().enablePickaxe = true;
+        if (selectedItemSlot.GetItemName() == "pickaxe") GetComponent<DestroyBlock>().enablePickaxe = true;
         else GetComponent<DestroyBlock>().enablePickaxe = false;
     }
 

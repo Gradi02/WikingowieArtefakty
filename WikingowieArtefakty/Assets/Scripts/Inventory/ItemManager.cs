@@ -21,7 +21,8 @@ public class ItemManager : MonoBehaviour
     [ContextMenu("pick")]
     public void PickUp()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>().PickUpItem(this.gameObject);
+        
+        GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>().PickUpItem(gameObject);
     }
 
     void SetPosition()

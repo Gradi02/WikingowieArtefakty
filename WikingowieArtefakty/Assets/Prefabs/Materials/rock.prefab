@@ -97,4 +97,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: rock
-  itemIcon: {fileID: 21300000, guid: 3c357759695d6564b99c57e53330a61d, type: 3}
+  itemIcon: {fileID: 21300000, guid: c4c548a339b4d41a590928c0c98934a7, type: 3}
