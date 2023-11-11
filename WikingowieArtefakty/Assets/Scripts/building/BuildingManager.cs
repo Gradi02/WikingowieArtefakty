@@ -40,7 +40,7 @@ public class BuildingManager : MonoBehaviour
     }
     #endif
 
-    public void SetPlacementMode(PlacementMode Mode);
-    public void SetMaterial(PlacementMode Mode);
-    private void InitialzeMaterials()
+    public void SetPlacementMode(BuildingState Mode);
+    public void SetMaterial(BuildingState Mode);
+    private void InitializeMaterials();
 }

@@ -30,7 +30,7 @@ public class blueprintObject : MonoBehaviour
 
         BuildingManager m = toBuild.getComponent<BuildingManager>();
         m.isFixed = false;
-        m.SetPlacementMode(PlacementMode.Valid);
+        m.SetPlacementMode(BuildingState.Valid);
     }
     
     private void setBuildingPrefab(GameObject prefab)
