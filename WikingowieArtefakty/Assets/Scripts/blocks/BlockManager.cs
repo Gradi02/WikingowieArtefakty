@@ -16,6 +16,7 @@ public class BlockManager : MonoBehaviour
     public int maxNumberOfLoot;
     public GameObject loot;
     public ParticleSystem destroyParticles;
+    public ParticleSystem treeParticles;
     public float resizeOffset = 0;
     
     
@@ -36,8 +37,19 @@ public class BlockManager : MonoBehaviour
         //if player tools
         currentBreakStatus++;
         transform.localScale -= breakStep;
+        StartCoroutine(Hitting());
         transform.position -= new Vector3(0f,FindGroundY(transform.position.y) - resizeOffset,0f);
         CheckForDestroy();
+    }
+
+    IEnumerator Hitting()
+    {
+        float x = Random.Range(-10, 10);
+        float z = Random.Range(-10, 10);
+        treeParticles.Play();
+        LeanTween.rotate(this.gameObject, new Vector3(x, this.gameObject.transform.rotation.y, z), 0.15f).setEase(LeanTweenType.easeInSine);
+        yield return new WaitForSeconds(0.20f);
+        LeanTween.rotate(this.gameObject, new Vector3(0, this.gameObject.transform.rotation.y, 0), 0.15f).setEase(LeanTweenType.easeOutSine);
     }
 
     float FindGroundY(float h)
