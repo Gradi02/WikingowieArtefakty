@@ -52,7 +52,7 @@ public class TimeManager : MonoBehaviour
         DayChangeTMP.gameObject.SetActive(true);
         PreviousDayTMP.text = (day - 1).ToString();
         NextDayTMP.text = day.ToString();
-
+        
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
 
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
@@ -112,7 +112,7 @@ public class TimeManager : MonoBehaviour
         {
             yield return new WaitForSeconds((delay-0.01f)/10);
             //RenderSettings.fogDensity += 0.1f;
-            Debug.Log("Fog Density: " + RenderSettings.fogDensity);
+            //Debug.Log("Fog Density: " + RenderSettings.fogDensity);
             Sun.Rotate(Vector3.right, 360f / 480f);
         }
     }

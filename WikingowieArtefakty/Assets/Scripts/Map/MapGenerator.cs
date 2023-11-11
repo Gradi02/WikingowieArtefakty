@@ -19,6 +19,7 @@ public class MapGenerator : MonoBehaviour
     public GameObject[] ground_prefabs1;
     public Material defaultMaterial1;
     public Material[] oresMaterials1;
+    public GameObject shipPrefab;
 
     [Header("Base 2")]
     public GameObject[] trees_variants2;
@@ -49,8 +50,11 @@ public class MapGenerator : MonoBehaviour
     public Material[] oresMaterials5;
 
     [Header("Others")]
+    public GameObject manager;
     public GameObject waterLayer;
-    public GameObject player;
+    public Camera cam;
+    public GameObject baseBuilding;
+    //public GameObject player;
     public GameObject air;
     public GameObject Trees, Rocks, Air, Ground; 
 
@@ -67,6 +71,7 @@ public class MapGenerator : MonoBehaviour
 
         if(islandLevel < 1 || islandLevel > 5) islandLevel = 1;
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
+        manager.GetComponent<Manager>().SetMiddle(middle);
 
         if(islandLevel == 1) GenerateWorld1();
         else if (islandLevel == 2) GenerateWorld2();
@@ -75,6 +80,9 @@ public class MapGenerator : MonoBehaviour
         else if (islandLevel == 5) GenerateWorld5();
 
         SetMiddleMap();
+        SetShip();
+        SpawnBase();
+        //player.GetComponent<PlayerMovement>().SetStartPosition(middle);
     }
     void GenerateWorld1()
     {
@@ -226,8 +234,6 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-
-        player.GetComponent<PlayerMovement>().SetStartPosition(middle);
     }
 
     void GenerateWorld2()
@@ -380,8 +386,6 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-
-        player.GetComponent<PlayerMovement>().SetStartPosition(middle);
     }
 
     void GenerateWorld3()
@@ -440,6 +444,39 @@ public class MapGenerator : MonoBehaviour
                 g.GetComponent<MeshRenderer>().material = defaultMaterial1;
             }
         }
+    }
+
+    void SetShip()
+    {
+        //Przywo³aj statek na brzegu mapy w losowym miejscu
+        GameObject ship = Instantiate(shipPrefab, transform.position, Quaternion.identity);
+        ship.name = "Ship";
+
+        int xy = GetRandomSign();
+        int ss = GetRandomSign() * 70;
+
+        Vector3 shipPos = new();
+
+        if (xy == 0) shipPos = new Vector3(ss, 0, Random.Range(0, size));
+        else shipPos = new Vector3(Random.Range(0, size), 0, ss);
+
+        ship.transform.position = shipPos;
+
+        //Ustaw kamere na statek
+        cam.GetComponent<CameraFollow>().Target = ship.transform;
+        cam.GetComponent<CameraFollow>().SetPosition(shipPos);
+        cam.GetComponent<CameraFollow>().SmoothTime = 2;
+    }
+
+    int GetRandomSign()
+    {
+        return Random.Range(-10, 9) < 0 ? 0 : 1;
+    }
+
+    void SpawnBase()
+    {
+        GameObject b = Instantiate(baseBuilding, middle + new Vector3(0,0.25f,0), Quaternion.identity);
+        b.name = "base";
     }
 
     public List<GameObject> GetGroundBlocks()
