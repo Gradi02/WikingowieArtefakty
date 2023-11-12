@@ -21,7 +21,7 @@ public class TimeManager : MonoBehaviour
     public Transform Sun;
     public GameObject Player;
 
-    private float delay = 0.2f;
+    private float delay = 5f;
     int hour = 8;
     int min = 0;
     int day = 1;
