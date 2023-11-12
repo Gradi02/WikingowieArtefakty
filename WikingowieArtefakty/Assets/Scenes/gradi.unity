@@ -1319,9 +1319,10 @@ GameObject:
   m_Component:
   - component: {fileID: 338394462}
   - component: {fileID: 338394463}
+  - component: {fileID: 338394464}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1355,6 +1356,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPref: {fileID: 96891937399687568, guid: f7e8370cd0333dd42aaa6b15637ca261, type: 3}
   cam: {fileID: 261472643}
+--- !u!114 &338394464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338394461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28f76501cd1c7db4e8cdb5cb6a8c449d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generator: {fileID: 988246187}
 --- !u!114 &392286943 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8818588812078890310, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
@@ -3288,11 +3302,11 @@ MonoBehaviour:
   ground_prefabs5: []
   defaultMaterial5: {fileID: 0}
   oresMaterials5: []
-  manager: {fileID: 338394461}
   waterLayer: {fileID: 663216414}
-  cam: {fileID: 261472643}
   baseBuilding: {fileID: 4960937523105547747, guid: d8c361eea94171947ac017b5d5ce6f3e, type: 3}
   air: {fileID: 3945946977855608217, guid: 1a9aa9d5d8031b543b9de3e153aba9fb, type: 3}
+  cam: {fileID: 261472643}
+  manager: {fileID: 338394461}
   Trees: {fileID: 9235876}
   Rocks: {fileID: 667027241}
   Air: {fileID: 1182208547}

@@ -9,10 +9,12 @@ public class InventoryManager : MonoBehaviour
     public List<Slot> slots = new();
     private EqBar selection;
     public GameObject[] itemList;
+    private ItemsDropManager dropManager;
 
     private void Awake()
     {
         selection = GameObject.FindGameObjectWithTag("uimanager").GetComponent<EqBar>();
+        dropManager = GameObject.FindGameObjectWithTag("manager").GetComponent<ItemsDropManager>();
 
         slots.Clear();
         GameObject[] gmslots = GameObject.FindGameObjectsWithTag("slots");
@@ -96,7 +98,7 @@ public class InventoryManager : MonoBehaviour
         
         if(drop.Droppable() && !drop.IsEmpty())
         {
-            if(!CheckForSpace())
+            if(CheckForSpace())
             {
                 Debug.Log("nie ma miejsca");
                 return;
@@ -110,26 +112,6 @@ public class InventoryManager : MonoBehaviour
 
     bool CheckForSpace()
     {
-        Vector3 dropPos = new Vector3(Mathf.RoundToInt(transform.position.x), 1f, Mathf.RoundToInt(transform.position.z));
-        Debug.DrawRay(dropPos, Vector3.down, Color.red, 1);
-
-        RaycastHit[] hits = new RaycastHit[1];
-        int hitCount = Physics.RaycastNonAlloc(dropPos, Vector3.down, hits, 1.0f);
-        Debug.Log(hitCount);
-
-        // SprawdŸ, czy istnieje trafienie i czy miejsce jest zajête
-        if (hitCount > 0)
-        {
-            foreach (var hit in hits)
-            {
-                if (hit.transform != null && (hit.transform.GetComponent<BlockManager>() != null || hit.transform.GetComponent<ItemManager>() != null))
-                {
-                    Debug.Log("Nie mo¿na nic tu upuœciæ - zajête przez obiekt.");
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return dropManager.IsPlaceEmpty(Mathf.RoundToInt(transform.localPosition.x), Mathf.RoundToInt(transform.localPosition.z));
     }
 }

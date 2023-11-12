@@ -39,20 +39,20 @@ public class BlockManager : MonoBehaviour
         currentBreakStatus++;
         //transform.localScale -= breakStep;
         LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep, 0.2f);
+        transform.position -= new Vector3(0f,breakStep.y/2,0f); //FindGroundY(transform.position.y) - resizeOffset
         StartCoroutine(Hitting());
-        transform.position -= new Vector3(0f,FindGroundY(transform.position.y) - resizeOffset,0f);
         CheckForDestroy();
     }
 
     IEnumerator Hitting()
     {
-        float x = Random.Range(-10, 10);
-        float z = Random.Range(-10, 10);
+        float x = Random.Range(-5, 5);
+        float z = Random.Range(-5, 5);
         if(treeParticles!=null) treeParticles.Play();
         if (stoneParticles != null) stoneParticles.Play();
-        LeanTween.rotate(this.gameObject, new Vector3(x, this.gameObject.transform.rotation.y, z), 0.15f).setEase(LeanTweenType.easeInSine);
-        yield return new WaitForSeconds(0.20f);
-        LeanTween.rotate(this.gameObject, new Vector3(0, this.gameObject.transform.rotation.y, 0), 0.15f).setEase(LeanTweenType.easeOutSine);
+        LeanTween.rotate(this.gameObject, new Vector3(x, transform.localRotation.eulerAngles.y, z), 0.1f).setEase(LeanTweenType.easeInSine);
+        yield return new WaitForSeconds(0.1f);
+        LeanTween.rotate(this.gameObject, new Vector3(0, transform.localRotation.eulerAngles.y, 0), 0.1f).setEase(LeanTweenType.easeOutSine);
     }
 
     float FindGroundY(float h)
