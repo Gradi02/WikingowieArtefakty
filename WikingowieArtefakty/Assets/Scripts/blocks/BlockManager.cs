@@ -17,6 +17,7 @@ public class BlockManager : MonoBehaviour
     public GameObject loot;
     public ParticleSystem destroyParticles;
     public ParticleSystem treeParticles;
+    public ParticleSystem stoneParticles;
     public float resizeOffset = 0;
     
     
@@ -36,7 +37,8 @@ public class BlockManager : MonoBehaviour
     {
         //if player tools
         currentBreakStatus++;
-        transform.localScale -= breakStep;
+        //transform.localScale -= breakStep;
+        LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep, 0.2f);
         StartCoroutine(Hitting());
         transform.position -= new Vector3(0f,FindGroundY(transform.position.y) - resizeOffset,0f);
         CheckForDestroy();
@@ -46,7 +48,8 @@ public class BlockManager : MonoBehaviour
     {
         float x = Random.Range(-10, 10);
         float z = Random.Range(-10, 10);
-        treeParticles.Play();
+        if(treeParticles!=null) treeParticles.Play();
+        if (stoneParticles != null) stoneParticles.Play();
         LeanTween.rotate(this.gameObject, new Vector3(x, this.gameObject.transform.rotation.y, z), 0.15f).setEase(LeanTweenType.easeInSine);
         yield return new WaitForSeconds(0.20f);
         LeanTween.rotate(this.gameObject, new Vector3(0, this.gameObject.transform.rotation.y, 0), 0.15f).setEase(LeanTweenType.easeOutSine);
