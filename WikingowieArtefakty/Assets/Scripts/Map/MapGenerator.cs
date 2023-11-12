@@ -49,13 +49,14 @@ public class MapGenerator : MonoBehaviour
     public Material defaultMaterial5;
     public Material[] oresMaterials5;
 
-    [Header("Others")]
-    public GameObject manager;
+    [Header("Other Prefabs")]
     public GameObject waterLayer;
-    public Camera cam;
     public GameObject baseBuilding;
-    //public GameObject player;
     public GameObject air;
+
+    [Header("Others")]
+    public Camera cam;
+    public GameObject manager;
     public GameObject Trees, Rocks, Air, Ground; 
 
     private GameObject start;
