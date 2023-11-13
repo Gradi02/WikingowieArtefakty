@@ -6,9 +6,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class scaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class scaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public GameObject Building;
+    public BuildingManager buildingManager;
+    [Range(0, 8)] public int buildingNumber; 
 
     public TextMeshProUGUI NameTMP;
     public TextMeshProUGUI DescriptionTMP;
@@ -70,5 +72,16 @@ public class scaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             ResourcesTMP[i].text = "";
         }
         Building.SetActive(false);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(!buildingManager.CheckForSchematPlace())
+        {
+            Debug.Log("Masz ju¿ max schematów!");
+            return;
+        }
+
+        buildingManager.PickNewPrefab(buildingNumber);
     }
 }

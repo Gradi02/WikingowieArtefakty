@@ -175,6 +175,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 2
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -584,6 +586,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 5
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -1320,6 +1324,7 @@ GameObject:
   - component: {fileID: 338394462}
   - component: {fileID: 338394463}
   - component: {fileID: 338394464}
+  - component: {fileID: 338394465}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: manager
@@ -1369,6 +1374,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 988246187}
+--- !u!114 &338394465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338394461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4742fe214d8ccd7499987e01a110f3a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildPrefabs:
+  - {fileID: 7593791710759264347, guid: b71666080ac5be44bb845988137c3d6d, type: 3}
+  - {fileID: 5818735168176854563, guid: 771ac1a607ac4e745be80b3f3c2b411c, type: 3}
 --- !u!114 &392286943 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8818588812078890310, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
@@ -1711,6 +1731,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 8
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -2345,6 +2367,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 7
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -2824,6 +2848,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 3
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -3086,6 +3112,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 4
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -3562,6 +3590,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 6
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -4982,6 +5012,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 0
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
@@ -6143,6 +6175,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Building: {fileID: 1538498791}
+  buildingManager: {fileID: 338394465}
+  buildingNumber: 1
   NameTMP: {fileID: 1351201295}
   DescriptionTMP: {fileID: 392286943}
   ResourcesTMP:
