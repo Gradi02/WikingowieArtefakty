@@ -187,8 +187,8 @@ MonoBehaviour:
   Name: 
   Description: 
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 
@@ -598,8 +598,8 @@ MonoBehaviour:
   Name: 
   Description: 
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 
@@ -1389,6 +1389,7 @@ MonoBehaviour:
   buildPrefabs:
   - {fileID: 7593791710759264347, guid: b71666080ac5be44bb845988137c3d6d, type: 3}
   - {fileID: 5818735168176854563, guid: 771ac1a607ac4e745be80b3f3c2b411c, type: 3}
+  - {fileID: 7593791710759264347, guid: afd604dbacecffb4c989c07aa76d4eb7, type: 3}
 --- !u!114 &392286943 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8818588812078890310, guid: cb5465cf2af59f846a838246fb8b6460, type: 3}
@@ -1743,8 +1744,8 @@ MonoBehaviour:
   Name: 
   Description: 
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 
@@ -2379,8 +2380,8 @@ MonoBehaviour:
   Name: 
   Description: 
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 
@@ -2860,8 +2861,8 @@ MonoBehaviour:
   Name: 
   Description: 
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 
@@ -3124,8 +3125,8 @@ MonoBehaviour:
   Name: Laboratory
   Description: Improve your knowledge
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 05000000050000000200000001000000
@@ -3602,8 +3603,8 @@ MonoBehaviour:
   Name: 
   Description: 
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 
@@ -5024,8 +5025,8 @@ MonoBehaviour:
   Name: Lumber
   Description: Produce a wood
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 0300000002000000
@@ -6187,8 +6188,8 @@ MonoBehaviour:
   Name: Mine
   Description: Produce a rocks
   resources_name:
-  - planks
-  - rocks
+  - wood
+  - rock
   - iron bars
   - diamonds
   resources: 0200000003000000

@@ -10,11 +10,12 @@ public class BuildingManager : MonoBehaviour
 
     public GameObject[] buildPrefabs = new GameObject[9];
    
-    public void PickNewPrefab(int num)
+    public void PickNewPrefab(int num, scaler info)
     {
         RemoveCurrentBuild();
 
         currentBuildPrefab = Instantiate(buildPrefabs[num], transform.position, Quaternion.identity);
+        currentBuildPrefab.GetComponent<BuildingInfo>().SetBuildingInfo(info);
     }
 
     private void Update()
@@ -27,7 +28,10 @@ public class BuildingManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                Vector3 newPos = new Vector3(Mathf.RoundToInt(hit.point.x), 0.75f, Mathf.RoundToInt(hit.point.z));
+                float Xoffset = currentBuildPrefab.transform.localScale.x / 2;
+                float Zoffset = currentBuildPrefab.transform.localScale.z / 2;
+
+                Vector3 newPos = new Vector3(Mathf.RoundToInt(hit.point.x) + Xoffset, 0.75f, Mathf.RoundToInt(hit.point.z) + Zoffset);
 
                 currentBuildPrefab.transform.position = newPos;
             }
@@ -38,7 +42,17 @@ public class BuildingManager : MonoBehaviour
             RemoveCurrentBuild();
         }
 
-        if (Input.GetMouseButtonDown(0) && currentBuildPrefab != null)
+        /*if(Input.GetKeyDown(KeyCode.E) && currentBuildPrefab != null)
+        {
+            currentBuildPrefab.transform.localEulerAngles += new Vector3(0, 90, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && currentBuildPrefab != null)
+        {
+            currentBuildPrefab.transform.localEulerAngles -= new Vector3(0, 90, 0);
+        }*/
+
+        if (Input.GetKeyDown(KeyCode.Space) && currentBuildPrefab != null)
         {
             SetNewBuild();
         }

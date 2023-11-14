@@ -82,6 +82,6 @@ public class scaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             return;
         }
 
-        buildingManager.PickNewPrefab(buildingNumber);
+        buildingManager.PickNewPrefab(buildingNumber, this);
     }
 }
