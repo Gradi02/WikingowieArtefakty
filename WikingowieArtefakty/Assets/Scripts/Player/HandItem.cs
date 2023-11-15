@@ -35,7 +35,6 @@ public class HandItem : MonoBehaviour
 
     Slot GetSelectedItem()
     {
-        //Debug.Log(inventoryManager.GetSelectedSlot());
         return inventoryManager.GetSelectedSlot();
     }
 }

@@ -16,6 +16,7 @@ public class InventoryManager : MonoBehaviour
         selection = GameObject.FindGameObjectWithTag("uimanager").GetComponent<EqBar>();
         dropManager = GameObject.FindGameObjectWithTag("manager").GetComponent<ItemsDropManager>();
 
+        GameObject.FindGameObjectWithTag("manager").GetComponent<Manager>().SetUiVisibility(true);
         slots.Clear();
         GameObject[] gmslots = GameObject.FindGameObjectsWithTag("slots");
         foreach(var gmslot in gmslots)
@@ -23,6 +24,7 @@ public class InventoryManager : MonoBehaviour
             slots.Add(gmslot.GetComponent<Slot>());
         }
         SortujSloty();
+        GameObject.FindGameObjectWithTag("manager").GetComponent<Manager>().SetUiVisibility(false);
     }
 
     void SortujSloty()
@@ -88,6 +90,8 @@ public class InventoryManager : MonoBehaviour
     public Slot GetSelectedSlot()
     {
         int num = selection.GetSelectedSlot();
+
+        if(slots.Count == 0) return null;
 
         return slots[num];
     }

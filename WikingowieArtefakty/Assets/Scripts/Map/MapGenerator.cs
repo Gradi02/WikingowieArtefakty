@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator : NetworkBehaviour
 {
     [Header("Generator Settings")]
-    public int islandLevel;
+    //public int islandLevel;
     [Min(1)] public int size;
     private int seed;
     public int middleRadius;
@@ -70,22 +71,20 @@ public class MapGenerator : MonoBehaviour
     {
         start = this.gameObject;
 
-        if(islandLevel < 1 || islandLevel > 5) islandLevel = 1;
+        //if(islandLevel < 1 || islandLevel > 5) islandLevel = 1;
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
         manager.GetComponent<Manager>().SetMiddle(middle);
 
-        if(islandLevel == 1) GenerateWorld1();
+        /*if(islandLevel == 1) GenerateWorld1();
         else if (islandLevel == 2) GenerateWorld2();
         else if (islandLevel == 3) GenerateWorld3();
         else if (islandLevel == 4) GenerateWorld4();
-        else if (islandLevel == 5) GenerateWorld5();
+        else if (islandLevel == 5) GenerateWorld5();*/
 
-        SetMiddleMap();
-        SetShip();
-        SpawnBase();
         //player.GetComponent<PlayerMovement>().SetStartPosition(middle);
     }
-    void GenerateWorld1()
+
+    public void GenerateWorld(bool multi)
     {
         seed = Random.Range(100, 9999);
         Debug.Log("Seed: " + seed);
@@ -119,6 +118,12 @@ public class MapGenerator : MonoBehaviour
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Sand" + x + y;
                             ground.Add(gr);
+
+                            if (multi)
+                            {
+                                gr.AddComponent<NetworkObject>();
+                                gr.AddComponent<NetworkTransport>();
+                            }
                         }
                         else
                         {
@@ -126,6 +131,12 @@ public class MapGenerator : MonoBehaviour
                             a.transform.localPosition = new Vector3(x, 0.25f, y);
                             a.name = "Air" + x + y;
                             airBlocks.Add(a);
+
+                            if (multi)
+                            {
+                                a.AddComponent<NetworkObject>();
+                                a.AddComponent<NetworkTransport>();
+                            }
                         }
                     }
                     else if (id == 1) //Blok Trawy/Drzewa 
@@ -152,6 +163,12 @@ public class MapGenerator : MonoBehaviour
                             new_obj.name = "Tree" + x + y;
                             new_obj.transform.parent = Trees.transform;
                             blocks.Add(new_obj);
+
+                            if (multi)
+                            {
+                                new_obj.AddComponent<NetworkObject>();
+                                new_obj.AddComponent<NetworkTransport>();
+                            }
                         }
 
                         //Pod這瞠
@@ -159,6 +176,12 @@ public class MapGenerator : MonoBehaviour
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
+
+                        if (multi)
+                        {
+                            gr.AddComponent<NetworkObject>();
+                            gr.AddComponent<NetworkTransport>();
+                        }
                     }
                     else if (id == 2) //Blok ma貫go kamienia
                     {
@@ -183,6 +206,12 @@ public class MapGenerator : MonoBehaviour
                             new_obj.transform.parent = Rocks.transform;
                             blocks.Add(new_obj);
 
+                            if (multi)
+                            {
+                                new_obj.AddComponent<NetworkObject>();
+                                new_obj.AddComponent<NetworkTransport>();
+                            }
+
 
                             //Pod這瞠
                             GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
@@ -190,6 +219,12 @@ public class MapGenerator : MonoBehaviour
                             gr.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
+
+                            if (multi)
+                            {
+                                gr.AddComponent<NetworkObject>();
+                                gr.AddComponent<NetworkTransport>();
+                            }
                         }
                         else
                         {
@@ -198,6 +233,12 @@ public class MapGenerator : MonoBehaviour
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
+
+                            if (multi)
+                            {
+                                gr.AddComponent<NetworkObject>();
+                                gr.AddComponent<NetworkTransport>();
+                            }
                         }
                     }
                     else //Blok ska造
@@ -225,157 +266,11 @@ public class MapGenerator : MonoBehaviour
                         new_obj.transform.parent = Rocks.transform;
                         blocks.Add(new_obj);
 
-                        //Pod這瞠
-                        GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
-                        gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                        gr.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
-                        gr.name = "Ground" + x + y;
-                        ground.Add(gr);
-                    }
-                }
-            }
-        }
-    }
-
-    void GenerateWorld2()
-    {
-        seed = Random.Range(100, 9999);
-        Debug.Log("Seed: " + seed);
-
-        waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
-        waterLayer.transform.position = middle + new Vector3(0, 0, 0);
-
-        int oresTypes = oresMaterials1.Length;
-
-        for (int x = 0; x < size; x++)
-        {
-            for (int y = 0; y < size; y++)
-            {
-                int id = GetIdPerlinNoise(x, y);
-                int ifempty = Random.Range(0, 3);
-
-                if (x <= 3 || y <= 3 || x >= size - 3 || y >= size - 3) id = 0;
-                if ((x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6) && id > 1) id = 1;
-                if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) id = 1;
-                if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius + 1 && id > 2) id = 2;
-
-                if (id >= 0)
-                {
-                    GameObject new_obj;
-
-                    if (id == 0) //Blok Powietrza
-                    {
-                        if (x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6)
+                        if (multi)
                         {
-                            GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity, Ground.transform);
-                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                            gr.name = "Sand" + x + y;
-                            ground.Add(gr);
+                            new_obj.AddComponent<NetworkObject>();
+                            new_obj.AddComponent<NetworkTransport>();
                         }
-                        else
-                        {
-                            GameObject a = Instantiate(air, transform.position, Quaternion.identity, Air.transform);
-                            a.transform.localPosition = new Vector3(x, 0.25f, y);
-                            a.name = "Air" + x + y;
-                            airBlocks.Add(a);
-                        }
-                    }
-                    else if (id == 1) //Blok Trawy/Drzewa 
-                    {
-                        if (ifempty == 1 || ifempty == 2)
-                        {
-                            //Losowanie drzewa
-                            int randvar = Random.Range(0, trees_variants1.Length);
-                            new_obj = Instantiate(trees_variants1[randvar], transform.position, Quaternion.identity, start.transform);
-
-                            //Offset drzewa na kratce
-                            new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
-                            new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
-
-                            //Losowa skala
-                            float randscale = Random.Range(0.5f, 0.75f);
-                            new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
-
-                            //Losowa rotacja
-                            int randrot = Random.Range(1, 4);
-                            new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
-
-                            //Przypisanie do rodzica
-                            new_obj.name = "Tree" + x + y;
-                            new_obj.transform.parent = Trees.transform;
-                            blocks.Add(new_obj);
-                        }
-
-                        //Pod這瞠
-                        GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
-                        gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                        gr.name = "Ground" + x + y;
-                        ground.Add(gr);
-                    }
-                    else if (id == 2) //Blok ma貫go kamienia
-                    {
-                        if (ifempty == 1 || ifempty == 2)
-                        {
-                            //Losowanie kamienia
-                            int randvar = Random.Range(1, rocks_variants1.Length);
-                            new_obj = Instantiate(rocks_variants1[randvar], transform.position, Quaternion.identity, start.transform);
-
-                            //Losowa rotacja
-                            int randrot = Random.Range(1, 4);
-                            new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
-
-                            //Pozycja
-                            new_obj.transform.localPosition = new Vector3(x, 0.19f, y);
-
-                            //Offset kamienia na kratce
-                            new_obj.transform.localPosition += new Vector3(Random.Range(-rockOffset, rockOffset), 0, Random.Range(-rockOffset, rockOffset));
-
-                            //Przypisanie do rodzica
-                            new_obj.name = "Rock" + x + y;
-                            new_obj.transform.parent = Rocks.transform;
-                            blocks.Add(new_obj);
-
-
-                            //Pod這瞠
-                            GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
-                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                            gr.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
-                            gr.name = "Ground" + x + y;
-                            ground.Add(gr);
-                        }
-                        else
-                        {
-                            //Pod這瞠
-                            GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity, Ground.transform);
-                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                            gr.name = "Ground" + x + y;
-                            ground.Add(gr);
-                        }
-                    }
-                    else //Blok ska造
-                    {
-                        //Spawn kamienia
-                        new_obj = Instantiate(rocks_variants1[0], transform.position, Quaternion.identity, start.transform);
-
-                        //Skala na bazie noise
-                        new_obj.transform.localScale = new Vector3(1, GetHeightByNoise(x, y), 1);
-                        new_obj.transform.localPosition = new Vector3(x, 0.5f, y);
-
-                        //Losowa rotacja
-                        int randrot = Random.Range(1, 4);
-                        new_obj.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
-
-                        //Losowanie rudy
-                        int randore = Random.Range(1, 100);
-                        if (oresChance > randore && oresMaterials1.Length < 0)
-                        {
-                            new_obj.transform.GetComponent<MeshRenderer>().material = oresMaterials1[Random.Range(0, oresTypes)];
-                        }
-
-                        //Przypisanie do rodzica
-                        new_obj.name = "Mountain" + x + y;
-                        new_obj.transform.parent = Rocks.transform;
-                        blocks.Add(new_obj);
 
                         //Pod這瞠
                         GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity, Ground.transform);
@@ -383,25 +278,19 @@ public class MapGenerator : MonoBehaviour
                         gr.transform.rotation = Quaternion.Euler(0, randrot * 90, 0);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
+
+                        if (multi)
+                        {
+                            gr.AddComponent<NetworkObject>();
+                            gr.AddComponent<NetworkTransport>();
+                        }
                     }
                 }
             }
         }
-    }
 
-    void GenerateWorld3()
-    {
-
-    }
-
-    void GenerateWorld4()
-    {
-
-    }
-
-    void GenerateWorld5()
-    {
-
+        SetMiddleMap();
+        SetShip();
     }
 
     int GetIdPerlinNoise(int x, int y)
@@ -464,9 +353,9 @@ public class MapGenerator : MonoBehaviour
         ship.transform.position = shipPos;
 
         //Ustaw kamere na statek
-        cam.GetComponent<CameraFollow>().Target = ship.transform;
-        cam.GetComponent<CameraFollow>().SetPosition(shipPos);
-        cam.GetComponent<CameraFollow>().SmoothTime = 2;
+        //cam.GetComponent<CameraFollow>().Target = ship.transform;
+        cam.GetComponent<CameraFollow>().SetPosition(middle);
+        //cam.GetComponent<CameraFollow>().SmoothTime = 2;
     }
 
     int GetRandomSign()
@@ -474,9 +363,10 @@ public class MapGenerator : MonoBehaviour
         return Random.Range(-10, 9) < 0 ? 0 : 1;
     }
 
-    void SpawnBase()
+    public void SpawnBase()
     {
         GameObject b = Instantiate(baseBuilding, middle + new Vector3(0,0.25f,0), Quaternion.identity);
+        cam.GetComponent<CameraFollow>().SetPosition(b.transform.position);
         b.name = "base";
     }
 
