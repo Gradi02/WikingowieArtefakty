@@ -7,10 +7,23 @@ public class AnimController : MonoBehaviour
     // Start is called before the first frame update
     public Animator animator;
 
-    void Start()
+    private void Update()
     {
+        if (Input.GetKey(KeyCode.W) ||
+            Input.GetKey(KeyCode.S) ||
+            Input.GetKey(KeyCode.A) ||
+            Input.GetKey(KeyCode.D))
+        {
+            animator.SetBool("walk", true);
+        }
+        else animator.SetBool("walk", false);
 
-        // Uruchom animacjê o nazwie "NazwaTwojejAnimacji"
-        animator.Play("player");
+        /////////////////////////////////////
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            animator.SetBool("dash", true);
+        }
+        else animator.SetBool("dash", false);
     }
 }
