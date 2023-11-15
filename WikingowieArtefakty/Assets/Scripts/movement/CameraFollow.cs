@@ -20,6 +20,8 @@ public class CameraFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Target == null) return;
+
         // update position
         Vector3 targetPosition = Target.position + Offset;
         camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, SmoothTime);
