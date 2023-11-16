@@ -1,25 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public enum BuildingState
-{
-    PlacingValid,
-    PlacingInvalid,
-    Erecting,
-    Erected,
-}
 public class BuildingManager : MonoBehaviour
 {
-    public Material validPlacementMaterial;
-    public Material invalidPlacementMaterial;
-    public Material ErectingMaterial;
+    public GameObject[] objects;
+    private GameObject pendingObject;
 
-    public MeshRenderer[] meshComponents;
-    private Dictionary<MeshRenderer, List<Material>> initialMaterials;
-
-    public bool hasValicPlacement;
-    public bool isFixed;
+    private Vector3 pos;
+    private RaycastHit hit;
+    [SerializeField] private LayerMask layerMask;
     
     // Start is called before the first frame update
     void Start()
@@ -30,17 +22,35 @@ public class BuildingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-    
-    #if UNITY_EDITOR
-        private void OnValidate()
-    {
-        InitializeMaterials();
-    }
-    #endif
+        if (pendingObject != null)
+        {
+            pendingObject.transform.position = pos;
+        }
 
-    public void SetPlacementMode(BuildingState Mode);
-    public void SetMaterial(BuildingState Mode);
-    private void InitializeMaterials();
+        if (Input.GetMouseButtonDown(9))
+        {
+            PlaceObject();
+        }
+    }
+
+    public void PlaceObject()
+    {
+        pendingObject = null;
+    }
+
+    private void FixedUpdate()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, 1000, layerMask))
+        {
+            pos = hit.point;
+            
+        }
+    }
+
+    public void SelectObject(int index)
+    {
+        pendingObject = Instantiate(objects[index],pos,transform.rotation);
+    }
 }
