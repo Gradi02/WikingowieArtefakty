@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     private GameObject player;
     private float Horizontal, Vertical;
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
         if (canMove)
         {
             //Movement Basic
@@ -50,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
         if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time >= nextDash && direction != Vector3.zero)
         {
             nextDash = Time.time + dashCooldown;
@@ -61,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void SetRotation(Vector3 dir)
     {
+
         if (dir == Vector3.zero || Input.GetKey(KeyCode.Mouse0))
         {
             Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerInfo : MonoBehaviour
+public class PlayerInfo : NetworkBehaviour
 {
     private PlayerMovement move;
     private InventoryManager inventoryManager;
@@ -11,10 +12,13 @@ public class PlayerInfo : MonoBehaviour
     {
         move = GetComponent<PlayerMovement>();
         inventoryManager = GetComponent<InventoryManager>();
+
+        if (IsLocalPlayer) Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
     }
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (!IsOwner) return;
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             CheckForBridge();           
         }

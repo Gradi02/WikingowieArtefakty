@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class CameraFollow : MonoBehaviour
+public class CameraFollow : NetworkBehaviour
 {
     public Transform Target;
     public Transform camTransform;
@@ -20,6 +21,7 @@ public class CameraFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Target == null) return;
         // update position
         Vector3 targetPosition = Target.position + Offset;
         camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, SmoothTime);
@@ -29,6 +31,11 @@ public class CameraFollow : MonoBehaviour
     public void SetPosition(Vector3 pos)
     {
         transform.position = pos + Offset;
+    }
+
+    public void SetTarget(Transform t)
+    {
+        Target = t;
     }
 
     public void ResetSmooth()

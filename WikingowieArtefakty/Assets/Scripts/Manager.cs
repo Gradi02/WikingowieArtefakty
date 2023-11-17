@@ -11,8 +11,8 @@ public class Manager : MonoBehaviour
 
     void Start()
     {
-        Invoke(nameof(SetPlayer), 1);
-        Invoke(nameof(ResetCameraSmoothTime), 10);
+        //Invoke(nameof(SetPlayer), 1);
+        //Invoke(nameof(ResetCameraSmoothTime), 10);
     }
 
     public void SetMiddle(Vector3 md)
