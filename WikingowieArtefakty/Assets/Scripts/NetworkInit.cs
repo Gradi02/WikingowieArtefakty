@@ -86,7 +86,8 @@ public class NetworkInit : NetworkBehaviour
 
     public void JoinGame()
     {
-        joincode = code.text.Substring(0, 6);
+        //joincode = code.text.Substring(0, 6);
+        joincode = inputCode.GetComponent<TMP_InputField>().text;
         if (joincode.Length != 6)
         {
             Debug.Log("zly kod");
@@ -94,5 +95,6 @@ public class NetworkInit : NetworkBehaviour
         }
 
         JoinRelay(joincode);
+        Debug.Log(joincode);
     }
 }
