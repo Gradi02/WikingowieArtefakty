@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class DestroyBlock : MonoBehaviour
+public class DestroyBlock : NetworkBehaviour
 {
     public bool enableAxe = false;
     public bool enablePickaxe = false;
@@ -15,6 +16,7 @@ public class DestroyBlock : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
         if (Input.GetKeyDown(KeyCode.Mouse0)) start = true;
 
         if (Input.GetKey(KeyCode.Mouse0))
