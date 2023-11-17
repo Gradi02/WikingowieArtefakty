@@ -15,25 +15,19 @@ public class NetworkInit : NetworkBehaviour
 
     [SerializeField] private GameObject hostButton;
     [SerializeField] private GameObject joinButton;
-    [SerializeField] private GameObject backButton;
     [SerializeField] private GameObject inputCode;
     [SerializeField] private TextMeshProUGUI code;
 
     private string joincode;
-    private Camera cam;
     public static int MaxPlayer = 2;
 
-    private void Awake()
-    {
-        cam = Camera.main;
-    }
     private async void Start()
     {
         await UnityServices.InitializeAsync();
 
         AuthenticationService.Instance.SignedIn += () =>
         {
-            Debug.Log("Signed in" +AuthenticationService.Instance.PlayerId);
+            Debug.Log("Signed in" + AuthenticationService.Instance.PlayerId);
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -48,9 +42,9 @@ public class NetworkInit : NetworkBehaviour
             joincode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             code.text = joincode;
 
-            RelayServerData relayServerData = new RelayServerData(allocation, dtls);
+            RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
 
-            NetworkManager.Singleton.GetComponentUnityTransport().SetRelayServerData(relayServerData);
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
 
             NetworkManager.Singleton.StartHost();
@@ -68,9 +62,9 @@ public class NetworkInit : NetworkBehaviour
         {
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(join_code);
 
-            RelayServerData relayServerData = new RelayServerData(joinAllocation, dtls);
+            RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
 
-            NetworkManager.Singleton.GetComponentUnityTransport().SetRelayServerData(relayServerData);
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
 
             NetworkManager.Singleton.StartClient();
@@ -88,8 +82,6 @@ public class NetworkInit : NetworkBehaviour
         joinButton.SetActive(false);
         inputCode.SetActive(false);
         hostButton.SetActive(false);
-
-        generator.GenerateWorld(true);
     }
 
     public void JoinGame()
@@ -97,85 +89,10 @@ public class NetworkInit : NetworkBehaviour
         joincode = code.text.Substring(0, 6);
         if (joincode.Length != 6)
         {
-            Debug.Log(zly kod);
+            Debug.Log("zly kod");
             return;
         }
 
         JoinRelay(joincode);
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        if (!NetworkManager.Singleton.IsConnectedClient)
-            Disconnected();
-
-        base.OnNetworkDespawn();
-    }
-
-    public void Disconnected()
-    {
-        code.text = ;
-        po wyjœciu gracza
-        }
-
-    public void Back()
-    {
-        NetworkManager.Shutdown();
-
-        joinButton.SetActive(true);
-        inputCode.SetActive(true);
-        hostButton.SetActive(true);
-
-        singleButton.SetActive(true);
-        multiButton.SetActive(true);
-
-        single.SetActive(false);
-        multi.SetActive(false);
-
-        backButton.SetActive(false);
-    }
-
-    public void StartGameMulti()
-    {
-        singleButton.SetActive(false);
-        multiButton.SetActive(false);
-        backButton.SetActive(false);
-        single.SetActive(false);
-        multi.SetActive(false);
-
-        cam.GetComponentCameraFollow().Offset = new Vector3(-3, 5, 0);
-
-        generator.GenerateWorld(true);
-    }
-
-    public void StartGameSingle()
-    {
-        singleButton.SetActive(false);
-        multiButton.SetActive(false);
-        backButton.SetActive(false);
-        single.SetActive(false);
-        multi.SetActive(false);
-
-        generator.GenerateWorld(false);
-        GameObject.FindGameObjectWithTag(manager).GetComponentManager().SetPlayer();
-        cam.GetComponentCameraFollow().Offset = new Vector3(-3, 5, 0);
-    }
-
-    public void Single()
-    {
-        single.SetActive(true);
-
-        singleButton.SetActive(false);
-        multiButton.SetActive(false);
-        backButton.SetActive(true);
-    }
-
-    public void Multi()
-    {
-        multi.SetActive(true);
-
-        singleButton.SetActive(false);
-        multiButton.SetActive(false);
-        backButton.SetActive(true);
     }
 }
