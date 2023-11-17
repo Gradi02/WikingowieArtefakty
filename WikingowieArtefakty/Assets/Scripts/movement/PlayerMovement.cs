@@ -69,7 +69,7 @@ public class PlayerMovement : NetworkBehaviour
         {
             Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
             Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            float angle = -AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) - 90;
+            float angle = -AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen);
             Quaternion targetRotation = Quaternion.Euler(0f, angle, 0f);
 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
@@ -82,7 +82,7 @@ public class PlayerMovement : NetworkBehaviour
             float angleDegrees = Mathf.Rad2Deg * angle;
 
             // Tworzymy obrót wokó³ osi Y (góra-dó³)
-            Quaternion targetRotation = Quaternion.Euler(0, angleDegrees-90, 0);
+            Quaternion targetRotation = Quaternion.Euler(0, angleDegrees, 0);
 
             // Interpolujemy p³ynnie obrotu gracza
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
