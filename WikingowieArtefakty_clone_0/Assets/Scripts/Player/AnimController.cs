@@ -25,5 +25,17 @@ public class AnimController : MonoBehaviour
             animator.SetBool("dash", true);
         }
         else animator.SetBool("dash", false);
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            animator.SetBool("axe", true);
+        }
+        else animator.SetBool("axe", false);
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            animator.SetBool("pickaxe", true);
+        }
+        else animator.SetBool("pickaxe", false);
     }
 }
