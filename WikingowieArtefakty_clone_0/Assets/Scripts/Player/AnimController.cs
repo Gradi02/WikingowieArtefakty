@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class AnimController : MonoBehaviour
+public class AnimController : NetworkBehaviour
 {
     // Start is called before the first frame update
     public Animator animator;
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         if (Input.GetKey(KeyCode.W) ||
             Input.GetKey(KeyCode.S) ||
             Input.GetKey(KeyCode.A) ||
