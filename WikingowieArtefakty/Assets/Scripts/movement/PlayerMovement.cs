@@ -57,10 +57,15 @@ public class PlayerMovement : NetworkBehaviour
         {
             nextDash = Time.time + dashCooldown;
             rb.AddForce(direction * dashPower, ForceMode.Impulse);
-            ParticleSystem dash = Instantiate(dashParticle, transform.position, player.transform.rotation);
-            dash.transform.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles - new Vector3(0f, 90f, 0f));
-            dash.Play();
+            SpawnParticleServerRpc();
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SpawnParticleServerRpc()
+    {
+        ParticleSystem dash = Instantiate(dashParticle, transform.position + new Vector3(0,0.1f,0), player.transform.rotation);
+        dash.transform.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles - new Vector3(0f, 90f, 0f));
     }
     void SetRotation(Vector3 dir)
     {

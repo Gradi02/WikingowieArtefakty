@@ -11,7 +11,6 @@ public class InventoryManager : NetworkBehaviour
     private EqBar selection;
     public GameObject[] itemList;
     private ItemsDropManager dropManager;
-    private GameObject itemToSpawn = null;
 
    
     private void Awake()
