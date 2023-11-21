@@ -32,6 +32,7 @@ public class PlayerMovement : NetworkBehaviour
             Vertical = Input.GetAxisRaw("Vertical");
 
             direction = new Vector3(Vertical, 0, -Horizontal).normalized;
+            Debug.Log(direction);
             
             //if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
             //transform.position += direction * speed * Time.deltaTime;
