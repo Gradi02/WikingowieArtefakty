@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1284974636987291219}
   - component: {fileID: -7538085241984041884}
   - component: {fileID: 4426624906383981632}
+  - component: {fileID: 5428922775225678083}
   m_Layer: 0
   m_Name: treevariant 2
   m_TagString: Untagged
@@ -122,10 +123,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxBreakStatus: 5
   breakingTool: 0
-  maxNumberOfLoot: 1
   loot: {fileID: 1855252431164562674, guid: b365db96e87439f48b9e5902287dd53a, type: 3}
   destroyParticles: {fileID: 3066103022588316011, guid: 83d4c8cc9baacfb4686c9a34a462a10e, type: 3}
   treeParticles: {fileID: -7538085241984041884}
+  stoneParticles: {fileID: 0}
   resizeOffset: 0.25
 --- !u!198 &-7538085241984041884
 ParticleSystem:
@@ -4980,3 +4981,23 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5428922775225678083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4090169650874675395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

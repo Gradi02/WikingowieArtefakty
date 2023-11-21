@@ -32,7 +32,6 @@ public class PlayerMovement : NetworkBehaviour
             Vertical = Input.GetAxisRaw("Vertical");
 
             direction = new Vector3(Vertical, 0, -Horizontal).normalized;
-            Debug.Log(direction);
             
             //if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
             //transform.position += direction * speed * Time.deltaTime;
@@ -58,10 +57,15 @@ public class PlayerMovement : NetworkBehaviour
         {
             nextDash = Time.time + dashCooldown;
             rb.AddForce(direction * dashPower, ForceMode.Impulse);
-            ParticleSystem dash = Instantiate(dashParticle, transform.position, player.transform.rotation);
-            dash.transform.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles - new Vector3(0f, 90f, 0f));
-            dash.Play();
+            SpawnParticleServerRpc();
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SpawnParticleServerRpc()
+    {
+        ParticleSystem dash = Instantiate(dashParticle, transform.position + new Vector3(0,0.1f,0), player.transform.rotation);
+        dash.transform.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles - new Vector3(0f, 90f, 0f));
     }
     void SetRotation(Vector3 dir)
     {

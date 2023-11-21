@@ -7,6 +7,7 @@ public class PlayerInfo : NetworkBehaviour
 {
     private PlayerMovement move;
     private InventoryManager inventoryManager;
+    private GameObject itemToRemove;
 
     private void Start()
     {
@@ -57,6 +58,7 @@ public class PlayerInfo : NetworkBehaviour
 
     void PickUpClosestItem()
     {
+        if (GameObject.FindGameObjectsWithTag("item").Length == 0) return;
         GameObject closestItem = GameObject.FindGameObjectWithTag("item");
         GameObject[] items = GameObject.FindGameObjectsWithTag("item");
 
@@ -69,16 +71,49 @@ public class PlayerInfo : NetworkBehaviour
         }
 
         if(closestItem != null)
-            closestItem.GetComponent<ItemManager>().PickUp();
+            closestItem.GetComponent<ItemManager>().PickUp(gameObject);
+
+        //itemToRemove = closestItem;
+        SetItemServerRpc(closestItem.GetComponent<NetworkObject>().NetworkObjectId);
+        ClearDropPlaceServerRpc();
+        DestroyItemServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SetItemServerRpc(ulong objectId)
+    {
+        SetItemClientRpc(objectId);
+    }
+
+    [ClientRpc]
+    void SetItemClientRpc(ulong objectId)
+    {
+        GameObject o = NetworkManager.Singleton.SpawnManager.SpawnedObjects[objectId].gameObject;
+
+        itemToRemove = o;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void ClearDropPlaceServerRpc()
+    {
+        ClearDropPlaceClientRpc();
+    }
+
+    [ClientRpc]
+    void ClearDropPlaceClientRpc()
+    {
+        itemToRemove.GetComponent<ItemManager>().ClearPlace();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void DestroyItemServerRpc()
+    {
+        //DestroyItemClientRpc();
+        itemToRemove.GetComponent<NetworkObject>().Despawn();
     }
 
     void DropItem()
     {
         inventoryManager.DropSelectedItem();
-    }
-
-    public void ChopAnimation()
-    {
-
     }
 }

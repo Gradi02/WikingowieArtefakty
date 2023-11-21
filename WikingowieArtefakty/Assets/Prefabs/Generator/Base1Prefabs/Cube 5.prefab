@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4656909689010848058}
   - component: {fileID: 34251541372658657}
   - component: {fileID: 3585152976519100931}
+  - component: {fileID: -614969986993817710}
   m_Layer: 0
   m_Name: Cube 5
   m_TagString: Untagged
@@ -127,7 +128,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxBreakStatus: 5
   breakingTool: 1
-  maxNumberOfLoot: 1
   loot: {fileID: 1855252431164562674, guid: 2b4e4a2eeb6b38948926ecef5fd1fe58, type: 3}
   destroyParticles: {fileID: 3066103022588316011, guid: 7ada4bcc0e46e5142a8c8a688e5ddb87, type: 3}
   treeParticles: {fileID: 0}
@@ -4986,6 +4986,26 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-614969986993817710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133260629164837768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &720612263055235952
 GameObject:
   m_ObjectHideFlags: 0
