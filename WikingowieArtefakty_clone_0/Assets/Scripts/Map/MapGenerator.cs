@@ -23,8 +23,9 @@ public class MapGenerator : NetworkBehaviour
     public GameObject shipPrefab;
 
     [Header("Other Prefabs")]
+    public GameObject waterLayerPrefab;
     public GameObject waterLayer;
-    public GameObject baseBuilding;
+    public GameObject campfire;
     public GameObject air;
 
     [Header("Others")]
@@ -32,7 +33,7 @@ public class MapGenerator : NetworkBehaviour
     public GameObject manager;
 
     private GameObject start;
-    private Vector3 middle;
+    public static Vector3 middle = Vector3.zero;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
@@ -44,6 +45,12 @@ public class MapGenerator : NetworkBehaviour
 
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
         manager.GetComponent<Manager>().SetMiddle(middle);
+
+        waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
+        //waterLayer.GetComponent<NetworkObject>().Spawn();
+        waterLayer.name = "waterLayer";
+        waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
+        waterLayer.transform.position = middle + new Vector3(0, 0, 0);
     }
 
     [ServerRpc]
@@ -52,8 +59,11 @@ public class MapGenerator : NetworkBehaviour
         seed = Random.Range(100, 9999);
         Debug.Log("Seed: " + seed);
 
+       /* waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
+        //waterLayer.GetComponent<NetworkObject>().Spawn();
+        waterLayer.name = "waterLayer";
         waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
-        waterLayer.transform.position = middle + new Vector3(0, 0, 0);
+        waterLayer.transform.position = middle + new Vector3(0, 0, 0);*/
 
         int oresTypes = oresMaterials1.Length;
 
@@ -161,7 +171,7 @@ public class MapGenerator : NetworkBehaviour
                         else
                         {
                             //Pod³o¿e
-                            GameObject gr = Instantiate(ground_prefabs1[id-1], transform.position, Quaternion.identity);
+                            GameObject gr = Instantiate(ground_prefabs1[id - 1], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
@@ -174,7 +184,7 @@ public class MapGenerator : NetworkBehaviour
                         new_obj = Instantiate(rocks_variants1[0], transform.position, Quaternion.identity);
                         new_obj.GetComponent<NetworkObject>().Spawn();
                         //Skala na bazie noise
-                        new_obj.transform.localScale = new Vector3(1, GetHeightByNoise(x,y) , 1);
+                        new_obj.transform.localScale = new Vector3(1, GetHeightByNoise(x, y), 1);
                         new_obj.transform.localPosition = new Vector3(x, 0.5f, y);
 
                         //Losowa rotacja
@@ -205,7 +215,7 @@ public class MapGenerator : NetworkBehaviour
             }
         }
 
-        foreach(GameObject g in blocks)
+        foreach (GameObject g in blocks)
         {
             g.transform.parent = start.transform;
         }
@@ -273,8 +283,10 @@ public class MapGenerator : NetworkBehaviour
 
     void SetShip()
     {
+        if (!IsServer) return;
         //Przywo³aj statek na brzegu mapy w losowym miejscu
         GameObject ship = Instantiate(shipPrefab, transform.position, Quaternion.identity);
+        ship.GetComponent<NetworkObject>().Spawn();
         ship.name = "Ship";
 
         int xy = GetRandomSign();
@@ -295,8 +307,10 @@ public class MapGenerator : NetworkBehaviour
 
     void SpawnBase()
     {
-        GameObject b = Instantiate(baseBuilding, middle + new Vector3(0,0.25f,0), Quaternion.identity);
-        b.name = "base";
+        if (!IsServer) return;
+        GameObject b = Instantiate(campfire, middle + new Vector3(0,0.25f,0), Quaternion.identity);
+        b.GetComponent<NetworkObject>().Spawn();
+        b.name = "campfire";
     }
 
     public List<GameObject> GetGroundBlocks()

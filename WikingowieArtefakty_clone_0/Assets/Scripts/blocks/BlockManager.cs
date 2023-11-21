@@ -100,7 +100,7 @@ public class BlockManager : NetworkBehaviour
         GameObject g2 = Instantiate(loot, transform.position, Quaternion.identity);
         g2.GetComponent<NetworkObject>().Spawn();
 
-        gameObject.GetComponent<NetworkObject>().Despawn();
+        GetComponent<NetworkObject>().Despawn();
     }
 
     [ServerRpc]

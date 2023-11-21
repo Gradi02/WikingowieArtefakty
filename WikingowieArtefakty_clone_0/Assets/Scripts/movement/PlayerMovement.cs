@@ -112,4 +112,10 @@ public class PlayerMovement : NetworkBehaviour
         startPos.y = 0.75f;
         player.transform.position = startPos;
     }
+
+    public override void OnNetworkSpawn()
+    {
+        transform.position = MapGenerator.middle;
+        base.OnNetworkSpawn();
+    }
 }
