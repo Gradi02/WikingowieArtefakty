@@ -37,7 +37,7 @@ public class MapGenerator : NetworkBehaviour
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
-
+    
 
     private void Start()
     {

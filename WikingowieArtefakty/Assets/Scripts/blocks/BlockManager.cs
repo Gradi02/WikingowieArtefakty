@@ -35,12 +35,6 @@ public class BlockManager : NetworkBehaviour
     [ContextMenu("Step"), ServerRpc(RequireOwnership = false)]
     public void NextBreakStepServerRpc()
     {
-        NextBreakStepClientRpc();
-    }
-
-    [ClientRpc]
-    void NextBreakStepClientRpc()
-    {
         currentBreakStatus++;
         LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep, 0.2f);
         transform.position -= new Vector3(0f, breakStep.y / 2, 0f);
@@ -50,7 +44,7 @@ public class BlockManager : NetworkBehaviour
 
         StartCoroutine(Hitting(x, z));
 
-        if(IsServer) CheckForDestroy();
+        if (IsServer) CheckForDestroy();
     }
 
     IEnumerator Hitting(float xin, float zin)
