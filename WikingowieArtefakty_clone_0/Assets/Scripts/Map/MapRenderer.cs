@@ -15,6 +15,9 @@ public class MapRenderer : MonoBehaviour
     }
     void Update()
     {
+        if(GameObject.FindGameObjectWithTag("Player") != null)
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+    
         if (showAll)
         {
             foreach (GameObject g in gen.GetGroundBlocks())
@@ -49,17 +52,21 @@ public class MapRenderer : MonoBehaviour
                     }
                 }
             }
-            foreach (GameObject g in gen.GetObjectsBlocks())
+
+            if (player != null)
             {
-                if (g != null)
+                foreach (GameObject g in gen.GetObjectsBlocks())
                 {
-                    if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 15)
+                    if (g != null)
                     {
-                        g.SetActive(false);
-                    }
-                    else
-                    {
-                        g.SetActive(true);
+                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 15)
+                        {
+                            g.SetActive(false);
+                        }
+                        else
+                        {
+                            g.SetActive(true);
+                        }
                     }
                 }
             }

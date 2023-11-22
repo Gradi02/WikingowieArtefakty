@@ -49,8 +49,7 @@ public class MapGenerator : NetworkBehaviour
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
         manager.GetComponent<Manager>().SetMiddle(middle);
         
-        startPlane.transform.position = middle;
-        cam.GetComponent<CameraFollow>().SetPosition(middle);
+        startPlane.transform.position = middle + new Vector3(0,0.25f,0);
 
         waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
         //waterLayer.GetComponent<NetworkObject>().Spawn();
@@ -68,7 +67,8 @@ public class MapGenerator : NetworkBehaviour
             startPlane.SetActive(false);
         }
 
-        SpawnBase();
+        GameObject campfire1 = SpawnBase();
+        cam.GetComponent<CameraFollow>().Target = campfire1.transform;
     }
 
     [ServerRpc]
@@ -367,12 +367,13 @@ public class MapGenerator : NetworkBehaviour
         return Random.Range(-10, 9) < 0 ? 0 : 1;
     }
 
-    void SpawnBase()
+    GameObject SpawnBase()
     {
         //if (!IsServer) return;
         GameObject b = Instantiate(campfire, middle + new Vector3(0,0.25f,0), Quaternion.identity);
         //b.GetComponent<NetworkObject>().Spawn();
         b.name = "campfire";
+        return b;
     }
 
     public List<GameObject> GetGroundBlocks()

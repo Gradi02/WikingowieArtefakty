@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -362,7 +362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   islandLevel: 0
-  size: 50
+  size: 100
   middleRadius: 7
   treeOffset: 0.15
   rockOffset: 0.08
@@ -390,7 +390,7 @@ MonoBehaviour:
   shipPrefab: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
   waterLayerPrefab: {fileID: 6942782308479380561, guid: e81893c140be0d94c8f63d2cb05d2efc, type: 3}
   waterLayer: {fileID: 0}
-  campfire: {fileID: 4960937523105547747, guid: d8c361eea94171947ac017b5d5ce6f3e, type: 3}
+  campfire: {fileID: 5117925673290852196, guid: 53fa9b6008eecef49b21de14a5a4cc47, type: 3}
   air: {fileID: 3945946977855608217, guid: 1a9aa9d5d8031b543b9de3e153aba9fb, type: 3}
   cam: {fileID: 1751882901}
   manager: {fileID: 1502539006}
@@ -4939,7 +4939,7 @@ Transform:
   m_GameObject: {fileID: 1062793399}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: -1, z: 25}
+  m_LocalPosition: {x: 25, y: 0.25, z: 25}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9946,21 +9946,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2128734424}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad3b4eb5a860dce45abb433c9419b930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeTMP: {fileID: 0}
-  dayTMP: {fileID: 0}
-  DayChangeTMP: {fileID: 0}
-  PreviousDayTMP: {fileID: 0}
-  NextDayTMP: {fileID: 0}
-  LandTMP: {fileID: 0}
-  DescTMP: {fileID: 0}
-  ClockTMP: {fileID: 0}
-  AccDayTMP: {fileID: 0}
-  Sun: {fileID: 0}
+  timeTMP: {fileID: 308920018}
+  dayTMP: {fileID: 1957958107}
+  DayChangeTMP: {fileID: 178644370}
+  PreviousDayTMP: {fileID: 1636970578}
+  NextDayTMP: {fileID: 1001107975}
+  LandTMP: {fileID: 1950302142}
+  DescTMP: {fileID: 1644760191}
+  ClockTMP: {fileID: 308920018}
+  AccDayTMP: {fileID: 1957958107}
+  Sun: {fileID: 696168447}
   Player: {fileID: 96891937399687568, guid: f7e8370cd0333dd42aaa6b15637ca261, type: 3}
 --- !u!114 &2128734426
 MonoBehaviour:
