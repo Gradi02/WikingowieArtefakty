@@ -48,7 +48,7 @@ public class Slot : MonoBehaviour
         }
 
         currentItem = inventoryManager.GetItemFromList(new_item.GetComponent<ItemManager>().itemName).GetComponent<ItemManager>();
-        new_item.GetComponent<ItemManager>().DestroyItem();
+        //new_item.GetComponent<ItemManager>().DestroyItem();
         SetItemInfo();
     }
 

@@ -4897,6 +4897,7 @@ GameObject:
   - component: {fileID: 2065555306112266290}
   - component: {fileID: 899406962369289026}
   - component: {fileID: 1321075335411901956}
+  - component: {fileID: -1546798759279616067}
   m_Layer: 7
   m_Name: air
   m_TagString: Untagged
@@ -4955,3 +4956,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bridgePrefab: {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
   buildParticle: {fileID: 2081955019264123588}
+--- !u!114 &-1546798759279616067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3945946977855608217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

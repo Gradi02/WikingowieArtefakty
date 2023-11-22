@@ -17,6 +17,7 @@ public class NetworkInit : NetworkBehaviour
     [SerializeField] private GameObject joinButton;
     [SerializeField] private GameObject inputCode;
     [SerializeField] private TextMeshProUGUI code;
+    [SerializeField] private GameObject mapButton;
 
     private string joincode;
     public static int MaxPlayer = 2;
@@ -82,6 +83,7 @@ public class NetworkInit : NetworkBehaviour
         joinButton.SetActive(false);
         inputCode.SetActive(false);
         hostButton.SetActive(false);
+        mapButton.SetActive(true);
     }
 
     public void JoinGame()

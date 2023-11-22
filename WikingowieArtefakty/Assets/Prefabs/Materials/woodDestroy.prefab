@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2951625346513953413}
   - component: {fileID: 3066103022588316011}
   - component: {fileID: 6408802714723184972}
-  - component: {fileID: 6658946700455779123}
   - component: {fileID: 8675871484973876200}
   m_Layer: 0
   m_Name: woodDestroy
@@ -4888,19 +4887,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &6658946700455779123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4101215345935987754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf47b5c648bb1b4882fe0edc44045bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 3
 --- !u!114 &8675871484973876200
 MonoBehaviour:
   m_ObjectHideFlags: 0

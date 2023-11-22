@@ -14,7 +14,6 @@ public class BlockManager : NetworkBehaviour
     }
 
     public Tools breakingTool;
-    public int maxNumberOfLoot;
     public GameObject loot;
     public ParticleSystem destroyParticles;
     public ParticleSystem treeParticles;
@@ -90,28 +89,30 @@ public class BlockManager : NetworkBehaviour
     {
         if(currentBreakStatus >= maxBreakStatus)
         {
+            SpawnDestroyParticleServerRpc();
             DespawnObjectServerRpc();
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void DespawnObjectServerRpc()
     {
-        ParticleSystem g = Instantiate(destroyParticles, transform.position, Quaternion.identity);
-        g.gameObject.GetComponent<NetworkObject>().Spawn();
+        GameObject g2 = Instantiate(loot, transform.position, Quaternion.identity);
+        g2.GetComponent<NetworkObject>().Spawn();
 
-        int lootrand = Random.Range(1, maxNumberOfLoot);
-        for (int i = 0; i < lootrand; i++)
-        {
-            GameObject g2 = Instantiate(loot, transform.position, Quaternion.identity);
-            g2.GetComponent<NetworkObject>().Spawn();
-        }
-
-        GetComponent<NetworkObject>().Despawn();
+        gameObject.GetComponent<NetworkObject>().Despawn();
     }
 
-    public void DestroyAnimation()
+    [ServerRpc]
+    void SpawnDestroyParticleServerRpc()
     {
+        SpawnDestroyParticleClientRpc();
+    }
 
+    [ClientRpc]
+    void SpawnDestroyParticleClientRpc()
+    {
+        ParticleSystem g = Instantiate(destroyParticles, transform.position, Quaternion.identity);
+        Destroy(g.gameObject, 3);
     }
 }

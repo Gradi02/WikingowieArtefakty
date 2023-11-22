@@ -43,7 +43,7 @@ public class DestroyBlock : NetworkBehaviour
             else if (enablePickaxe)
             {
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position + offset, transform.right, out hit, 0.75f))
+                if (Physics.Raycast(transform.position + offset, transform.forward, out hit, 0.75f))
                 {
                     if (hit.transform.GetComponent<BlockManager>() != null && hit.transform.GetComponent<BlockManager>().breakingTool == BlockManager.Tools.Pickaxe)
                     {

@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 
-public class ItemManager : MonoBehaviour
+public class ItemManager : NetworkBehaviour
 {
     public string itemName;
     public Sprite itemIcon;
@@ -16,16 +17,23 @@ public class ItemManager : MonoBehaviour
         SetPosition();
         dropManager.SetItem(true, Mathf.RoundToInt(transform.localPosition.x), Mathf.RoundToInt(transform.localPosition.z));
     }
-    public void DestroyItem()
+
+    public void PickUp(GameObject player)
     {
-        Destroy(gameObject);
+        player.GetComponent<InventoryManager>().PickUpItem(gameObject);
+        //SetDropManagerServerRpc();
+        //dropManager.SetItem(false ,Mathf.RoundToInt(transform.localPosition.x), Mathf.RoundToInt(transform.localPosition.z));     
+        //GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>().PickUpItem(gameObject);
     }
 
-    [ContextMenu("pick")]
-    public void PickUp()
+    public void ClearPlace()
     {
-        dropManager.SetItem(false ,Mathf.RoundToInt(transform.localPosition.x), Mathf.RoundToInt(transform.localPosition.z));     
-        GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>().PickUpItem(gameObject);
+        dropManager.SetItem(false, Mathf.RoundToInt(transform.localPosition.x), Mathf.RoundToInt(transform.localPosition.z));
+    }
+
+    [ClientRpc]
+    public void SetDropManagerClientRpc()
+    {
     }
 
     void SetPosition()

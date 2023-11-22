@@ -32,7 +32,6 @@ public class PlayerMovement : NetworkBehaviour
             Vertical = Input.GetAxisRaw("Vertical");
 
             direction = new Vector3(Vertical, 0, -Horizontal).normalized;
-            Debug.Log(direction);
             
             //if(Mathf.Abs(rb.velocity.x) < 4 && Mathf.Abs(rb.velocity.z) < 4) rb.AddForce(direction * speed / 10, ForceMode.VelocityChange);
             //transform.position += direction * speed * Time.deltaTime;
@@ -58,10 +57,24 @@ public class PlayerMovement : NetworkBehaviour
         {
             nextDash = Time.time + dashCooldown;
             rb.AddForce(direction * dashPower, ForceMode.Impulse);
-            ParticleSystem dash = Instantiate(dashParticle, transform.position, player.transform.rotation);
-            dash.transform.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles - new Vector3(0f, 90f, 0f));
-            dash.Play();
+            SpawnParticleServerRpc(GetComponent<NetworkObject>().NetworkObjectId);
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SpawnParticleServerRpc(ulong playerId)
+    {
+        SpawnParticleClientRpc(playerId);
+    }
+
+    [ClientRpc]
+    void SpawnParticleClientRpc(ulong playerId)
+    {
+        GameObject playerDash = NetworkManager.Singleton.SpawnManager.SpawnedObjects[playerId].gameObject;
+
+        ParticleSystem dash = Instantiate(dashParticle, playerDash.transform.position + new Vector3(0, 0.1f, 0), playerDash.transform.rotation);
+        dash.transform.rotation = Quaternion.Euler(playerDash.transform.rotation.eulerAngles - new Vector3(0f, 180f, 0f));
+        Destroy(dash.gameObject, 2);
     }
     void SetRotation(Vector3 dir)
     {
