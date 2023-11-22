@@ -21,7 +21,7 @@ public class TimeManager : MonoBehaviour
     public Transform Sun;
     public GameObject Player;
 
-    private float delay = 5f;
+    private float delay = 1f;
     int hour = 8;
     int min = 0;
     int day = 1;
@@ -32,7 +32,7 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         //fogDensity = RenderSettings.fogDensity;
-        
+        LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
         PreviousDayTMP.gameObject.SetActive(false);
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
@@ -53,7 +53,7 @@ public class TimeManager : MonoBehaviour
         DayChangeTMP.gameObject.SetActive(true);
         PreviousDayTMP.text = (day - 1).ToString();
         NextDayTMP.text = day.ToString();
-        
+        LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
 
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
@@ -132,13 +132,14 @@ public class TimeManager : MonoBehaviour
             yield return new WaitForSeconds((delay-0.01f)/10);
             //RenderSettings.fogDensity += 0.1f;
             //Debug.Log("Fog Density: " + RenderSettings.fogDensity);
-            Sun.Rotate(Vector3.right, 360f / 480f);
+            LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay*48)-0.01f));
+            //Sun.Rotate(Vector3.right, 360f / 480f);
         }
     }
 
         IEnumerator Timer()
     {
-        while (true) { 
+        while (true) {
             int temp = 0;
 
             if (hour > 23)
@@ -153,7 +154,6 @@ public class TimeManager : MonoBehaviour
             while (temp < 2)
             {
                 yield return new WaitForSeconds(delay);
-                StartCoroutine(SunMove());
                 temp++;
                 min += 30;
                 if(min==60)min= 0;
