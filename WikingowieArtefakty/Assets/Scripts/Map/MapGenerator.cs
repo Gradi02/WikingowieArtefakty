@@ -31,13 +31,16 @@ public class MapGenerator : NetworkBehaviour
     [Header("Others")]
     public Camera cam;
     public GameObject manager;
+    public GameObject startPlane;
+
 
     private GameObject start;
     public static Vector3 middle = Vector3.zero;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
-    
+
+    [HideInInspector] public NetworkVariable<bool> started = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Start()
     {
@@ -45,12 +48,27 @@ public class MapGenerator : NetworkBehaviour
 
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
         manager.GetComponent<Manager>().SetMiddle(middle);
+        
+        startPlane.transform.position = middle;
+        cam.GetComponent<CameraFollow>().SetPosition(middle);
 
         waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
         //waterLayer.GetComponent<NetworkObject>().Spawn();
         waterLayer.name = "waterLayer";
         waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
         waterLayer.transform.position = middle + new Vector3(0, 0, 0);
+
+        if(started.Value == false)
+        {
+            waterLayer.SetActive(false);
+        }
+        else
+        {
+            waterLayer.SetActive(true);
+            startPlane.SetActive(false);
+        }
+
+        SpawnBase();
     }
 
     [ServerRpc]
@@ -74,8 +92,8 @@ public class MapGenerator : NetworkBehaviour
                 int id = GetIdPerlinNoise(x, y);
                 int ifempty = Random.Range(0, 3);
 
-                if (x <= 3 || y <= 3 || x >= size - 3 || y >= size - 3) id = 0;
-                if ((x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6) && id > 1) id = 1;
+                if (x <= 9 || y <= 9 || x >= size - 9 || y >= size - 9) id = 1;
+                if (x <= 7 || y <= 7 || x >= size - 7 || y >= size - 7) id = 0;
                 if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) id = 1;
                 if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius + 1 && id > 2) id = 2;
 
@@ -85,13 +103,56 @@ public class MapGenerator : NetworkBehaviour
 
                     if (id == 0) //Blok Powietrza
                     {
-                        if (x <= 6 || y <= 6 || x >= size - 6 || y >= size - 6)
+                        if(x <= 2 || y <= 2 || x >= size - 2 || y >= size - 2)
+                        {
+                            int rand = Random.Range(1, 3);
+
+                            if(rand == 2)
+                            {
+                                GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
+                                gr.GetComponent<NetworkObject>().Spawn();
+                                gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                                gr.name = "Sand" + x + y;
+                                ground.Add(gr);
+                            }
+                            else
+                            {
+                                GameObject a = Instantiate(air, transform.position, Quaternion.identity);
+                                a.GetComponent<NetworkObject>().Spawn();
+                                a.transform.localPosition = new Vector3(x, 0.25f, y);
+                                a.name = "Air" + x + y;
+                                airBlocks.Add(a);
+                            }
+                        }
+                        else if (x <= 5 || y <= 5 || x >= size - 5 || y >= size - 5)
                         {
                             GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Sand" + x + y;
                             ground.Add(gr);
+                        }
+                        else if(x <= 7 || y <= 7 || x >= size - 7 || y >= size - 7)
+                        {
+                            int rand = Random.Range(1, 3);
+
+                            if (rand == 2)
+                            {
+                                GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
+                                gr.GetComponent<NetworkObject>().Spawn();
+                                gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                                gr.name = "Sand" + x + y;
+                                ground.Add(gr);
+                            }
+                            else
+                            {
+                                GameObject gr = Instantiate(ground_prefabs1[1], transform.position, Quaternion.identity);
+                                gr.GetComponent<NetworkObject>().Spawn();
+                                gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                                gr.name = "Ground" + x + y;
+                                ground.Add(gr);
+                            }
+
                         }
                         else
                         {
@@ -232,7 +293,8 @@ public class MapGenerator : NetworkBehaviour
 
         SetMiddleMap();
         SetShip();
-        SpawnBase();
+        started.Value = true;
+        EnableWaterClientRpc();
 
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
             g.GetComponent<PlayerMovement>().SetStartPosition(middle);
@@ -307,9 +369,9 @@ public class MapGenerator : NetworkBehaviour
 
     void SpawnBase()
     {
-        if (!IsServer) return;
+        //if (!IsServer) return;
         GameObject b = Instantiate(campfire, middle + new Vector3(0,0.25f,0), Quaternion.identity);
-        b.GetComponent<NetworkObject>().Spawn();
+        //b.GetComponent<NetworkObject>().Spawn();
         b.name = "campfire";
     }
 
@@ -321,5 +383,12 @@ public class MapGenerator : NetworkBehaviour
     public List<GameObject> GetObjectsBlocks()
     {
         return blocks;
+    }
+
+    [ClientRpc]
+    void EnableWaterClientRpc()
+    {
+        waterLayer.SetActive(true);
+        startPlane.SetActive(false);
     }
 }
