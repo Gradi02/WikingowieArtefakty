@@ -8,6 +8,7 @@ TagManager:
   - uimanager
   - slots
   - manager
+  - sun
   layers:
   - Default
   - TransparentFX

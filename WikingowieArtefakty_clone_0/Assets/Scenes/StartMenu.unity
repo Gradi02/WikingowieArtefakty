@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -362,10 +362,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   islandLevel: 0
-  size: 50
+  size: 80
   middleRadius: 7
+  ruinRadius: 5
   treeOffset: 0.15
-  rockOffset: 0.08
+  rockOffset: 0
   oresChance: 5
   trees_variants1:
   - {fileID: 2551570784844344749, guid: 270aa20491d98d94daa58417330afd35, type: 3}
@@ -385,16 +386,19 @@ MonoBehaviour:
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
+  - {fileID: 4936650255284283978, guid: 211b5ac82aac37142a53bb4f0ef077f1, type: 3}
   defaultMaterial1: {fileID: 2100000, guid: 2ae21ea97d61ab246b1c4279b5b132fd, type: 2}
   oresMaterials1: []
   shipPrefab: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
+  grass: {fileID: 4936650255284283978, guid: 2046e217c2721044982fdc0e95747f72, type: 3}
   waterLayerPrefab: {fileID: 6942782308479380561, guid: e81893c140be0d94c8f63d2cb05d2efc, type: 3}
   waterLayer: {fileID: 0}
-  campfire: {fileID: 4960937523105547747, guid: d8c361eea94171947ac017b5d5ce6f3e, type: 3}
+  campfire: {fileID: 5117925673290852196, guid: 53fa9b6008eecef49b21de14a5a4cc47, type: 3}
   air: {fileID: 3945946977855608217, guid: 1a9aa9d5d8031b543b9de3e153aba9fb, type: 3}
   cam: {fileID: 1751882901}
   manager: {fileID: 1502539006}
   startPlane: {fileID: 1062793399}
+  timeManager: {fileID: 2128734425}
   started:
     m_InternalValue: 0
 --- !u!4 &53929052
@@ -2991,7 +2995,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.15130615, y: 62.00006}
+  m_AnchoredPosition: {x: 0.15130615, y: 62.000122}
   m_SizeDelta: {x: 183.038, y: 113.8396}
   m_Pivot: {x: 0.50000036, y: 0.49999994}
 --- !u!114 &550621757
@@ -3378,9 +3382,11 @@ GameObject:
   m_Component:
   - component: {fileID: 696168447}
   - component: {fileID: 696168446}
+  - component: {fileID: 696168448}
+  - component: {fileID: 696168449}
   m_Layer: 0
   m_Name: Directional Light
-  m_TagString: Untagged
+  m_TagString: sun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3462,6 +3468,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &696168448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696168445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 318775435
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &696168449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696168445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 0
+  SyncPositionY: 0
+  SyncPositionZ: 0
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &702671532
 GameObject:
   m_ObjectHideFlags: 0
@@ -4939,7 +4995,7 @@ Transform:
   m_GameObject: {fileID: 1062793399}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: -1, z: 25}
+  m_LocalPosition: {x: 25, y: 0.25, z: 25}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9932,6 +9988,7 @@ GameObject:
   - component: {fileID: 2128734427}
   - component: {fileID: 2128734426}
   - component: {fileID: 2128734425}
+  - component: {fileID: 2128734429}
   m_Layer: 0
   m_Name: UI_manager (1)
   m_TagString: uimanager
@@ -9946,21 +10003,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2128734424}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad3b4eb5a860dce45abb433c9419b930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeTMP: {fileID: 0}
-  dayTMP: {fileID: 0}
-  DayChangeTMP: {fileID: 0}
-  PreviousDayTMP: {fileID: 0}
-  NextDayTMP: {fileID: 0}
-  LandTMP: {fileID: 0}
-  DescTMP: {fileID: 0}
-  ClockTMP: {fileID: 0}
-  AccDayTMP: {fileID: 0}
-  Sun: {fileID: 0}
+  timeTMP: {fileID: 308920018}
+  dayTMP: {fileID: 1957958107}
+  DayChangeTMP: {fileID: 178644370}
+  PreviousDayTMP: {fileID: 1636970578}
+  NextDayTMP: {fileID: 1001107975}
+  LandTMP: {fileID: 1950302142}
+  DescTMP: {fileID: 1644760191}
+  ClockTMP: {fileID: 308920018}
+  AccDayTMP: {fileID: 1957958107}
+  Sun: {fileID: 696168447}
   Player: {fileID: 96891937399687568, guid: f7e8370cd0333dd42aaa6b15637ca261, type: 3}
 --- !u!114 &2128734426
 MonoBehaviour:
@@ -10025,6 +10082,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2128734429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128734424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3968852476
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &2130180236
 GameObject:
   m_ObjectHideFlags: 0
