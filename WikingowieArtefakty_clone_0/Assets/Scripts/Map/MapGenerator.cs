@@ -10,6 +10,7 @@ public class MapGenerator : NetworkBehaviour
     [Min(1)] public int size;
     private int seed;
     public int middleRadius;
+    public int ruinRadius;
     [Range(0, 0.5f)] public float treeOffset;
     [Range(0, 0.5f)] public float rockOffset;
     [Range(1, 100)]  public int oresChance;
@@ -34,12 +35,17 @@ public class MapGenerator : NetworkBehaviour
     public GameObject startPlane;
     public TimeManager timeManager;
 
+    private Vector3 ruinsPos;
+    private Vector3[] treeArea = new Vector3[3];
+    private int treeAreaSize = 6;
+
     private GameObject start;
     public static Vector3 middle = Vector3.zero;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
 
+    private bool isnew = false;
     [HideInInspector] public NetworkVariable<bool> started = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Start()
@@ -57,18 +63,19 @@ public class MapGenerator : NetworkBehaviour
         waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
         waterLayer.transform.position = middle + new Vector3(0, 0, 0);
 
-        if(started.Value == false)
-        {
-            waterLayer.SetActive(false);
-        }
-        else
-        {
-            waterLayer.SetActive(true);
-            startPlane.SetActive(false);
-        }
-
         GameObject campfire1 = SpawnBase();
         cam.GetComponent<CameraFollow>().Target = campfire1.transform;
+    }
+
+    private void Update()
+    {
+        if (IsClient && started.Value && !isnew)
+        {
+            isnew = true;
+            waterLayer.SetActive(true);
+            startPlane.SetActive(false);
+            timeManager.StartDayOne();
+        }
     }
 
     [ServerRpc]
@@ -77,11 +84,28 @@ public class MapGenerator : NetworkBehaviour
         seed = Random.Range(100, 9999);
         Debug.Log("Seed: " + seed);
 
-       /* waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
-        //waterLayer.GetComponent<NetworkObject>().Spawn();
-        waterLayer.name = "waterLayer";
-        waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
-        waterLayer.transform.position = middle + new Vector3(0, 0, 0);*/
+        /* waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
+         //waterLayer.GetComponent<NetworkObject>().Spawn();
+         waterLayer.name = "waterLayer";
+         waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
+         waterLayer.transform.position = middle + new Vector3(0, 0, 0);*/
+
+        SetRuins();
+
+        for(int i=0; i<3; i++)
+        {
+            treeArea[i] = RandomXY();
+
+            if (i == 1)
+            {
+                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 10) i--;
+            }
+            else if(i == 2)
+            {
+                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 10 ||
+                    Vector3.Distance(treeArea[i], treeArea[i - 2]) < 10) i--;
+            }
+        }
 
         int oresTypes = oresMaterials1.Length;
 
@@ -90,12 +114,22 @@ public class MapGenerator : NetworkBehaviour
             for (int y = 0; y < size; y++)
             {
                 int id = GetIdPerlinNoise(x, y);
-                int ifempty = Random.Range(0, 3);
+                int ifempty = Random.Range(0, 4);
 
                 if (x <= 9 || y <= 9 || x >= size - 9 || y >= size - 9) id = 1;
                 if (x <= 7 || y <= 7 || x >= size - 7 || y >= size - 7) id = 0;
-                if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) id = 1;
-                if (Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius + 1 && id > 2) id = 2;
+                
+                if ((Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) || (Vector3.Distance(ruinsPos, new Vector3(x, 0, y)) < ruinRadius)) id = 1;
+                if ((Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius + 1 && id > 2) || (Vector3.Distance(ruinsPos, new Vector3(x, 0, y)) < ruinRadius + 1 && id > 2)) id = 2;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    if (Vector3.Distance(treeArea[i], new Vector3(x, 0, y)) < treeAreaSize)
+                    {
+                        id = 1;
+                        ifempty = Random.Range(0, 2);
+                    }
+                }
 
                 if (id >= 0)
                 {
@@ -165,7 +199,7 @@ public class MapGenerator : NetworkBehaviour
                     }
                     else if (id == 1) //Blok Trawy/Drzewa 
                     {
-                        if (ifempty == 1 || ifempty == 2)
+                        if (ifempty == 1)
                         {
                             //Losowanie drzewa
                             int randvar = Random.Range(0, trees_variants1.Length);
@@ -199,7 +233,7 @@ public class MapGenerator : NetworkBehaviour
                     }
                     else if (id == 2) //Blok ma³ego kamienia
                     {
-                        if (ifempty == 1 || ifempty == 2)
+                        if (ifempty != 1 && ifempty != 2)
                         {
                             //Losowanie kamienia
                             int randvar = Random.Range(1, rocks_variants1.Length);
@@ -291,11 +325,11 @@ public class MapGenerator : NetworkBehaviour
             g.transform.parent = start.transform;
         }
 
-        SetMiddleMap();
+        ClearMap(middle, middleRadius);
         SetShip();
         started.Value = true;
         EnableWaterClientRpc();
-        timeManager.StartDayOne();
+        ClearMap(ruinsPos, ruinRadius);
 
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
             g.GetComponent<PlayerMovement>().SetStartPosition(middle);
@@ -312,7 +346,7 @@ public class MapGenerator : NetworkBehaviour
 
     float GetHeightByNoise(int x, int y)
     {
-        float h = GetFloatPerlinNoise(x, y) / 2 - 0.2f;
+        float h = GetFloatPerlinNoise(x, y) / 2 - 0.3f;
 
         return (Mathf.Round(h*10)/10);
     }
@@ -324,12 +358,12 @@ public class MapGenerator : NetworkBehaviour
 
         return Mathf.Clamp(perlin, 0, 5); //blocks_prefabs1.Length
     }
-    void SetMiddleMap()
+    void ClearMap(Vector3 pos, float r)
     {
         
         foreach (GameObject g in blocks)
         {
-            if (Vector3.Distance(g.transform.position, middle) < middleRadius - 0.5f)
+            if (Vector3.Distance(g.transform.position, pos) < r - 0.5f)
             {      
                 Destroy(g);
             }
@@ -337,11 +371,44 @@ public class MapGenerator : NetworkBehaviour
 
         foreach (GameObject g in ground)
         {
-            if (Vector3.Distance(g.transform.position, middle) < middleRadius)
+            if (Vector3.Distance(g.transform.position, pos) < r)
             {
                 g.GetComponent<MeshRenderer>().material = defaultMaterial1;
             }
         }
+    }
+
+    Vector3 RandomXY()
+    {
+        Vector3 pos;
+
+        do {
+            pos = new Vector3(Random.Range(10, size - 10), 0, Random.Range(10, size - 10));
+        } while (Vector3.Distance(pos, middle) < 10);
+
+
+        return pos;
+    }
+
+    Vector3 SetRuins()
+    {
+        int offset = size / 4;
+        int x, y;
+
+        do {
+
+            x = Random.Range(0 + offset, size - offset);
+            y = Random.Range(0 + offset, size - offset);
+            ruinsPos = new Vector3(x, 0, y);
+
+        } while (Vector3.Distance(ruinsPos, middle) < offset);
+
+
+        GameObject ship = Instantiate(shipPrefab, ruinsPos, Quaternion.identity);
+        ship.GetComponent<NetworkObject>().Spawn();
+        ship.name = "ruina";
+        
+        return ruinsPos;
     }
 
     void SetShip()

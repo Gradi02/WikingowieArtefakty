@@ -4,25 +4,27 @@ using UnityEngine;
 
 public class MapRenderer : MonoBehaviour
 {
-    private Camera cam;
-    public MapGenerator gen;
-    public Transform player;
+    private MapGenerator gen;
+    private Transform player;
     public bool showAll = true;
+    private Camera cam;
 
     private void Start()
     {
-        cam = this.gameObject.GetComponent<Camera>();
+        player = transform;
+        cam = Camera.main;
+        gen = GameObject.Find("GeneratorManager").GetComponent<MapGenerator>();
     }
     void Update()
     {
-        if(GameObject.FindGameObjectWithTag("Player") != null)
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-    
         if (showAll)
         {
             foreach (GameObject g in gen.GetGroundBlocks())
             {
-                if (g != null) g.SetActive(true);
+                if (g != null)
+                {
+                    g.SetActive(true);
+                }
             }
 
             foreach (GameObject g in gen.GetObjectsBlocks())
@@ -36,7 +38,7 @@ public class MapRenderer : MonoBehaviour
             return;
         }
 
-        if (cam != null)
+       /* if (cam != null)
         {
             foreach (GameObject g in gen.GetGroundBlocks())
             {
@@ -52,14 +54,14 @@ public class MapRenderer : MonoBehaviour
                     }
                 }
             }
-
+        } */
             if (player != null)
             {
                 foreach (GameObject g in gen.GetObjectsBlocks())
                 {
                     if (g != null)
                     {
-                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 15)
+                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
                         {
                             g.SetActive(false);
                         }
@@ -69,7 +71,22 @@ public class MapRenderer : MonoBehaviour
                         }
                     }
                 }
-            }
+
+                foreach (GameObject g in gen.GetGroundBlocks())
+                {
+                    if (g != null)
+                    {
+                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
+                        {
+                            g.SetActive(false);
+                        }
+                        else
+                        {
+                            g.SetActive(true);
+                        }
+                    }
+                }
         }
+        
     }
 }

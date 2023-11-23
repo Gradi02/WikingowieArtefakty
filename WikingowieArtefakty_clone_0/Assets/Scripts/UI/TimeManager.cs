@@ -28,7 +28,7 @@ public class TimeManager : NetworkBehaviour
 
     private NetworkVariable<int> n_hour = new NetworkVariable<int>(8, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<int> n_min = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    private NetworkVariable<int> n_day = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<int> n_day = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private bool paused = false; 
 
@@ -39,33 +39,33 @@ public class TimeManager : NetworkBehaviour
         PreviousDayTMP.gameObject.SetActive(false);
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
-        SetTimeDataClientRpc();
 
         LandTMP.gameObject.transform.localPosition = new Vector3(0, +100, 0);
         DescTMP.gameObject.transform.localPosition = new Vector3(0, +150, 0);
         ClockTMP.gameObject.transform.localPosition = new Vector3(0, +200, 0);
         AccDayTMP.gameObject.transform.localPosition = new Vector3(0, +250, 0);
+        
     }
-    
+
     public void StartDayOne()
     {
         StartCoroutine(StartTransInfo());
 
-        if (IsServer)
+        if (IsHost)
         {
             LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
             n_hour.Value = 8;
             StartCoroutine(Timer());
         }
     }
-    void DayChange()
+    void DayChange(int day)
     {
         PreviousDayTMP.gameObject.SetActive(true);
         NextDayTMP.gameObject.SetActive(true);
         DayChangeTMP.gameObject.SetActive(true);
-        PreviousDayTMP.text = (n_day.Value - 1).ToString();
-        NextDayTMP.text = n_day.Value.ToString();
-        LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
+        PreviousDayTMP.text = (day - 1).ToString();
+        NextDayTMP.text = day.ToString();
+        //LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
 
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(PreviousDayTMP, alpha));
@@ -74,6 +74,8 @@ public class TimeManager : NetworkBehaviour
 
     private void Update()
     {
+        //Debug.Log("Day: " + n_day.Value + " | Hours: " + n_hour.Value + " | Min: " + n_min.Value);
+        SetTimeData();
         //pauza
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -102,6 +104,7 @@ public class TimeManager : NetworkBehaviour
 
     IEnumerator StartTransInfo()
     {
+        //Debug.Log("anim");
         yield return new WaitForSeconds(0.2f);
         LeanTween.moveLocalY(AccDayTMP.gameObject, -250f, 0.5f).setEase(LeanTweenType.easeInCirc);
         yield return new WaitForSeconds(0.2f);
@@ -155,8 +158,8 @@ public class TimeManager : NetworkBehaviour
             {
                 n_hour.Value = 0;
                 n_day.Value++;
-                SetTimeDataServerRpc();
-                SetNextDayAnimationServerRpc();
+                //SetTimeDataServerRpc();
+                SetNextDayAnimationServerRpc(n_day.Value);
             }
 
             while (temp < 2)
@@ -165,36 +168,31 @@ public class TimeManager : NetworkBehaviour
                 temp++;
                 n_min.Value += 30;
                 if(n_min.Value == 60) n_min.Value = 0;
-                SetTimeDataServerRpc();
+                //SetTimeDataServerRpc();
             }
             n_min.Value = 0;
             n_hour.Value++;
-            SetTimeDataServerRpc();
+            //SetTimeDataServerRpc();
         }
     }
 
-    [ServerRpc]
-    void SetTimeDataServerRpc()
-    {
-        SetTimeDataClientRpc();
-    }
-
-    [ClientRpc]
-    void SetTimeDataClientRpc()
+    void SetTimeData()
     {
         timeTMP.text = n_hour.Value.ToString() + ":" + n_min.Value.ToString("D2");
+        dayTMP.text = "day " + n_day.Value.ToString();
     }
 
     [ServerRpc]
-    void SetNextDayAnimationServerRpc()
+    void SetNextDayAnimationServerRpc(int day)
     {
-        SetNextDayAnimationClientRpc();
+        SetNextDayAnimationClientRpc(day);
+        LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
     }
 
     [ClientRpc]
-    void SetNextDayAnimationClientRpc()
+    void SetNextDayAnimationClientRpc(int day)
     {
-        DayChange();
+        DayChange(day);
         dayTMP.text = "day " + n_day.Value.ToString();
     }
 }
