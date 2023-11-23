@@ -8,17 +8,22 @@ public class PlayerInfo : NetworkBehaviour
     private PlayerMovement move;
     private InventoryManager inventoryManager;
     private GameObject itemToRemove;
+    private GameObject sun;
 
     private void Start()
     {
         move = GetComponent<PlayerMovement>();
         inventoryManager = GetComponent<InventoryManager>();
+        sun = GameObject.FindGameObjectWithTag("sun");
 
         if (IsLocalPlayer) Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
     }
     void Update()
     {
         if (!IsOwner) return;
+
+        sun.transform.localPosition = transform.position + new Vector3(0, 10, 0);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CheckForBridge();           
@@ -45,13 +50,15 @@ public class PlayerInfo : NetworkBehaviour
         else
         {
             RaycastHit hit;
-            Debug.DrawRay(transform.position, transform.right);
+            Debug.DrawRay(transform.position, transform.forward);
 
             if (Physics.Raycast(transform.position, transform.right, out hit, 1))
             {
                 if (hit.transform.GetComponent<Bridge>() != null)
+                {
                     hit.transform.GetComponent<Bridge>().BuildBridge();
-                selected.RemoveItem();
+                    selected.RemoveItem();
+                }
             }
         }
     }

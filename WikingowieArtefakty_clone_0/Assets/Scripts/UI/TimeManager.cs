@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
+using Unity.Netcode;
 using UnityEngine;
 
-public class TimeManager : MonoBehaviour
+public class TimeManager : NetworkBehaviour
 {
     public TextMeshProUGUI timeTMP;
     public TextMeshProUGUI dayTMP;
@@ -22,9 +22,13 @@ public class TimeManager : MonoBehaviour
     public GameObject Player;
 
     private float delay = 1f;
-    int hour = 8;
-    int min = 0;
-    int day = 1;
+    //int hour = 8;
+    //int min = 0;
+    //int day = 1;
+
+    private NetworkVariable<int> n_hour = new NetworkVariable<int>(8, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<int> n_min = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<int> n_day = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private bool paused = false; 
 
@@ -32,27 +36,35 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         //fogDensity = RenderSettings.fogDensity;
-        LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
         PreviousDayTMP.gameObject.SetActive(false);
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
-        timeTMP.text = hour.ToString() +":"+min.ToString();
+        SetTimeDataClientRpc();
 
         LandTMP.gameObject.transform.localPosition = new Vector3(0, +100, 0);
         DescTMP.gameObject.transform.localPosition = new Vector3(0, +150, 0);
         ClockTMP.gameObject.transform.localPosition = new Vector3(0, +200, 0);
         AccDayTMP.gameObject.transform.localPosition = new Vector3(0, +250, 0);
-        StartCoroutine(Timer());
-        StartCoroutine(StartTransInfo());
     }
-    //
+    
+    public void StartDayOne()
+    {
+        StartCoroutine(StartTransInfo());
+
+        if (IsServer)
+        {
+            LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
+            n_hour.Value = 8;
+            StartCoroutine(Timer());
+        }
+    }
     void DayChange()
     {
         PreviousDayTMP.gameObject.SetActive(true);
         NextDayTMP.gameObject.SetActive(true);
         DayChangeTMP.gameObject.SetActive(true);
-        PreviousDayTMP.text = (day - 1).ToString();
-        NextDayTMP.text = day.ToString();
+        PreviousDayTMP.text = (n_day.Value - 1).ToString();
+        NextDayTMP.text = n_day.Value.ToString();
         LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay * 48) - 0.01f));
         LeanTween.value(0f, 1f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float alpha) => UpdateTextAlpha(DayChangeTMP, alpha));
 
@@ -62,22 +74,19 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        Sun.transform.position = Player.transform.position + new Vector3(0, 10, 0);
-
-
         //pauza
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Debug.Log("KLIKAM PAUZE");
             if (paused == false)
             {
-                Time.timeScale = 0f;
+                //Time.timeScale = 0f;
                 paused = true;
             }
 
             else if (paused == true)
             {
-                Time.timeScale = 1f;
+                //Time.timeScale = 1f;
                 paused = false;
             }
         }
@@ -137,31 +146,55 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-        IEnumerator Timer()
+    IEnumerator Timer()
     {
         while (true) {
             int temp = 0;
 
-            if (hour > 23)
+            if (n_hour.Value > 23)
             {
-                hour = 0;
-                timeTMP.text = hour.ToString() + ":" + min.ToString("D2");
-                day++;
-                DayChange();
-                dayTMP.text = "day " + day.ToString();
+                n_hour.Value = 0;
+                n_day.Value++;
+                SetTimeDataServerRpc();
+                SetNextDayAnimationServerRpc();
             }
 
             while (temp < 2)
             {
                 yield return new WaitForSeconds(delay);
                 temp++;
-                min += 30;
-                if(min==60)min= 0;
-                timeTMP.text = hour.ToString() + ":" + min.ToString("D2");
+                n_min.Value += 30;
+                if(n_min.Value == 60) n_min.Value = 0;
+                SetTimeDataServerRpc();
             }
-            min = 0;
-            hour++;
-            timeTMP.text = hour.ToString() + ":" + min.ToString("D2");
+            n_min.Value = 0;
+            n_hour.Value++;
+            SetTimeDataServerRpc();
         }
+    }
+
+    [ServerRpc]
+    void SetTimeDataServerRpc()
+    {
+        SetTimeDataClientRpc();
+    }
+
+    [ClientRpc]
+    void SetTimeDataClientRpc()
+    {
+        timeTMP.text = n_hour.Value.ToString() + ":" + n_min.Value.ToString("D2");
+    }
+
+    [ServerRpc]
+    void SetNextDayAnimationServerRpc()
+    {
+        SetNextDayAnimationClientRpc();
+    }
+
+    [ClientRpc]
+    void SetNextDayAnimationClientRpc()
+    {
+        DayChange();
+        dayTMP.text = "day " + n_day.Value.ToString();
     }
 }

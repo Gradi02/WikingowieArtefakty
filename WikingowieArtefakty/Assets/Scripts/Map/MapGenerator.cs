@@ -32,7 +32,7 @@ public class MapGenerator : NetworkBehaviour
     public Camera cam;
     public GameObject manager;
     public GameObject startPlane;
-
+    public TimeManager timeManager;
 
     private GameObject start;
     public static Vector3 middle = Vector3.zero;
@@ -295,6 +295,7 @@ public class MapGenerator : NetworkBehaviour
         SetShip();
         started.Value = true;
         EnableWaterClientRpc();
+        timeManager.StartDayOne();
 
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
             g.GetComponent<PlayerMovement>().SetStartPosition(middle);

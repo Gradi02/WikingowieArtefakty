@@ -362,7 +362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   islandLevel: 0
-  size: 100
+  size: 50
   middleRadius: 7
   treeOffset: 0.15
   rockOffset: 0.08
@@ -395,6 +395,7 @@ MonoBehaviour:
   cam: {fileID: 1751882901}
   manager: {fileID: 1502539006}
   startPlane: {fileID: 1062793399}
+  timeManager: {fileID: 2128734425}
   started:
     m_InternalValue: 0
 --- !u!4 &53929052
@@ -3378,9 +3379,10 @@ GameObject:
   m_Component:
   - component: {fileID: 696168447}
   - component: {fileID: 696168446}
+  - component: {fileID: 696168448}
   m_Layer: 0
   m_Name: Directional Light
-  m_TagString: Untagged
+  m_TagString: sun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3462,6 +3464,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &696168448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696168445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 318775435
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &702671532
 GameObject:
   m_ObjectHideFlags: 0
@@ -8249,7 +8271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   camTransform: {fileID: 1751882902}
-  Offset: {x: -3, y: 5, z: 0}
+  Offset: {x: -4, y: 6, z: 0}
   Rotation: {x: 50, y: 90, z: 0}
   SmoothTime: 0.3
 --- !u!114 &1751882904
@@ -9932,6 +9954,7 @@ GameObject:
   - component: {fileID: 2128734427}
   - component: {fileID: 2128734426}
   - component: {fileID: 2128734425}
+  - component: {fileID: 2128734429}
   m_Layer: 0
   m_Name: UI_manager (1)
   m_TagString: uimanager
@@ -10025,6 +10048,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2128734429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128734424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3968852476
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &2130180236
 GameObject:
   m_ObjectHideFlags: 0
