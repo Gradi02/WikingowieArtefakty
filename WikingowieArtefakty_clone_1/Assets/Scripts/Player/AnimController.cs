@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.EventSystems;
 
 public class AnimController : NetworkBehaviour
 {
     // Start is called before the first frame update
     public Animator animator;
+
 
     private void Update()
     {
@@ -25,10 +27,15 @@ public class AnimController : NetworkBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            animator.SetBool("walk", true);
             animator.SetBool("dash", true);
+            animator.speed = 5;
         }
-        else animator.SetBool("dash", false);
-
+        else
+        {
+            animator.SetBool("dash", false);
+            animator.speed = 1;
+        }
         if (Input.GetKey(KeyCode.R))
         {
             animator.SetBool("axe", true);
