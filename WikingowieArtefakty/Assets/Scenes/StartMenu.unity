@@ -366,7 +366,7 @@ MonoBehaviour:
   middleRadius: 7
   ruinRadius: 5
   treeOffset: 0.15
-  rockOffset: 0.08
+  rockOffset: 0
   oresChance: 5
   trees_variants1:
   - {fileID: 2551570784844344749, guid: 270aa20491d98d94daa58417330afd35, type: 3}
@@ -386,9 +386,11 @@ MonoBehaviour:
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
   - {fileID: 5468871287417284545, guid: afdf27045d5b6ea43bfc70631eb31a43, type: 3}
+  - {fileID: 4936650255284283978, guid: 211b5ac82aac37142a53bb4f0ef077f1, type: 3}
   defaultMaterial1: {fileID: 2100000, guid: 2ae21ea97d61ab246b1c4279b5b132fd, type: 2}
   oresMaterials1: []
   shipPrefab: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
+  grass: {fileID: 4936650255284283978, guid: 2046e217c2721044982fdc0e95747f72, type: 3}
   waterLayerPrefab: {fileID: 6942782308479380561, guid: e81893c140be0d94c8f63d2cb05d2efc, type: 3}
   waterLayer: {fileID: 0}
   campfire: {fileID: 5117925673290852196, guid: 53fa9b6008eecef49b21de14a5a4cc47, type: 3}
@@ -8303,7 +8305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   camTransform: {fileID: 1751882902}
-  Offset: {x: -4, y: 6, z: 0}
+  Offset: {x: -3, y: 5, z: 0}
   Rotation: {x: 50, y: 90, z: 0}
   SmoothTime: 0.3
 --- !u!114 &1751882904
