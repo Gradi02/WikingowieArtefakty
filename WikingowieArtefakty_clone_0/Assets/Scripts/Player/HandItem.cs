@@ -9,6 +9,7 @@ public class HandItem : NetworkBehaviour
     public Transform HandTransform;
 
     public GameObject[] HandItemsPrefabs;
+    public GameObject[] HandModelsPrefabs;
     private Slot selectedItemSlot;
 
     private BowShooting bowscript;
@@ -24,14 +25,85 @@ public class HandItem : NetworkBehaviour
         if (!IsOwner) return;
         selectedItemSlot = GetSelectedItem();
 
-        if (selectedItemSlot.GetItemName() == "bow") bowscript.enableBow = true;
-        else bowscript.enableBow = false;
+        //nic
+        if (selectedItemSlot.GetItemName() == null)
+        {
+            SetItemOnPlayerServerRpc(GetComponent<NetworkObject>().NetworkObjectId, -1);
+        }
 
-        if (selectedItemSlot.GetItemName() == "axe") GetComponent<DestroyBlock>().enableAxe = true;
-        else GetComponent<DestroyBlock>().enableAxe = false;
+        //battleaxe
+        if (selectedItemSlot.GetItemName() == "battleaxe")
+        {
+            HandModelsPrefabs[0].SetActive(true);
+            SetItemOnPlayerServerRpc(GetComponent<NetworkObject>().NetworkObjectId, 0);
+        }
+        else
+        {
+            HandModelsPrefabs[0].SetActive(false);
+        }
 
-        if (selectedItemSlot.GetItemName() == "pickaxe") GetComponent<DestroyBlock>().enablePickaxe = true;
-        else GetComponent<DestroyBlock>().enablePickaxe = false;
+        //bow
+        if (selectedItemSlot.GetItemName() == "bow")
+        {
+            bowscript.enableBow = true;
+            HandModelsPrefabs[1].SetActive(true);
+            SetItemOnPlayerServerRpc(GetComponent<NetworkObject>().NetworkObjectId, 1);
+        }
+        else
+        {
+            bowscript.enableBow = false;
+            HandModelsPrefabs[1].SetActive(false);
+        }
+
+        //axe
+        if (selectedItemSlot.GetItemName() == "axe")
+        {
+            GetComponent<DestroyBlock>().enableAxe = true;
+            HandModelsPrefabs[2].SetActive(true);
+            SetItemOnPlayerServerRpc(GetComponent<NetworkObject>().NetworkObjectId, 2);
+        }
+        else
+        {
+            GetComponent<DestroyBlock>().enableAxe = false;
+            HandModelsPrefabs[2].SetActive(false);
+        }
+
+        //pickaxe
+        if (selectedItemSlot.GetItemName() == "pickaxe")
+        {
+            GetComponent<DestroyBlock>().enablePickaxe = true;
+            HandModelsPrefabs[3].SetActive(true);
+            SetItemOnPlayerServerRpc(GetComponent<NetworkObject>().NetworkObjectId, 3);
+        }
+        else
+        {
+            GetComponent<DestroyBlock>().enablePickaxe = false;
+            HandModelsPrefabs[3].SetActive(false);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SetItemOnPlayerServerRpc(ulong id, int item)
+    {
+        SetItemOnPlayerClientRpc(id, item);
+    }
+
+    [ClientRpc]
+    void SetItemOnPlayerClientRpc(ulong id, int item)
+    {
+        if(item == -1)
+        {
+            for (int i = 0; i < HandModelsPrefabs.Length; i++)
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].GetComponent<HandItem>().HandModelsPrefabs[i].SetActive(false);
+        }
+
+        for (int i = 0; i < HandModelsPrefabs.Length; i++)
+        {
+            if(i == item)
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].GetComponent<HandItem>().HandModelsPrefabs[i].SetActive(true);
+            else
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].GetComponent<HandItem>().HandModelsPrefabs[i].SetActive(false);
+        }
     }
 
     Slot GetSelectedItem()

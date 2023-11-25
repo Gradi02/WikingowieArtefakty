@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.EventSystems;
 
 public class AnimController : NetworkBehaviour
 {
     // Start is called before the first frame update
     public Animator animator;
 
+
     private void Update()
     {
         if (!IsOwner) return;
 
+        // WASD ANIM
         if (Input.GetKey(KeyCode.W) ||
             Input.GetKey(KeyCode.S) ||
             Input.GetKey(KeyCode.A) ||
@@ -19,17 +22,17 @@ public class AnimController : NetworkBehaviour
         {
             animator.SetBool("walk", true);
         }
-        else animator.SetBool("walk", false);
-
-        /////////////////////////////////////
-
-        if (Input.GetKey(KeyCode.LeftShift))
+        else
         {
-            animator.SetBool("dash", true);
+            animator.SetBool("walk", false);
         }
-        else animator.SetBool("dash", false);
 
-        if (Input.GetKey(KeyCode.R))
+
+
+
+
+
+        /*if (Input.GetKey(KeyCode.R))
         {
             animator.SetBool("axe", true);
         }
@@ -39,6 +42,20 @@ public class AnimController : NetworkBehaviour
         {
             animator.SetBool("pickaxe", true);
         }
-        else animator.SetBool("pickaxe", false);
+        else animator.SetBool("pickaxe", false);*/
+    }
+
+
+    public void DashAnim()
+    {
+        animator.SetBool("walk", true);
+        //animator.SetBool("dash", true);
+        animator.speed = 5;
+        Invoke(nameof(ResetSpeed), 0.5f);
+    }
+
+    private void ResetSpeed()
+    {
+        animator.speed = 1;
     }
 }

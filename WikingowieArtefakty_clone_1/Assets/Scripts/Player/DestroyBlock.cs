@@ -23,6 +23,9 @@ public class DestroyBlock : NetworkBehaviour
         {
             if (enableAxe)
             {
+                //animacja
+                GetComponent<AnimController>().animator.SetBool("axe", true);
+
                 RaycastHit hit;
                 if(Physics.Raycast(transform.position + offset, transform.forward, out hit, 0.75f))
                 {
@@ -42,6 +45,7 @@ public class DestroyBlock : NetworkBehaviour
             }
             else if (enablePickaxe)
             {
+                GetComponent<AnimController>().animator.SetBool("pickaxe", true);
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position + offset, transform.forward, out hit, 0.75f))
                 {
@@ -57,6 +61,12 @@ public class DestroyBlock : NetworkBehaviour
                     }
                 }
             }
+        }
+        else
+        {
+            //wylacz anim
+            GetComponent<AnimController>().animator.SetBool("axe", false);
+            GetComponent<AnimController>().animator.SetBool("pickaxe", false);
         }
     }
 }

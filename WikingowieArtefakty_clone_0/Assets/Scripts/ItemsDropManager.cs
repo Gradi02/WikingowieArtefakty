@@ -16,6 +16,8 @@ public class ItemsDropManager : MonoBehaviour
         for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++)
                 isItem[i, j] = false;
+
+        isItem[size/2, size/2] = true;
     }
     public void SetItem(bool s, int x, int y)
     {

@@ -58,6 +58,7 @@ public class PlayerMovement : NetworkBehaviour
             nextDash = Time.time + dashCooldown;
             rb.AddForce(direction * dashPower, ForceMode.Impulse);
             SpawnParticleServerRpc(GetComponent<NetworkObject>().NetworkObjectId);
+            GetComponent<AnimController>().DashAnim();
         }
     }
 
