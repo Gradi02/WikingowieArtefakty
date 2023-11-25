@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4287958576063161616}
   - component: {fileID: 1892957740318203145}
   - component: {fileID: 2510679168086074633}
+  - component: {fileID: -4114286235018251247}
   m_Layer: 0
   m_Name: potion
   m_TagString: Untagged
@@ -120,3 +121,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: potion
   itemIcon: {fileID: 21300000, guid: 99b821d56fa5c244080a61a33e94c922, type: 3}
+--- !u!114 &-4114286235018251247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6949883227041504164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

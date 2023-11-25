@@ -18,7 +18,7 @@ public class BlockManager : NetworkBehaviour
     public ParticleSystem destroyParticles;
     public ParticleSystem treeParticles;
     public ParticleSystem stoneParticles;
-    public float resizeOffset = 0;
+    //public float resizeOffset = 0;
     
     
     private Vector3 normalScale, breakStep;
@@ -28,23 +28,40 @@ public class BlockManager : NetworkBehaviour
     private void Start()
     {
         normalScale = transform.localScale;
-        breakStep = normalScale / maxBreakStatus / 3;
+        breakStep = normalScale / maxBreakStatus / 5;
         currentBreakStatus = 0;
     }
 
     [ContextMenu("Step"), ServerRpc(RequireOwnership = false)]
     public void NextBreakStepServerRpc()
     {
+        /* currentBreakStatus++;
+         LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep, 0.2f);
+         transform.position -= new Vector3(0f, breakStep.y / 2, 0f);
+
+         float x = Random.Range(-5, 5);
+         float z = Random.Range(-5, 5);
+
+         StartCoroutine(Hitting(x, z));*/
+        
+        
         currentBreakStatus++;
+
+        NextBreakClientRpc();
+
+        if (IsServer) CheckForDestroy();
+    }
+
+    [ClientRpc]
+    void NextBreakClientRpc()
+    {
         LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep, 0.2f);
         transform.position -= new Vector3(0f, breakStep.y / 2, 0f);
 
-        float x = Random.Range(-5, 5);
-        float z = Random.Range(-5, 5);
+        float x = Random.Range(-2, 2);
+        float z = Random.Range(-2, 2);
 
         StartCoroutine(Hitting(x, z));
-
-        if (IsServer) CheckForDestroy();
     }
 
     IEnumerator Hitting(float xin, float zin)
@@ -52,8 +69,8 @@ public class BlockManager : NetworkBehaviour
         float x = xin;
         float z = zin;
 
-        if (treeParticles != null) PlayParticleServerRpc(0);
-        if (stoneParticles != null) PlayParticleServerRpc(1);
+        if (treeParticles != null) PlayTreeParticle();
+        if (stoneParticles != null) PlayStoneParticle();
 
         LeanTween.rotate(this.gameObject, new Vector3(x, transform.localRotation.eulerAngles.y, z), 0.1f).setEase(LeanTweenType.easeInSine);
         yield return new WaitForSeconds(0.1f);
@@ -63,18 +80,17 @@ public class BlockManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void PlayParticleServerRpc(int i)
     {
-        if (i == 0) PlayTreeParticleClientRpc();
-        else if (i == 1) PlayStoneParticleClientRpc();
+        //if (i == 0) PlayTreeParticleClientRpc();
+        //else if (i == 1) PlayStoneParticleClientRpc();
     }
 
-    [ClientRpc]
-    private void PlayTreeParticleClientRpc()
+
+    private void PlayTreeParticle()
     {
         treeParticles.Play();
     }
 
-    [ClientRpc]
-    private void PlayStoneParticleClientRpc()
+    private void PlayStoneParticle()
     {
         stoneParticles.Play();
     }

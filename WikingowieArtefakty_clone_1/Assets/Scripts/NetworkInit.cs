@@ -84,6 +84,8 @@ public class NetworkInit : NetworkBehaviour
         inputCode.SetActive(false);
         hostButton.SetActive(false);
         mapButton.SetActive(true);
+
+        Debug.Log(joincode);
     }
 
     public void JoinGame()
@@ -98,5 +100,10 @@ public class NetworkInit : NetworkBehaviour
 
         JoinRelay(joincode);
         Debug.Log(joincode);
+
+        joinButton.SetActive(false);
+        inputCode.SetActive(false);
+        hostButton.SetActive(false);
+        code.gameObject.SetActive(false);
     }
 }
