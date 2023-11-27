@@ -33,6 +33,7 @@ public class Popup : MonoBehaviour
         TextMeshProUGUI text = Instantiate(desc, infoTransform.position, Quaternion.identity, canva.transform);
         text.transform.position = infoTransform.position;
         text.text = info;
+        text.color = Color.red;
         ifblock = true;
         StartCoroutine(Timer());
     }
