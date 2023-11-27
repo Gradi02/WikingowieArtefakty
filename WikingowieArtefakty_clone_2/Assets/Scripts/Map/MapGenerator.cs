@@ -228,7 +228,7 @@ public class MapGenerator : NetworkBehaviour
                                 GameObject tr = Instantiate(waterPrefabs[(int)Random.Range(0, waterPrefabs.Length)], transform.position, Quaternion.identity);
                                 tr.GetComponent<NetworkObject>().Spawn();
                                 tr.transform.parent = a.transform;
-                                tr.transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), -0.05f, Random.Range(-0.1f, 0.1f));
+                                tr.transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), -0.26f, Random.Range(-0.1f, 0.1f));
                                 //tr.transform.localEulerAngles.Set(0, Random.Range(0, 360), 0);
                                 tr.name = "water";
                             }

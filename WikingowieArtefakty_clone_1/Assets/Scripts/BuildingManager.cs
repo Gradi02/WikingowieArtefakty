@@ -91,7 +91,7 @@ public class BuildingManager : NetworkBehaviour
         }
         else
         {
-            Debug.Log("Masz ju¿ max schematów na mapie");
+            Popup.Instance.PopupPop("You can't create more building schemats!");
         }
     }
 

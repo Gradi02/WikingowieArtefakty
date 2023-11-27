@@ -111,7 +111,7 @@ public class InventoryManager : NetworkBehaviour
         {
             if(CheckForSpace())
             {
-                Debug.Log("nie ma miejsca");
+                Popup.Instance.PopupPop("You can't drop item here!");
                 return;
             }
 

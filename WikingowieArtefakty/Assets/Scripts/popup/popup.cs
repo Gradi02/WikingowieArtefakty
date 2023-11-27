@@ -6,21 +6,40 @@ using UnityEngine.UI;
 
 public class Popup : MonoBehaviour
 {
+    public static Popup Instance;
+
     public TextMeshProUGUI desc;
     public Canvas canva;
+    public Transform infoTransform;
 
-    public void Update()
+    private bool ifblock = false;
+
+    private void Awake()
     {
-        Vector3 inGamePos = Input.mousePosition;
-       // Vector3 inGamePos = Camera.main.ScreenToWorldPoint(mousepos);
-        if (Input.GetKeyDown(KeyCode.Mouse0)) PopupPop("test", inGamePos);
-        Debug.Log(inGamePos);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public void PopupPop(string info, Vector3 pos)
+    public void PopupPop(string info)
     {
-        Instantiate(desc, pos, Quaternion.identity, canva.transform);
-        desc.transform.position = pos;
-        desc.text = info;
+        if (ifblock) return;
+
+        TextMeshProUGUI text = Instantiate(desc, infoTransform.position, Quaternion.identity, canva.transform);
+        text.transform.position = infoTransform.position;
+        text.text = info;
+        ifblock = true;
+        StartCoroutine(Timer());
+    }
+
+    IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(2);
+        ifblock = false;
     }
 }

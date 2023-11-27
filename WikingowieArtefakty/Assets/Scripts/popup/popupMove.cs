@@ -12,8 +12,8 @@ public class PopupMove : MonoBehaviour
     void Start()
     {
         float move = this.gameObject.transform.position.y;
-        LeanTween.value(textmesh.gameObject, 1, 0, 4).setOnUpdate(UpdateTextAlpha).setDelay(2f);
-        LeanTween.moveLocalY(this.gameObject, move, 20f);
+        LeanTween.value(textmesh.gameObject, 1, 0, 4).setOnUpdate(UpdateTextAlpha).setDelay(1.5f);
+        LeanTween.moveLocalY(this.gameObject, move, 40f);
         Destroy(this.gameObject, 20f);
     }
 
