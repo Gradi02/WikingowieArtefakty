@@ -37,12 +37,6 @@ public class scaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             ResourcesTMP[i].text = "";
         }
     }
-    public void Update()
-    {
-        if(Input.GetKey(KeyCode.RightAlt) || Input.GetKey(KeyCode.LeftAlt))
-        {
-        }
-    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         this.gameObject.transform.localScale += new Vector3(0.2f, 0.2f, 0);
@@ -78,7 +72,7 @@ public class scaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     {
         if(!buildingManager.CheckForSchematPlace())
         {
-            Debug.Log("Masz ju¿ max schematów!");
+            Popup.Instance.PopupPop("You can't create more building schemats!");
             return;
         }
 
