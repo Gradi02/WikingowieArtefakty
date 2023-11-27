@@ -18,6 +18,8 @@ public class BlockManager : NetworkBehaviour
     public ParticleSystem destroyParticles;
     public ParticleSystem treeParticles;
     public ParticleSystem stoneParticles;
+
+    public Animator TreeAnimator;
     //public float resizeOffset = 0;
     
     
@@ -97,6 +99,13 @@ public class BlockManager : NetworkBehaviour
         if(currentBreakStatus >= maxBreakStatus)
         {
             SpawnDestroyParticleServerRpc();
+
+            if (TreeAnimator != null)
+            {
+                gameObject.GetComponent<BoxCollider>().enabled = false;
+                TreeAnimator.SetBool("TREE_FALL", true);
+            }
+
             DespawnObjectServerRpc();
         }
     }
@@ -106,7 +115,13 @@ public class BlockManager : NetworkBehaviour
     {
         GameObject g2 = Instantiate(loot, transform.position, Quaternion.identity);
         g2.GetComponent<NetworkObject>().Spawn();
+        StartCoroutine(DelayedDespawn());
+        
+    }
 
+    private IEnumerator DelayedDespawn()
+    {
+        yield return new WaitForSeconds(4f);
         GetComponent<NetworkObject>().Despawn();
     }
 

@@ -71,6 +71,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fab6784fc52ac1849b27fce6dc61b7d8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1520121134063253430}
+    - targetCorrespondingSourceObject: {fileID: 8164078558771037576, guid: fab6784fc52ac1849b27fce6dc61b7d8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7993360952925039058}
   m_SourcePrefab: {fileID: 100100000, guid: fab6784fc52ac1849b27fce6dc61b7d8, type: 3}
 --- !u!1 &702579786378899497 stripped
 GameObject:
@@ -115,6 +118,7 @@ MonoBehaviour:
   destroyParticles: {fileID: 3066103022588316011, guid: 83d4c8cc9baacfb4686c9a34a462a10e, type: 3}
   treeParticles: {fileID: 6169253708236904260}
   stoneParticles: {fileID: 0}
+  TreeAnimator: {fileID: 7993360952925039058}
 --- !u!199 &5856588525059635536
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4989,3 +4993,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!1 &8380595788582521072 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: fab6784fc52ac1849b27fce6dc61b7d8, type: 3}
+  m_PrefabInstance: {fileID: 360702786812693880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7993360952925039058
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8380595788582521072}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 359c7e03b307635448e5dc8fd1e1f513, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
