@@ -7,8 +7,11 @@ using Unity.Netcode;
 public class MenuManager : NetworkBehaviour
 {
     public RawImage img;
-    private Color alpha;
+    public GameObject[] invUI;
 
+
+    private Color alpha;
+    private bool sh = false;
     private bool isAnimation = false;
 
     private void Start()
@@ -16,22 +19,29 @@ public class MenuManager : NetworkBehaviour
         alpha = Color.black;
         alpha.a = 1;
         img.color = alpha;
-        FadeAnimation(false);
+
+        foreach (var g in invUI)
+        {
+            g.transform.localPosition -= new Vector3(0, 200, 0);
+        }
+
+        StartCoroutine(FadeOut());
     }
 
-    public void FadeAnimation(bool inout)
+    [ServerRpc]
+    public void FadeAnimationServerRpc(bool inout)
     {
         if (isAnimation) return;
         isAnimation = true;
 
-        if (inout) StartCoroutine(FadeIn());
-        else StartCoroutine(FadeOut());
+        FadeAnimationClientRpc(inout);
     }
 
-    public IEnumerator InvokeFunction(bool inout, float time)
+    [ClientRpc]
+    public void FadeAnimationClientRpc(bool inout)
     {
-        yield return new WaitForSeconds(time);
-        FadeAnimation(inout);
+        if (inout) StartCoroutine(FadeIn());
+        else StartCoroutine(FadeOut());
     }
 
     IEnumerator FadeIn()
@@ -64,5 +74,42 @@ public class MenuManager : NetworkBehaviour
 
         isAnimation=false;
         yield return null;
+    }
+
+    [ClientRpc]
+    public void SetInstantClientRpc(bool inout)
+    {
+        if(inout)
+        {
+            Color a = Color.black;
+            a.a = 1;
+            img.color = a;
+        }
+        else
+        {
+            Color a = Color.black;
+            a.a = 0;
+            img.color = a;
+        }
+    }
+
+    [ClientRpc]
+    public void SetInventoryUIClientRpc()
+    {
+        sh = !sh;
+        if(sh)
+        {
+            foreach(var g in invUI)
+            {
+                g.transform.localPosition += new Vector3(0, 200, 0);
+            }
+        }
+        else
+        {
+            foreach (var g in invUI)
+            {
+                g.transform.localPosition -= new Vector3(0, 200, 0);
+            }
+        }
     }
 }

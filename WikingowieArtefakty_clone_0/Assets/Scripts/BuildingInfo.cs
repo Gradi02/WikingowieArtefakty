@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
 
-public class BuildingInfo : MonoBehaviour
+public class BuildingInfo : NetworkBehaviour
 {
     private scaler info;
     private BuildingManager manager;
@@ -71,10 +72,16 @@ public class BuildingInfo : MonoBehaviour
         FinishBuilding();
     }*/
 
-    [ContextMenu("finish")]
-    private void FinishBuilding()
+    [ContextMenu("finish"), ServerRpc(RequireOwnership = false)]
+    private void FinishBuildingServerRpc()
+    {
+        manager.DecreseSchematsCountServerRpc();
+        FinishBuildingClientRpc();
+    }
+
+    [ClientRpc]
+    private void FinishBuildingClientRpc()
     {
         gameObject.GetComponent<MeshRenderer>().material = finished;
-        manager.DecreseSchematsCount();
     }
 }
