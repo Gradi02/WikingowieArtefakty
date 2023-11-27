@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class BuildingManager : MonoBehaviour
+public class BuildingManager : NetworkBehaviour
 {
     private GameObject currentBuildPrefab = null;
-    private int maxBuildingSchemats = 1;
-    private int currentBuildingSchemats = 0;
+    private int currentBuildIndex = 0;
+
+    private Vector3 currentPosition = Vector3.zero;
+    
+    private NetworkVariable<int> maxBuildingSchemats = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<int> currentBuildingSchemats = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public GameObject[] buildPrefabs = new GameObject[9];
    
@@ -15,6 +20,8 @@ public class BuildingManager : MonoBehaviour
         RemoveCurrentBuild();
 
         currentBuildPrefab = Instantiate(buildPrefabs[num], transform.position, Quaternion.identity);
+        currentBuildIndex = num;
+
         currentBuildPrefab.GetComponent<BuildingInfo>().SetBuildingInfo(info);
     }
 
@@ -28,13 +35,15 @@ public class BuildingManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                float Xoffset = currentBuildPrefab.transform.localScale.x / 2;
-                float Zoffset = currentBuildPrefab.transform.localScale.z / 2;
-
-                Vector3 newPos = new Vector3(Mathf.RoundToInt(hit.point.x) + Xoffset, 0.75f, Mathf.RoundToInt(hit.point.z) + Zoffset);
+                Vector3 newPos = new Vector3(Mathf.RoundToInt(hit.point.x), 0.75f, Mathf.RoundToInt(hit.point.z));
+                currentPosition = newPos;
 
                 currentBuildPrefab.transform.position = newPos;
             }
+        }
+        else
+        {
+            currentPosition = Vector3.zero;
         }
 
         if(Input.GetMouseButtonDown(1) && currentBuildPrefab != null)
@@ -52,9 +61,10 @@ public class BuildingManager : MonoBehaviour
             currentBuildPrefab.transform.localEulerAngles -= new Vector3(0, 90, 0);
         }*/
 
-        if (Input.GetKeyDown(KeyCode.Space) && currentBuildPrefab != null)
+        if (Input.GetKeyDown(KeyCode.B) && currentBuildPrefab != null)
         {
-            SetNewBuild();
+            SetNewBuildServerRpc(currentBuildIndex, currentPosition);
+            RemoveCurrentBuild();
         }
     }
 
@@ -64,23 +74,35 @@ public class BuildingManager : MonoBehaviour
         {
             Destroy(currentBuildPrefab);
             currentBuildPrefab = null;
+            currentBuildIndex = 0;
         }
     }
 
-    private void SetNewBuild()
+    [ServerRpc(RequireOwnership = false)]
+    private void SetNewBuildServerRpc(int buildingId, Vector3 pos)
     {
         /// WYWO£AJ FUNKCJE POSTAWIENIA NA SKRYPCIE BUDYNKU!!!!!
-        currentBuildPrefab = null;
-        currentBuildingSchemats++;
+
+        if (CheckForSchematPlace())
+        {
+            GameObject b = Instantiate(buildPrefabs[buildingId], pos, Quaternion.identity);
+            b.GetComponent<NetworkObject>().Spawn();
+            currentBuildingSchemats.Value++;
+        }
+        else
+        {
+            Debug.Log("Masz ju¿ max schematów na mapie");
+        }
     }
 
-    public void DecreseSchematsCount()
+    [ServerRpc(RequireOwnership = false)]
+    public void DecreseSchematsCountServerRpc()
     {
-        currentBuildingSchemats--;
+        currentBuildingSchemats.Value--;
     }
 
     public bool CheckForSchematPlace()
     {
-        return (currentBuildingSchemats < maxBuildingSchemats);
+        return (currentBuildingSchemats.Value < maxBuildingSchemats.Value);
     }
 }

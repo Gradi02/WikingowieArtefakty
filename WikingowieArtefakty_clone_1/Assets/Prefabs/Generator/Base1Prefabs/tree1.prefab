@@ -113,7 +113,7 @@ MonoBehaviour:
   breakingTool: 0
   loot: {fileID: 1855252431164562674, guid: b365db96e87439f48b9e5902287dd53a, type: 3}
   destroyParticles: {fileID: 3066103022588316011, guid: 83d4c8cc9baacfb4686c9a34a462a10e, type: 3}
-  treeParticles: {fileID: 1453966699055693536, guid: 270aa20491d98d94daa58417330afd35, type: 3}
+  treeParticles: {fileID: 6169253708236904260}
   stoneParticles: {fileID: 0}
 --- !u!199 &5856588525059635536
 ParticleSystemRenderer:

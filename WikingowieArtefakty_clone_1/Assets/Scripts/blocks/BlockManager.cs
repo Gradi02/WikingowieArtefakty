@@ -21,14 +21,18 @@ public class BlockManager : NetworkBehaviour
     //public float resizeOffset = 0;
     
     
-    private Vector3 normalScale, breakStep;
+    private NetworkVariable<Vector3> breakStep = new NetworkVariable<Vector3>(new Vector3(0.02f, 0.02f, 0.02f), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     private int currentBreakStatus;
 
 
     private void Start()
     {
-        normalScale = transform.localScale;
-        breakStep = normalScale / maxBreakStatus / 5;
+        if (IsHost)
+        {
+            breakStep.Value = transform.localScale / maxBreakStatus / 5;
+        }
+
         currentBreakStatus = 0;
     }
 
@@ -55,8 +59,9 @@ public class BlockManager : NetworkBehaviour
     [ClientRpc]
     void NextBreakClientRpc()
     {
-        LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep, 0.2f);
-        transform.position -= new Vector3(0f, breakStep.y / 2, 0f);
+        //Debug.Log(breakStep);
+        LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep.Value, 0.2f);
+        transform.position -= new Vector3(0f, breakStep.Value.y / 2, 0f);
 
         float x = Random.Range(-2, 2);
         float z = Random.Range(-2, 2);
@@ -76,14 +81,6 @@ public class BlockManager : NetworkBehaviour
         yield return new WaitForSeconds(0.1f);
         LeanTween.rotate(this.gameObject, new Vector3(0, transform.localRotation.eulerAngles.y, 0), 0.1f).setEase(LeanTweenType.easeOutSine);
     }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void PlayParticleServerRpc(int i)
-    {
-        //if (i == 0) PlayTreeParticleClientRpc();
-        //else if (i == 1) PlayStoneParticleClientRpc();
-    }
-
 
     private void PlayTreeParticle()
     {

@@ -52,11 +52,11 @@ public class PlayerInfo : NetworkBehaviour
             RaycastHit hit;
             Debug.DrawRay(transform.position, transform.forward);
 
-            if (Physics.Raycast(transform.position, transform.right, out hit, 1))
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 1))
             {
                 if (hit.transform.GetComponent<Bridge>() != null)
                 {
-                    hit.transform.GetComponent<Bridge>().BuildBridge();
+                    hit.transform.GetComponent<Bridge>().BuildBridgeServerRpc();
                     selected.RemoveItem();
                 }
             }

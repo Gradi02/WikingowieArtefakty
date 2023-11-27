@@ -85,18 +85,20 @@ public class MapGenerator : NetworkBehaviour
         }
     }
 
+
+    [ServerRpc]
+    public void SetUpGeneratorServerRpc()
+    {
+        menuManager.FadeAnimationServerRpc(true);
+        seed = Random.Range(100, 9999);
+        Debug.Log("Seed: " + seed);
+        Invoke(nameof(GenerateWorldServerRpc), 2);
+    }
+
     [ServerRpc]
     public void GenerateWorldServerRpc()
     {
-        SetTransitionClientRpc();
-        seed = Random.Range(100, 9999);
-        Debug.Log("Seed: " + seed);
-
-        /* waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
-         //waterLayer.GetComponent<NetworkObject>().Spawn();
-         waterLayer.name = "waterLayer";
-         waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
-         waterLayer.transform.position = middle + new Vector3(0, 0, 0);*/
+        menuManager.SetInventoryUIClientRpc();
 
         SetRuins();
         
@@ -223,12 +225,12 @@ public class MapGenerator : NetworkBehaviour
 
                             if (ifobj == 0)
                             {
-                                Vector3 rand2 = new Vector3(x + Random.Range(-0.1f, 0.1f), -0.05f, y + Random.Range(-0.1f, 0.1f));
                                 GameObject tr = Instantiate(waterPrefabs[(int)Random.Range(0, waterPrefabs.Length)], transform.position, Quaternion.identity);
                                 tr.GetComponent<NetworkObject>().Spawn();
-                                tr.transform.localPosition = rand2;
-                                tr.transform.localRotation.eulerAngles.Set(0, Random.Range(0, 360), 0);
-                                tr.transform.parent = this.gameObject.transform;
+                                tr.transform.parent = a.transform;
+                                tr.transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), -0.05f, Random.Range(-0.1f, 0.1f));
+                                //tr.transform.localEulerAngles.Set(0, Random.Range(0, 360), 0);
+                                tr.name = "water";
                             }
                         }
                     }
@@ -246,7 +248,7 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
 
                             //Losowa skala
-                            float randscale = Random.Range(0.5f, 0.75f);
+                            float randscale = Random.Range(0.6f, 0.8f);
                             new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
 
                             //Losowa rotacja
@@ -407,7 +409,10 @@ public class MapGenerator : NetworkBehaviour
                         ground.Add(gr);
                     }
 
-                    if(new_obj != null) dropManager.SetItem(true, x, y);
+                    if (new_obj != null)
+                    {
+                        dropManager.SetItem(true, x, y);
+                    }
                 }
             }
         }
@@ -435,6 +440,8 @@ public class MapGenerator : NetworkBehaviour
 
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
             g.GetComponent<PlayerMovement>().SetStartPosition(middle);
+
+        menuManager.FadeAnimationServerRpc(false);
     }
 
     int GetIdPerlinNoise(int x, int y)
@@ -459,13 +466,6 @@ public class MapGenerator : NetworkBehaviour
         float perlin = Mathf.PerlinNoise(nx, ny) * (5 + 1);
 
         return Mathf.Clamp(perlin, 0, 5); //blocks_prefabs1.Length
-    }
-
-    [ClientRpc]
-    void SetTransitionClientRpc()
-    {
-        menuManager.FadeAnimation(true);
-        menuManager.InvokeFunction(false, 5);
     }
 
     [ClientRpc]
@@ -495,6 +495,7 @@ public class MapGenerator : NetworkBehaviour
             if (Vector3.Distance(g.transform.position, pos) < r - 0.5f)
             {      
                 g.GetComponent<NetworkObject>().Despawn();
+                dropManager.SetItem(false, Mathf.RoundToInt(g.transform.position.x), Mathf.RoundToInt(g.transform.position.z));
             }
         }
 

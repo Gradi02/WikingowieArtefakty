@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Bridge : MonoBehaviour
+public class Bridge : NetworkBehaviour
 {
     public GameObject bridgePrefab;
     public ParticleSystem buildParticle;
     private GameObject bridgeObj;
 
-    public void BuildBridge()
+    [ServerRpc(RequireOwnership = false)]
+    public void BuildBridgeServerRpc()
     {
         if (bridgeObj != null)
         {
@@ -16,8 +18,19 @@ public class Bridge : MonoBehaviour
             return;
         }
 
+        BuildBridgeClientRpc();   
+
+        if(transform.Find("water") != null)
+        {
+            transform.Find("water").GetComponent<NetworkObject>().Despawn();
+        }
+    }
+
+    [ClientRpc]
+    public void BuildBridgeClientRpc()
+    {
         bridgeObj = Instantiate(bridgePrefab, transform.position, Quaternion.identity, transform);
-        bridgeObj.transform.position -= new Vector3(0,0.5f,0);
+        bridgeObj.transform.localPosition -= new Vector3(0, 0.5f, 0);
         buildParticle.Play();
         GetComponent<BoxCollider>().enabled = false;
     }
