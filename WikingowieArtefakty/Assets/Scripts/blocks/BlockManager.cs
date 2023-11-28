@@ -121,7 +121,10 @@ public class BlockManager : NetworkBehaviour
 
     private IEnumerator DelayedDespawn()
     {
-        yield return new WaitForSeconds(4f);
+        if (TreeAnimator != null)
+        {
+            yield return new WaitForSeconds(10f);
+        }
         GetComponent<NetworkObject>().Despawn();
     }
 
