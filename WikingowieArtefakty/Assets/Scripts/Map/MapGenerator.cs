@@ -25,11 +25,12 @@ public class MapGenerator : NetworkBehaviour
     //public Material defaultMaterial1;
     public GameObject[] oresPrefabs1;
     public GameObject shipPrefab;
+    public GameObject castlePrefab;
     //public Material grassMaterial;
 
     [Header("Other Prefabs")]
     public GameObject waterLayerPrefab;
-    public GameObject waterLayer;
+    [HideInInspector] public GameObject waterLayer;
     public GameObject campfire;
     public GameObject air;
 
@@ -542,7 +543,7 @@ public class MapGenerator : NetworkBehaviour
         } while (Vector3.Distance(ruinsPos, middle) < offset);
 
 
-        GameObject ship = Instantiate(shipPrefab, ruinsPos, Quaternion.identity);
+        GameObject ship = Instantiate(castlePrefab, ruinsPos, Quaternion.identity);
         ship.GetComponent<NetworkObject>().Spawn();
         ship.name = "ruina";
         
