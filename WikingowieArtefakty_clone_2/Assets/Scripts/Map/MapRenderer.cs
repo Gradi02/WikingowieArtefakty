@@ -6,7 +6,7 @@ public class MapRenderer : MonoBehaviour
 {
     private MapGenerator gen;
     private Transform player;
-    public bool showAll = true;
+    public bool showAll = false;
     private Camera cam;
 
     private void Start()
@@ -19,15 +19,7 @@ public class MapRenderer : MonoBehaviour
     {
         if (showAll)
         {
-            foreach (GameObject g in gen.GetGroundBlocks())
-            {
-                if (g != null)
-                {
-                    g.SetActive(true);
-                }
-            }
-
-            foreach (GameObject g in gen.GetObjectsBlocks())
+            foreach (GameObject g in gen.GetChunks())
             {
                 if (g != null)
                 {
@@ -38,55 +30,23 @@ public class MapRenderer : MonoBehaviour
             return;
         }
 
-       /* if (cam != null)
-        {
-            foreach (GameObject g in gen.GetGroundBlocks())
+            if (player != null)
             {
-                if (g != null)
+                foreach (GameObject g in gen.GetChunks())
                 {
-                    if (GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(cam), g.GetComponent<MeshRenderer>().bounds))
+                    if (g != null)
                     {
-                        g.SetActive(true);
-                    }
-                    else
-                    {
-                        g.SetActive(false);
+                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
+                        {
+                            g.SetActive(false);
+                        }
+                        else
+                        {
+                            g.SetActive(true);
+                        }
                     }
                 }
             }
-        } */
-            if (player != null)
-            {
-                foreach (GameObject g in gen.GetObjectsBlocks())
-                {
-                    if (g != null)
-                    {
-                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
-                        {
-                            g.SetActive(false);
-                        }
-                        else
-                        {
-                            g.SetActive(true);
-                        }
-                    }
-                }
-
-                foreach (GameObject g in gen.GetGroundBlocks())
-                {
-                    if (g != null)
-                    {
-                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
-                        {
-                            g.SetActive(false);
-                        }
-                        else
-                        {
-                            g.SetActive(true);
-                        }
-                    }
-                }
-        }
         
     }
 }

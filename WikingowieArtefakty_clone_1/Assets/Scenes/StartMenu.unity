@@ -362,7 +362,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   islandLevel: 0
-  size: 80
+  size: 128
+  chunksize: 8
   middleRadius: 7
   ruinRadius: 5
   treeOffset: 0.1
