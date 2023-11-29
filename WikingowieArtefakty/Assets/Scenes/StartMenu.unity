@@ -977,7 +977,7 @@ MonoBehaviour:
   - rock
   - iron bars
   - diamonds
-  resources: 
+  resources: 000000000000000077530000
   resoruces_img:
   - {fileID: 634645588}
   - {fileID: 1580060835}
