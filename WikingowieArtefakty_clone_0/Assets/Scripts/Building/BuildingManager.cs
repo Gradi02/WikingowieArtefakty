@@ -82,7 +82,6 @@ public class BuildingManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SetNewBuildServerRpc(int buildingId, Vector3 pos)
     {
-        /// WYWO£AJ FUNKCJE POSTAWIENIA NA SKRYPCIE BUDYNKU!!!!!
 
         if (CheckForSchematPlace())
         {

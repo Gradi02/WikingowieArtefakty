@@ -187,7 +187,7 @@ public class MapGenerator : NetworkBehaviour
                 chunk.transform.position = new Vector3(x * chunksize + chunkoffset, 0, y * chunksize + chunkoffset);
                 chunk.transform.parent = transform;
 
-                ConfigureChunkClientRpc(chunk.GetComponent<NetworkObject>().NetworkObjectId, "chunk" + x + y);
+                ConfigureChunkClientRpc(chunk.GetComponent<NetworkObject>().NetworkObjectId, "chunk" + x + "_" + y);
                 //chunk.name = "chunk" + x + y;
                 //chunks.Add(chunk);
 
@@ -375,7 +375,7 @@ public class MapGenerator : NetworkBehaviour
                                     Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
                                     float width = Random.Range(0.3f, 0.6f);
 
-                                    SetFlowerClientRpc(type, rand, width);
+                                    SetFlowerClientRpc(type, rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
                                 }
                             }
                             else if (ifgrass == 1)
@@ -386,7 +386,7 @@ public class MapGenerator : NetworkBehaviour
                                     Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
                                     float width = Random.Range(0.02f, 0.04f);
 
-                                    SetGrassClientRpc(rand, width);
+                                    SetGrassClientRpc(rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
                                 }
                             }
 
@@ -559,21 +559,21 @@ public class MapGenerator : NetworkBehaviour
     }
 
     [ClientRpc]
-    void SetGrassClientRpc(Vector3 pos, float width)
+    void SetGrassClientRpc(Vector3 pos, float width, ulong chunkId)
     {
         GameObject tr = Instantiate(grassPrefab, transform.position, Quaternion.identity);
         tr.transform.localPosition = pos;
         tr.transform.localScale = new Vector3(width, Random.Range(0.1f, 0.3f), width);
-        tr.transform.parent = this.gameObject.transform;
+        tr.transform.parent = NetworkManager.Singleton.SpawnManager.SpawnedObjects[chunkId].transform;
     }
 
     [ClientRpc]
-    void SetFlowerClientRpc(int type, Vector3 pos, float width)
+    void SetFlowerClientRpc(int type, Vector3 pos, float width, ulong chunkId)
     {
         GameObject tr = Instantiate(plantsPrefabs[type], transform.position, Quaternion.identity);
         tr.transform.localPosition = pos;
         tr.transform.localScale = new Vector3(width, Random.Range(0.2f,0.4f), width);
-        tr.transform.parent = this.gameObject.transform;
+        tr.transform.parent = NetworkManager.Singleton.SpawnManager.SpawnedObjects[chunkId].transform;
     }
 
     [ServerRpc]

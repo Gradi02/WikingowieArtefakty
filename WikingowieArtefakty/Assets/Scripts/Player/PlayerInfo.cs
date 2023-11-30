@@ -44,7 +44,7 @@ public class PlayerInfo : NetworkBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 1))
+        if (Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), transform.forward, out hit, 1))
         {
             if (hit.transform.GetComponent<Bridge>() != null)
             {
@@ -56,6 +56,10 @@ public class PlayerInfo : NetworkBehaviour
 
                 hit.transform.GetComponent<Bridge>().BuildBridgeServerRpc();
                 selected.RemoveItem();
+            }
+            else if(hit.transform.GetComponent<BuildingInfo>() != null)
+            {
+                hit.transform.GetComponent<BuildingInfo>().CheckForUseItem(selected);
             }
         }
 

@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
 using TMPro;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
+
 
 public class BuildingInfo : NetworkBehaviour
 {
@@ -37,6 +36,8 @@ public class BuildingInfo : NetworkBehaviour
         progressInfo.gameObject.SetActive(false);
         progressInfoName.gameObject.SetActive(false);
     }
+
+
     public void SetBuildingInfo(scaler i)
     {
         info = i;
@@ -48,7 +49,7 @@ public class BuildingInfo : NetworkBehaviour
        // resources_icon = info.resources_icon;
         resources_name = info.resources_name;
         CreateProgressList(resources);
-        BuildingProgressUpdate();
+        BuildingProgressUpdateServerRpc();
     }
 
     public void CreateProgressList(List<int> resources)
@@ -60,13 +61,20 @@ public class BuildingInfo : NetworkBehaviour
         }
     }
 
-    public void BuildingProgressUpdate()
+    [ServerRpc]
+    public void BuildingProgressUpdateServerRpc()
+    {
+        BuildingProgressUpdateClientRpc();
+    }
+
+    [ClientRpc]
+    public void BuildingProgressUpdateClientRpc()
     {
         progressInfoName.text = Name;
         progressInfo.text = string.Empty;
         for(int i = 0; i<resources.Count; i++)
         {
-            if (resources[i] > 0)
+            if (resources[i] > 0 && ResourcesProgress[i] < resources[i])
             {
                 progressInfo.text += ResourcesProgress[i] + "/" + resources[i].ToString();
                 progressInfo.text += ": ";
@@ -75,43 +83,35 @@ public class BuildingInfo : NetworkBehaviour
             }
         }
     }
-    /*    [ContextMenu("Build Step")]
-        public void BuildStep()
-        {
-            Slot selected = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryManager>().GetSelectedSlot();
-            ItemManager selecteditem = selected.GetItem();
-            CheckForNeededItem(selecteditem, selected);
-        }
 
-        private void CheckForNeededItem(ItemManager item, Slot slot)
+    public void CheckForUseItem(Slot selectedSlot)
+    {
+        for(int i=0; i < resources.Count; i++)
         {
-            for(int i = 0; i < resources.Count; i++)
+            if (resources_name[i] == selectedSlot.GetItemName() && ResourcesProgress[i] < resources[i])
             {
-                if (resources[i] < 0)
-                {
-                    if (resources_name[i] == item.itemName)
-                    {
-                        slot.RemoveItem();
-                        resources[i]--;
-                        CheckForFinishBuilding();
-                        return;
-                    }
-                }
+                selectedSlot.RemoveItem();
+                ResourcesProgress[i]++;
+                BuildingProgressUpdateServerRpc();
+                CheckForFinishSchemat();
+                return;
+            }
+        }
+    }
+
+    private void CheckForFinishSchemat()
+    {
+        for(int i=0; i<resources.Count; i++)
+        {
+            if(resources[i] > ResourcesProgress[i])
+            {
+                return;
             }
         }
 
-        private void CheckForFinishBuilding()
-        {
-            for (int i = 0; i < resources.Count; i++)
-            {
-                if(resources[i] < 0)
-                {
-                    return;
-                }
-            }
+        FinishBuildingServerRpc();
+    }
 
-            FinishBuilding();
-        }*/
 
     [ContextMenu("finish"), ServerRpc(RequireOwnership = false)]
     private void FinishBuildingServerRpc()
@@ -124,5 +124,6 @@ public class BuildingInfo : NetworkBehaviour
     private void FinishBuildingClientRpc()
     {
         gameObject.GetComponent<MeshRenderer>().material = finished;
+        DisableText();
     }
 }
