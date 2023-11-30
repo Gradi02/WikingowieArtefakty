@@ -10,6 +10,7 @@ public class PlayerInfo : NetworkBehaviour
     private GameObject itemToRemove;
     private GameObject sun;
 
+
     private void Start()
     {
         move = GetComponent<PlayerMovement>();
