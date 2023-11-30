@@ -26,7 +26,7 @@ public class PlayerInfo : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CheckForBridge();           
+            CheckForUse();           
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -38,11 +38,28 @@ public class PlayerInfo : NetworkBehaviour
         }
     }
 
-    void CheckForBridge()
+    void CheckForUse()
     {
         Slot selected = inventoryManager.GetSelectedSlot();
 
-        if (selected.GetItemName() != "wood")
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 1))
+        {
+            if (hit.transform.GetComponent<Bridge>() != null)
+            {
+                if (selected.GetItemName() != "wood")
+                {
+                    Debug.Log("nie masz matsów kurwo");
+                    return;
+                }
+
+                hit.transform.GetComponent<Bridge>().BuildBridgeServerRpc();
+                selected.RemoveItem();
+            }
+        }
+
+        /*if (selected.GetItemName() != "wood")
         {
             Debug.Log("nie masz matsów kurwo");
             return;
@@ -60,7 +77,7 @@ public class PlayerInfo : NetworkBehaviour
                     selected.RemoveItem();
                 }
             }
-        }
+        }*/
     }
 
     void PickUpClosestItem()

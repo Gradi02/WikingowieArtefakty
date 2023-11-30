@@ -578,8 +578,7 @@ public class MapGenerator : NetworkBehaviour
 
     [ServerRpc]
     void ClearMapServerRpc(Vector3 pos, float r)
-    {
-        
+    {   
         foreach (GameObject g in blocks)
         {
             if (Vector3.Distance(g.transform.position, pos) < r - 0.5f)
