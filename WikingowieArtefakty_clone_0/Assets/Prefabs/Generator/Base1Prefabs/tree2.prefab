@@ -71,7 +71,53 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 98a4013585c3cc94694fe53fbbf61bc6, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7320290459981450603}
+    - targetCorrespondingSourceObject: {fileID: 8164078558771037576, guid: 98a4013585c3cc94694fe53fbbf61bc6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3025373828608634312}
+    - targetCorrespondingSourceObject: {fileID: 8164078558771037576, guid: 98a4013585c3cc94694fe53fbbf61bc6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3877229714519706355}
   m_SourcePrefab: {fileID: 100100000, guid: 98a4013585c3cc94694fe53fbbf61bc6, type: 3}
+--- !u!1 &2061159233474840579 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: 98a4013585c3cc94694fe53fbbf61bc6, type: 3}
+  m_PrefabInstance: {fileID: 7914539056189836683}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3025373828608634312
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061159233474840579}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 359c7e03b307635448e5dc8fd1e1f513, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3877229714519706355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061159233474840579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 3025373828608634312}
 --- !u!1 &6996199665656639706 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 98a4013585c3cc94694fe53fbbf61bc6, type: 3}
@@ -115,6 +161,7 @@ MonoBehaviour:
   destroyParticles: {fileID: 3066103022588316011, guid: 83d4c8cc9baacfb4686c9a34a462a10e, type: 3}
   treeParticles: {fileID: -7621641292477581474}
   stoneParticles: {fileID: 0}
+  TreeAnimator: {fileID: 3025373828608634312}
 --- !u!199 &2639102686268052780
 ParticleSystemRenderer:
   serializedVersion: 6

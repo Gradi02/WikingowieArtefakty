@@ -32,7 +32,7 @@ public class BlockManager : NetworkBehaviour
     {
         if (IsHost)
         {
-            breakStep.Value = transform.localScale / maxBreakStatus / 5;
+            breakStep.Value = transform.localScale / maxBreakStatus / 10;
         }
 
         currentBreakStatus = 0;
@@ -41,16 +41,6 @@ public class BlockManager : NetworkBehaviour
     [ContextMenu("Step"), ServerRpc(RequireOwnership = false)]
     public void NextBreakStepServerRpc()
     {
-        /* currentBreakStatus++;
-         LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep, 0.2f);
-         transform.position -= new Vector3(0f, breakStep.y / 2, 0f);
-
-         float x = Random.Range(-5, 5);
-         float z = Random.Range(-5, 5);
-
-         StartCoroutine(Hitting(x, z));*/
-        
-        
         currentBreakStatus++;
 
         NextBreakClientRpc();
@@ -65,8 +55,8 @@ public class BlockManager : NetworkBehaviour
         LeanTween.scale(this.gameObject, this.gameObject.transform.localScale - breakStep.Value, 0.2f);
         transform.position -= new Vector3(0f, breakStep.Value.y / 2, 0f);
 
-        float x = Random.Range(-2, 2);
-        float z = Random.Range(-2, 2);
+        float x = Random.Range(-1, 1);
+        float z = Random.Range(-1, 1);
 
         StartCoroutine(Hitting(x, z));
     }
@@ -98,11 +88,11 @@ public class BlockManager : NetworkBehaviour
     {
         if(currentBreakStatus >= maxBreakStatus)
         {
-            SpawnDestroyParticleServerRpc();
+            DestroyAnimationServerRpc();
 
             if (TreeAnimator != null)
             {
-                gameObject.GetComponent<BoxCollider>().enabled = false;
+                
                 TreeAnimator.SetBool("TREE_FALL", true);
             }
 
@@ -129,14 +119,15 @@ public class BlockManager : NetworkBehaviour
     }
 
     [ServerRpc]
-    void SpawnDestroyParticleServerRpc()
+    void DestroyAnimationServerRpc()
     {
-        SpawnDestroyParticleClientRpc();
+        DestroyAnimationClientRpc();
     }
 
     [ClientRpc]
-    void SpawnDestroyParticleClientRpc()
+    void DestroyAnimationClientRpc()
     {
+        gameObject.GetComponent<BoxCollider>().enabled = false;
         ParticleSystem g = Instantiate(destroyParticles, transform.position, Quaternion.identity);
         Destroy(g.gameObject, 3);
     }

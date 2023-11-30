@@ -10,6 +10,7 @@ public class PlayerInfo : NetworkBehaviour
     private GameObject itemToRemove;
     private GameObject sun;
 
+
     private void Start()
     {
         move = GetComponent<PlayerMovement>();
@@ -26,7 +27,7 @@ public class PlayerInfo : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CheckForBridge();           
+            CheckForUse();           
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -38,11 +39,32 @@ public class PlayerInfo : NetworkBehaviour
         }
     }
 
-    void CheckForBridge()
+    void CheckForUse()
     {
         Slot selected = inventoryManager.GetSelectedSlot();
 
-        if (selected.GetItemName() != "wood")
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), transform.forward, out hit, 1))
+        {
+            if (hit.transform.GetComponent<Bridge>() != null)
+            {
+                if (selected.GetItemName() != "wood")
+                {
+                    Debug.Log("nie masz matsów kurwo");
+                    return;
+                }
+
+                hit.transform.GetComponent<Bridge>().BuildBridgeServerRpc();
+                selected.RemoveItem();
+            }
+            else if(hit.transform.GetComponent<BuildingInfo>() != null)
+            {
+                hit.transform.GetComponent<BuildingInfo>().CheckForUseItem(selected);
+            }
+        }
+
+        /*if (selected.GetItemName() != "wood")
         {
             Debug.Log("nie masz matsów kurwo");
             return;
@@ -60,7 +82,7 @@ public class PlayerInfo : NetworkBehaviour
                     selected.RemoveItem();
                 }
             }
-        }
+        }*/
     }
 
     void PickUpClosestItem()

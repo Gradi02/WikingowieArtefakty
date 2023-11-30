@@ -5,12 +5,13 @@ using Unity.Netcode;
 
 public class BuildingManager : NetworkBehaviour
 {
+    private scaler BuildingInfo;
     private GameObject currentBuildPrefab = null;
     private int currentBuildIndex = 0;
 
     private Vector3 currentPosition = Vector3.zero;
     
-    private NetworkVariable<int> maxBuildingSchemats = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<int> maxBuildingSchemats = new NetworkVariable<int>(10, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<int> currentBuildingSchemats = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public GameObject[] buildPrefabs = new GameObject[9];
@@ -18,11 +19,11 @@ public class BuildingManager : NetworkBehaviour
     public void PickNewPrefab(int num, scaler info)
     {
         RemoveCurrentBuild();
-
+        BuildingInfo = info;
         currentBuildPrefab = Instantiate(buildPrefabs[num], transform.position, Quaternion.identity);
         currentBuildIndex = num;
-
-        currentBuildPrefab.GetComponent<BuildingInfo>().SetBuildingInfo(info);
+        currentBuildPrefab.GetComponent<BuildingInfo>().DisableText();
+        
     }
 
     private void Update()
@@ -81,12 +82,12 @@ public class BuildingManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SetNewBuildServerRpc(int buildingId, Vector3 pos)
     {
-        /// WYWO£AJ FUNKCJE POSTAWIENIA NA SKRYPCIE BUDYNKU!!!!!
 
         if (CheckForSchematPlace())
         {
             GameObject b = Instantiate(buildPrefabs[buildingId], pos, Quaternion.identity);
             b.GetComponent<NetworkObject>().Spawn();
+            b.GetComponent<BuildingInfo>().SetBuildingInfo(BuildingInfo);
             currentBuildingSchemats.Value++;
         }
         else

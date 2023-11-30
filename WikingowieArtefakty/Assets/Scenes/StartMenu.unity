@@ -362,7 +362,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   islandLevel: 0
-  size: 80
+  size: 128
+  chunksize: 8
   middleRadius: 7
   ruinRadius: 5
   treeOffset: 0.1
@@ -407,6 +408,7 @@ MonoBehaviour:
   waterLayer: {fileID: 0}
   campfire: {fileID: 5117925673290852196, guid: 53fa9b6008eecef49b21de14a5a4cc47, type: 3}
   air: {fileID: 3945946977855608217, guid: 1a9aa9d5d8031b543b9de3e153aba9fb, type: 3}
+  chunkPrefab: {fileID: 5124363132739042628, guid: 2c28db4661ea95445b52c2c562356e5a, type: 3}
   cam: {fileID: 1751882901}
   manager: {fileID: 1502539006}
   startPlane: {fileID: 1062793399}
@@ -7396,6 +7398,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1502539010}
   - component: {fileID: 1502539009}
+  - component: {fileID: 1502539014}
   - component: {fileID: 1502539008}
   - component: {fileID: 1502539007}
   - component: {fileID: 1502539011}
@@ -7514,6 +7517,25 @@ MonoBehaviour:
   desc: {fileID: 7239336149951487395, guid: 9d4db4545f146f447b8c28e9a506d687, type: 3}
   canva: {fileID: 2003308259}
   infoTransform: {fileID: 372716784}
+--- !u!114 &1502539014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502539006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39d801c5cadf8494baba7c15e5cd05cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waveCountMin: 2
+  waveCountMax: 6
+  maxEnemies: 10
+  spawnPeriods: 3
+  enemy1: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
+  timeManager: {fileID: 2128734425}
+  night: 0
 --- !u!1 &1519469644
 GameObject:
   m_ObjectHideFlags: 0
@@ -10809,6 +10831,12 @@ MonoBehaviour:
   AccDayTMP: {fileID: 1957958107}
   Sun: {fileID: 696168447}
   Player: {fileID: 96891937399687568, guid: f7e8370cd0333dd42aaa6b15637ca261, type: 3}
+  n_hour:
+    m_InternalValue: 8
+  n_min:
+    m_InternalValue: 0
+  n_day:
+    m_InternalValue: 1
 --- !u!114 &2128734426
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ public class MapGenerator : NetworkBehaviour
     [Header("Generator Settings")]
     public int islandLevel;
     [Min(1)] public int size;
+    [Min(1)] public int chunksize;
     private int seed;
     public int middleRadius;
     public int ruinRadius;
@@ -33,6 +34,7 @@ public class MapGenerator : NetworkBehaviour
     [HideInInspector] public GameObject waterLayer;
     public GameObject campfire;
     public GameObject air;
+    public GameObject chunkPrefab;
 
     [Header("Others")]
     public Camera cam;
@@ -43,13 +45,16 @@ public class MapGenerator : NetworkBehaviour
 
     private Vector3 ruinsPos;
     private Vector3[] treeArea = new Vector3[5];
-    private int treeAreaSize = 6;
+    private int treeAreaSize = 9;
 
     private GameObject start;
     public static Vector3 middle = Vector3.zero;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
+
+    private List<GameObject> block = new List<GameObject>();
+    private List<GameObject> chunks = new List<GameObject>();
     private ItemsDropManager dropManager;
 
     private bool isnew = false;
@@ -102,48 +107,119 @@ public class MapGenerator : NetworkBehaviour
         menuManager.SetInventoryUIClientRpc();
 
         SetRuins();
-        
 
+        int att = 0;
         for(int i=0; i<5; i++)
         {
-            treeArea[i] = RandomXY();
+            if (att >= 20) break;
+
+            do
+            {
+                att++;
+                treeArea[i] = RandomXY();
+            } while (Vector3.Distance(treeArea[i], middle) >= size/2 - 13);
 
             if (i == 1)
             {
-                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20) i--;
+                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20)
+                {
+                    i--;
+                    att++;
+                }
             }
             else if(i == 2)
             {
                 if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20) i--;
+                    Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20)
+                {
+                    i--;
+                    att++;
+                }
             }
             else if (i == 3)
             {
                 if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20 ||
                     Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 3]) < 20) i--;
+                    Vector3.Distance(treeArea[i], treeArea[i - 3]) < 20)
+                {
+                    i--;
+                    att++;
+                }
             }
             else if (i == 4)
             {
                 if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20 ||
                     Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20 ||
                     Vector3.Distance(treeArea[i], treeArea[i - 3]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 4]) < 20) i--;
+                    Vector3.Distance(treeArea[i], treeArea[i - 4]) < 20)
+                {
+                    i--;
+                    att++;
+                }
             }
         }
 
-        int oresTypes = oresPrefabs1.Length;
+        GenerateChunks();
 
-        for (int x = 0; x < size; x++)
+        ClearMapServerRpc(middle, middleRadius);
+        SetShip();
+        started.Value = true;
+        EnableWaterClientRpc();
+        ClearMapServerRpc(ruinsPos, ruinRadius);
+
+        foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
+            g.GetComponent<PlayerMovement>().SetStartPosition(middle);
+
+        menuManager.FadeAnimationServerRpc(false);
+    }
+
+    void GenerateChunks()
+    {
+        int numofchunk = Mathf.CeilToInt(size / chunksize);
+
+        for (int x = 0; x < numofchunk; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < numofchunk; y++)
             {
+                GameObject chunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity);
+                chunk.GetComponent<NetworkObject>().Spawn();
+                float chunkoffset = chunksize / 2;
+                chunk.transform.position = new Vector3(x * chunksize + chunkoffset, 0, y * chunksize + chunkoffset);
+                chunk.transform.parent = transform;
+
+                ConfigureChunkClientRpc(chunk.GetComponent<NetworkObject>().NetworkObjectId, "chunk" + x + "_" + y);
+                //chunk.name = "chunk" + x + y;
+                //chunks.Add(chunk);
+
+                GenerateChunk(chunk, chunksize*x, chunksize*y);
+            }
+        }
+    }
+
+    [ClientRpc]
+    void ConfigureChunkClientRpc(ulong chunkId, string name)
+    {
+        GameObject chunk = NetworkManager.Singleton.SpawnManager.SpawnedObjects[chunkId].gameObject;
+        chunk.name = name;
+        chunks.Add(chunk);
+    }
+
+    void GenerateChunk(GameObject chunk, int Xoffset, int Yoffset)
+    {
+        for (int xp = 0; xp < chunksize; xp++)
+        {
+            for (int yp = 0; yp < chunksize; yp++)
+            {
+                int x = xp + Xoffset;
+                int y = yp + Yoffset;
+
                 int id = GetIdPerlinNoise(x, y);
                 int ifempty = Random.Range(0, 4);
 
-                if (x <= 9 || y <= 9 || x >= size - 9 || y >= size - 9) id = 1;
-                if (x <= 7 || y <= 7 || x >= size - 7 || y >= size - 7) id = 0;
-                
+                Vector3 temppos = new Vector3(x, 0, y);
+                if (Vector3.Distance(temppos, middle) >= size/2 - 9) id = 1;
+                if (Vector3.Distance(temppos, middle) >= size / 2 - 7) id = 0;
+
                 if ((Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) || (Vector3.Distance(ruinsPos, new Vector3(x, 0, y)) < ruinRadius)) id = 1;
                 if ((Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius + 1 && id > 2) || (Vector3.Distance(ruinsPos, new Vector3(x, 0, y)) < ruinRadius + 1 && id > 2)) id = 2;
 
@@ -162,36 +238,16 @@ public class MapGenerator : NetworkBehaviour
 
                     if (id == 0) //Blok Powietrza
                     {
-                        if(x <= 2 || y <= 2 || x >= size - 2 || y >= size - 2)
+                        if(Vector3.Distance(temppos, middle) >= size / 2)
                         {
-                            int rand = Random.Range(1, 3);
-
-                            if(rand == 2)
-                            {
-                                GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
-                                gr.GetComponent<NetworkObject>().Spawn();
-                                gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                                gr.name = "Sand" + x + y;
-                                ground.Add(gr);
-                            }
-                            else
-                            {
-                                GameObject a = Instantiate(air, transform.position, Quaternion.identity);
-                                a.GetComponent<NetworkObject>().Spawn();
-                                a.transform.localPosition = new Vector3(x, 0.25f, y);
-                                a.name = "Air" + x + y;
-                                airBlocks.Add(a);
-                            }
+                            GameObject a = Instantiate(air, transform.position, Quaternion.identity);
+                            a.GetComponent<NetworkObject>().Spawn();
+                            a.transform.localPosition = new Vector3(x, 0.25f, y);
+                            a.name = "Air" + x + y;
+                            airBlocks.Add(a);
+                            a.transform.parent = chunk.transform;
                         }
-                        else if (x <= 5 || y <= 5 || x >= size - 5 || y >= size - 5)
-                        {
-                            GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
-                            gr.GetComponent<NetworkObject>().Spawn();
-                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
-                            gr.name = "Sand" + x + y;
-                            ground.Add(gr);
-                        }
-                        else if(x <= 7 || y <= 7 || x >= size - 7 || y >= size - 7)
+                        else if (Vector3.Distance(temppos, middle) >= size / 2 - 2)
                         {
                             int rand = Random.Range(1, 3);
 
@@ -202,6 +258,39 @@ public class MapGenerator : NetworkBehaviour
                                 gr.transform.localPosition = new Vector3(x, -0.25f, y);
                                 gr.name = "Sand" + x + y;
                                 ground.Add(gr);
+                                gr.transform.parent = chunk.transform;
+                            }
+                            else
+                            {
+                                GameObject a = Instantiate(air, transform.position, Quaternion.identity);
+                                a.GetComponent<NetworkObject>().Spawn();
+                                a.transform.localPosition = new Vector3(x, 0.25f, y);
+                                a.name = "Air" + x + y;
+                                airBlocks.Add(a);
+                                a.transform.parent = chunk.transform;
+                            }
+                        }
+                        else if (Vector3.Distance(temppos, middle) >= size / 2 - 5)
+                        {
+                            GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
+                            gr.GetComponent<NetworkObject>().Spawn();
+                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                            gr.name = "Sand" + x + y;
+                            ground.Add(gr);
+                            gr.transform.parent = chunk.transform;
+                        }
+                        else if (Vector3.Distance(temppos, middle) >= size / 2 - 7)
+                        {
+                            int rand = Random.Range(1, 3);
+
+                            if (rand == 2)
+                            {
+                                GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
+                                gr.GetComponent<NetworkObject>().Spawn();
+                                gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                                gr.name = "Sand" + x + y;
+                                ground.Add(gr);
+                                gr.transform.parent = chunk.transform;
                             }
                             else
                             {
@@ -211,6 +300,7 @@ public class MapGenerator : NetworkBehaviour
                                 gr.transform.localPosition = new Vector3(x, -0.25f, y);
                                 gr.name = "Ground" + x + y;
                                 ground.Add(gr);
+                                gr.transform.parent = chunk.transform;
                             }
 
                         }
@@ -221,6 +311,7 @@ public class MapGenerator : NetworkBehaviour
                             a.transform.localPosition = new Vector3(x, 0.25f, y);
                             a.name = "Air" + x + y;
                             airBlocks.Add(a);
+                            a.transform.parent = chunk.transform;
 
                             int ifobj = Random.Range(0, 10);
 
@@ -232,6 +323,7 @@ public class MapGenerator : NetworkBehaviour
                                 tr.transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), -0.26f, Random.Range(-0.1f, 0.1f));
                                 //tr.transform.localEulerAngles.Set(0, Random.Range(0, 360), 0);
                                 tr.name = "water";
+                                tr.transform.parent = chunk.transform;
                             }
                         }
                     }
@@ -260,6 +352,7 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.name = "Tree" + x + y;
                             //new_obj.transform.parent = Trees.transform;
                             blocks.Add(new_obj);
+                            new_obj.transform.parent = chunk.transform;
 
 
                             GameObject gr = Instantiate(ground_prefabs1[6], transform.position, Quaternion.identity);
@@ -267,6 +360,7 @@ public class MapGenerator : NetworkBehaviour
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
+                            gr.transform.parent = chunk.transform;
                         }
                         else
                         {
@@ -281,7 +375,7 @@ public class MapGenerator : NetworkBehaviour
                                     Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
                                     float width = Random.Range(0.3f, 0.6f);
 
-                                    SetFlowerClientRpc(type, rand, width);
+                                    SetFlowerClientRpc(type, rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
                                 }
                             }
                             else if (ifgrass == 1)
@@ -292,7 +386,7 @@ public class MapGenerator : NetworkBehaviour
                                     Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
                                     float width = Random.Range(0.02f, 0.04f);
 
-                                    SetGrassClientRpc(rand, width);
+                                    SetGrassClientRpc(rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
                                 }
                             }
 
@@ -303,6 +397,7 @@ public class MapGenerator : NetworkBehaviour
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
+                            gr.transform.parent = chunk.transform;
                         }
                     }
                     else if (id == 2) //Blok ma³ego kamienia
@@ -327,6 +422,7 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.name = "Rock" + x + y;
                             //new_obj.transform.parent = Rocks.transform;
                             blocks.Add(new_obj);
+                            new_obj.transform.parent = chunk.transform;
 
 
                             //Pod³o¿e
@@ -336,42 +432,40 @@ public class MapGenerator : NetworkBehaviour
                             gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
+                            gr.transform.parent = chunk.transform;
                         }
                         else
                         {
-                            int ifgrass = Random.Range(0, 3);
+                            //Losowanie drzewa
+                            int randvar = Random.Range(0, trees_variants1.Length);
+                            new_obj = Instantiate(trees_variants1[randvar], transform.position, Quaternion.identity);
+                            new_obj.GetComponent<NetworkObject>().Spawn();
 
-                            if (ifgrass == 0)
-                            {
-                                int num = Random.Range(2, 4);
-                                int type = (int)Random.Range(0, plantsPrefabs.Length);
-                                for (int i = 0; i < num; i++)
-                                {
-                                    Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
-                                    float width = Random.Range(0.3f, 0.6f);
+                            //Offset drzewa na kratce
+                            new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
+                            new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
 
-                                    SetFlowerClientRpc(type, rand, width);
-                                }
-                            }
-                            else if (ifgrass == 1)
-                            {
-                                int num = Random.Range(7, 10);
-                                for (int i = 0; i < num; i++)
-                                {
-                                    Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
-                                    float width = Random.Range(0.02f, 0.04f);
+                            //Losowa skala
+                            float randscale = Random.Range(0.6f, 0.8f);
+                            new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
 
-                                    SetGrassClientRpc(rand, width);
-                                }
-                            }
+                            //Losowa rotacja
+                            int randrot = Random.Range(1, 360);
+                            new_obj.transform.rotation = Quaternion.Euler(0, randrot, 0);
 
-                            //Pod³o¿e
-                            int rand2 = Random.Range(0, 2);
-                            GameObject gr = Instantiate(ground_prefabs1[rand2 == 0 ? (id - 1) : 7], transform.position, Quaternion.identity);
+                            //Przypisanie do rodzica
+                            new_obj.name = "Tree" + x + y;
+                            //new_obj.transform.parent = Trees.transform;
+                            blocks.Add(new_obj);
+                            new_obj.transform.parent = chunk.transform;
+
+
+                            GameObject gr = Instantiate(ground_prefabs1[6], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
+                            gr.transform.parent = chunk.transform;
                         }
                     }
                     else //Blok ska³y
@@ -389,8 +483,8 @@ public class MapGenerator : NetworkBehaviour
                             //Spawn kamienia
                             new_obj = Instantiate(rocks_variants1[0], transform.position, Quaternion.identity);
                             new_obj.GetComponent<NetworkObject>().Spawn();
-                        } 
-                         
+                        }
+
                         //Skala na bazie noise
                         new_obj.transform.localScale = new Vector3(1, GetHeightByNoise(x, y), 1);
                         new_obj.transform.localPosition = new Vector3(x, 0.5f, y);
@@ -399,7 +493,8 @@ public class MapGenerator : NetworkBehaviour
                         new_obj.name = "Mountain" + x + y;
                         //new_obj.transform.parent = Rocks.transform;
                         blocks.Add(new_obj);
-                        
+                        new_obj.transform.parent = chunk.transform;
+
 
                         //Pod³o¿e
                         GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity);
@@ -408,6 +503,7 @@ public class MapGenerator : NetworkBehaviour
                         gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
+                        gr.transform.parent = chunk.transform;
                     }
 
                     if (new_obj != null)
@@ -417,34 +513,27 @@ public class MapGenerator : NetworkBehaviour
                 }
             }
         }
-
-        foreach (GameObject g in blocks)
-        {
-            g.transform.parent = start.transform;
-        }
-
-        foreach (GameObject g in airBlocks)
-        {
-            g.transform.parent = start.transform;
-        }
-
-        foreach (GameObject g in ground)
-        {
-            g.transform.parent = start.transform;
-        }
-
-        ClearMapServerRpc(middle, middleRadius);
-        SetShip();
-        started.Value = true;
-        EnableWaterClientRpc();
-        ClearMapServerRpc(ruinsPos, ruinRadius);
-
-        foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
-            g.GetComponent<PlayerMovement>().SetStartPosition(middle);
-
-        menuManager.FadeAnimationServerRpc(false);
     }
 
+    void AssignObjectToChunk(GameObject obj, List<GameObject> chunks)
+    {
+        Vector3 objPosition = obj.transform.localPosition;
+
+        foreach (GameObject chunk in chunks)
+        {
+            Vector3 chunkPosition = chunk.transform.position;
+            float chunkOffset = chunksize / 2;
+
+            bool isInsideX = objPosition.x >= chunkPosition.x - chunkOffset && objPosition.x < chunkPosition.x + chunkOffset;
+            bool isInsideZ = objPosition.z >= chunkPosition.z - chunkOffset && objPosition.z < chunkPosition.z + chunkOffset;
+
+            if (isInsideX && isInsideZ)
+            {
+                obj.transform.parent = chunk.transform;
+                break; // Zakoñcz pêtlê po znalezieniu odpowiedniego chunka
+            }
+        }
+    }
     int GetIdPerlinNoise(int x, int y)
     {
         float nx = (seed + x * 0.15f);
@@ -470,27 +559,26 @@ public class MapGenerator : NetworkBehaviour
     }
 
     [ClientRpc]
-    void SetGrassClientRpc(Vector3 pos, float width)
+    void SetGrassClientRpc(Vector3 pos, float width, ulong chunkId)
     {
         GameObject tr = Instantiate(grassPrefab, transform.position, Quaternion.identity);
         tr.transform.localPosition = pos;
         tr.transform.localScale = new Vector3(width, Random.Range(0.1f, 0.3f), width);
-        tr.transform.parent = this.gameObject.transform;
+        tr.transform.parent = NetworkManager.Singleton.SpawnManager.SpawnedObjects[chunkId].transform;
     }
 
     [ClientRpc]
-    void SetFlowerClientRpc(int type, Vector3 pos, float width)
+    void SetFlowerClientRpc(int type, Vector3 pos, float width, ulong chunkId)
     {
         GameObject tr = Instantiate(plantsPrefabs[type], transform.position, Quaternion.identity);
         tr.transform.localPosition = pos;
         tr.transform.localScale = new Vector3(width, Random.Range(0.2f,0.4f), width);
-        tr.transform.parent = this.gameObject.transform;
+        tr.transform.parent = NetworkManager.Singleton.SpawnManager.SpawnedObjects[chunkId].transform;
     }
 
     [ServerRpc]
     void ClearMapServerRpc(Vector3 pos, float r)
-    {
-        
+    {   
         foreach (GameObject g in blocks)
         {
             if (Vector3.Distance(g.transform.position, pos) < r - 0.5f)
@@ -536,8 +624,8 @@ public class MapGenerator : NetworkBehaviour
 
         do {
 
-            x = Random.Range(0 + offset, size - offset);
-            y = Random.Range(0 + offset, size - offset);
+            x = Random.Range(0 + offset, size - 2 * offset);
+            y = Random.Range(0 + offset, size - 2 * offset);
             ruinsPos = new Vector3(x, 0, y);
 
         } while (Vector3.Distance(ruinsPos, middle) < offset);
@@ -552,26 +640,27 @@ public class MapGenerator : NetworkBehaviour
 
     void SetShip()
     {
-        if (!IsServer) return;
         //Przywo³aj statek na brzegu mapy w losowym miejscu
         GameObject ship = Instantiate(shipPrefab, transform.position, Quaternion.identity);
         ship.GetComponent<NetworkObject>().Spawn();
         ship.name = "Ship";
 
-        int xy = GetRandomSign();
-        int ss = GetRandomSign() * size;
-
-        Vector3 shipPos;
-
-        if (xy == 0) shipPos = new Vector3(ss, 0, Random.Range(0, size));
-        else shipPos = new Vector3(Random.Range(0, size), 0, ss);
+        Vector3 shipPos = middle + GetPointOnCircle(size/2, Random.Range(0, 360));
 
         ship.transform.position = shipPos;
     }
 
-    int GetRandomSign()
+    public Vector3 GetPointOnCircle(float radius, float angleInDegrees)
     {
-        return Random.Range(-10, 9) < 0 ? 0 : 1;
+        // Konwersja k¹ta na radiany
+        float angleInRadians = Mathf.Deg2Rad * angleInDegrees;
+
+        // Wspó³rzêdne biegunowe
+        float x = radius * Mathf.Cos(angleInRadians);
+        float y = radius * Mathf.Sin(angleInRadians);
+
+        // Zwrócenie punktu
+        return new Vector3(x, 0, y);
     }
 
     GameObject SpawnBase()
@@ -591,6 +680,11 @@ public class MapGenerator : NetworkBehaviour
     public List<GameObject> GetObjectsBlocks()
     {
         return blocks;
+    }
+
+    public List<GameObject> GetChunks()
+    {
+        return chunks;
     }
 
     [ClientRpc]
