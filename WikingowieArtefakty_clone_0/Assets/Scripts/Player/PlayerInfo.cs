@@ -31,7 +31,7 @@ public class PlayerInfo : NetworkBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            PickUpClosestItem();
+            //PickUpClosestItem();
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -41,6 +41,19 @@ public class PlayerInfo : NetworkBehaviour
 
     void CheckForUse()
     {
+        if(FindItemInRadius() != null && inventoryManager.FindEmptySlot() != null)
+        {
+            GameObject closestItem = FindItemInRadius();
+
+            if (closestItem != null && closestItem.GetComponent<ItemManager>().GetPickable() && closestItem != itemToRemove)
+                closestItem.GetComponent<ItemManager>().PickUp(gameObject);
+
+            SetItemServerRpc(closestItem.GetComponent<NetworkObject>().NetworkObjectId);
+            ClearDropPlaceServerRpc();
+            DestroyItemServerRpc();
+            return;
+        }
+
         Slot selected = inventoryManager.GetSelectedSlot();
 
         RaycastHit hit;
@@ -61,51 +74,37 @@ public class PlayerInfo : NetworkBehaviour
             else if(hit.transform.GetComponent<BuildingInfo>() != null)
             {
                 hit.transform.GetComponent<BuildingInfo>().CheckForUseItem(selected);
+                return;
             }
-        }
-
-        /*if (selected.GetItemName() != "wood")
-        {
-            Debug.Log("nie masz matsów kurwo");
-            return;
-        }
-        else
-        {
-            RaycastHit hit;
-            Debug.DrawRay(transform.position, transform.forward);
-
-            if (Physics.Raycast(transform.position, transform.forward, out hit, 1))
+            else if(hit.transform.GetComponent<ItemManager>() != null)
             {
-                if (hit.transform.GetComponent<Bridge>() != null)
-                {
-                    hit.transform.GetComponent<Bridge>().BuildBridgeServerRpc();
-                    selected.RemoveItem();
-                }
+                GameObject closestItem = hit.transform.gameObject;
+
+                if (closestItem != null && closestItem.GetComponent<ItemManager>().GetPickable() && closestItem != itemToRemove)
+                    closestItem.GetComponent<ItemManager>().PickUp(gameObject);
+
+                SetItemServerRpc(closestItem.GetComponent<NetworkObject>().NetworkObjectId);
+                ClearDropPlaceServerRpc();
+                DestroyItemServerRpc();
+                return;
             }
-        }*/
+            else if(hit.transform.GetComponent<ShipManager>() != null)
+            {
+
+            }
+        }
     }
 
-    void PickUpClosestItem()
+    GameObject FindItemInRadius()
     {
-        if (GameObject.FindGameObjectsWithTag("item").Length == 0) return;
-        GameObject closestItem = GameObject.FindGameObjectWithTag("item");
-        GameObject[] items = GameObject.FindGameObjectsWithTag("item");
-
-        for(int i=0; i<items.Length; i++)
+        foreach(GameObject g in GameObject.FindGameObjectsWithTag("item"))
         {
-            if (Vector3.Distance(items[i].transform.position, transform.position) < Vector3.Distance(closestItem.transform.position, transform.position))
+            if(Vector3.Distance(transform.position, g.transform.position) <= 0.5f)
             {
-                closestItem = items[i];
+                return g;
             }
         }
-
-        if(closestItem != null)
-            closestItem.GetComponent<ItemManager>().PickUp(gameObject);
-
-        //itemToRemove = closestItem;
-        SetItemServerRpc(closestItem.GetComponent<NetworkObject>().NetworkObjectId);
-        ClearDropPlaceServerRpc();
-        DestroyItemServerRpc();
+        return null;
     }
 
     [ServerRpc(RequireOwnership = false)]

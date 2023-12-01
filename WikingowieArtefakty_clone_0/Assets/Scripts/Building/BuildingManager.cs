@@ -5,7 +5,9 @@ using Unity.Netcode;
 
 public class BuildingManager : NetworkBehaviour
 {
-    private scaler BuildingInfo;
+    public scaler[] scalerList;
+
+    private scaler buildingInfo;
     private GameObject currentBuildPrefab = null;
     private int currentBuildIndex = 0;
 
@@ -19,7 +21,7 @@ public class BuildingManager : NetworkBehaviour
     public void PickNewPrefab(int num, scaler info)
     {
         RemoveCurrentBuild();
-        BuildingInfo = info;
+        buildingInfo = info;
         currentBuildPrefab = Instantiate(buildPrefabs[num], transform.position, Quaternion.identity);
         currentBuildIndex = num;
         currentBuildPrefab.GetComponent<BuildingInfo>().DisableText();
@@ -64,7 +66,15 @@ public class BuildingManager : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.B) && currentBuildPrefab != null)
         {
-            SetNewBuildServerRpc(currentBuildIndex, currentPosition);
+            if (CheckForSchematPlace())
+            {
+                SetNewBuildServerRpc(currentBuildIndex, currentPosition, buildingInfo.Name);
+            }
+            else
+            {
+                Popup.Instance.PopupPop("You can't create more building schemats!");
+            }
+
             RemoveCurrentBuild();
         }
     }
@@ -80,20 +90,31 @@ public class BuildingManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetNewBuildServerRpc(int buildingId, Vector3 pos)
+    private void SetNewBuildServerRpc(int buildingId, Vector3 pos, string Name)
     {
+        GameObject b = Instantiate(buildPrefabs[buildingId], pos, Quaternion.identity);
+        b.GetComponent<NetworkObject>().Spawn();
+        //b.GetComponent<BuildingInfo>().SetBuildingInfo(BuildingInfo);
+        currentBuildingSchemats.Value++;
+        SetNewBuildClientRpc(b.GetComponent<NetworkObject>().NetworkObjectId, Name);
+    }
 
-        if (CheckForSchematPlace())
+    [ClientRpc]
+    private void SetNewBuildClientRpc(ulong id, string name)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].GetComponent<BuildingInfo>().SetBuildingInfo(GetScalerId(name));
+    }
+
+    private int GetScalerId(string name)
+    {
+        for(int i=0; i<scalerList.Length; i++)
         {
-            GameObject b = Instantiate(buildPrefabs[buildingId], pos, Quaternion.identity);
-            b.GetComponent<NetworkObject>().Spawn();
-            b.GetComponent<BuildingInfo>().SetBuildingInfo(BuildingInfo);
-            currentBuildingSchemats.Value++;
+            if (scalerList[i].Name == name)
+            {
+                return i;
+            }
         }
-        else
-        {
-            Popup.Instance.PopupPop("You can't create more building schemats!");
-        }
+        return 0;
     }
 
     [ServerRpc(RequireOwnership = false)]

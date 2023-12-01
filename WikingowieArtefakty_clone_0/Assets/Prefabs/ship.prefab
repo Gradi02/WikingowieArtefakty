@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8086083111109886661}
   - component: {fileID: 295924505562819277}
   - component: {fileID: 8560968391913518127}
+  - component: {fileID: 9201951348217235897}
   m_Layer: 0
   m_Name: ship
   m_TagString: Untagged
@@ -126,3 +127,15 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &9201951348217235897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982504718959506274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cefcfe3e283d9f4ab81c738543bcfd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
