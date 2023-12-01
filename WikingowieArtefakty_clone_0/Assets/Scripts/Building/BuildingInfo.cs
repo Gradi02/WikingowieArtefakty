@@ -14,8 +14,8 @@ public class BuildingInfo : NetworkBehaviour
     private string Name;
     private string Description;
     private List<int> resources;
-   // private List<Image> resoruces_img;
-   // private List<Sprite> resources_icon;
+    private List<Image> resoruces_img;
+    private List<Sprite> resources_icon;
     private List<string> resources_name;
 
 
@@ -37,19 +37,20 @@ public class BuildingInfo : NetworkBehaviour
         progressInfoName.gameObject.SetActive(false);
     }
 
-
-    public void SetBuildingInfo(scaler i)
+    public void SetBuildingInfo(int scalerId)
     {
-        info = i;
+        Debug.Log(GameObject.FindGameObjectWithTag("manager").GetComponent<BuildingManager>().scalerList[0]);
+        
+        info = GameObject.FindGameObjectWithTag("manager").GetComponent<BuildingManager>().scalerList[scalerId];
 
         Name = info.Name;
         Description = info.Description;
         resources = info.resources;
-       // resoruces_img = info.resoruces_img;
-       // resources_icon = info.resources_icon;
+        resoruces_img = info.resoruces_img;
+        resources_icon = info.resources_icon;
         resources_name = info.resources_name;
         CreateProgressList(resources);
-        BuildingProgressUpdateServerRpc();
+        BuildingProgressUpdateClientRpc();
     }
 
     public void CreateProgressList(List<int> resources)
@@ -61,7 +62,7 @@ public class BuildingInfo : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void BuildingProgressUpdateServerRpc()
     {
         BuildingProgressUpdateClientRpc();
@@ -91,12 +92,25 @@ public class BuildingInfo : NetworkBehaviour
             if (resources_name[i] == selectedSlot.GetItemName() && ResourcesProgress[i] < resources[i])
             {
                 selectedSlot.RemoveItem();
-                ResourcesProgress[i]++;
+                AddItemServerRpc(i);
+                //ResourcesProgress[i]++;
                 BuildingProgressUpdateServerRpc();
                 CheckForFinishSchemat();
                 return;
             }
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void AddItemServerRpc(int i)
+    {
+        AddItemClientRpc(i);
+    }
+
+    [ClientRpc]
+    void AddItemClientRpc(int i)
+    {
+        ResourcesProgress[i]++;
     }
 
     private void CheckForFinishSchemat()

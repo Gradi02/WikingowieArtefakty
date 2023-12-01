@@ -9,6 +9,7 @@ public class ItemManager : NetworkBehaviour
     public string itemName;
     public Sprite itemIcon;
     private ItemsDropManager dropManager;
+    private bool pickable = true;
 
     private void Start()
     {
@@ -40,5 +41,15 @@ public class ItemManager : NetworkBehaviour
     {
         transform.localPosition = new Vector3(Mathf.RoundToInt(transform.localPosition.x), 0.25f, Mathf.RoundToInt(transform.localPosition.z));
         transform.rotation = Quaternion.identity;
+    }
+
+    public void SetPickable(bool pin)
+    {
+        pickable = pin;
+    }
+
+    public bool GetPickable()
+    {
+        return pickable;
     }
 }

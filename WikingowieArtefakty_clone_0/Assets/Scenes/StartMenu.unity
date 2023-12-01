@@ -5694,7 +5694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1181549641
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7423,6 +7423,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4742fe214d8ccd7499987e01a110f3a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scalerList:
+  - {fileID: 358944483}
+  - {fileID: 1673488945}
+  - {fileID: 157385908}
+  - {fileID: 1459395292}
+  - {fileID: 1616654436}
+  - {fileID: 1394459465}
+  - {fileID: 2125026313}
+  - {fileID: 379421651}
+  - {fileID: 1431430822}
   buildPrefabs:
   - {fileID: 7593791710759264347, guid: b71666080ac5be44bb845988137c3d6d, type: 3}
   - {fileID: 5818735168176854563, guid: 771ac1a607ac4e745be80b3f3c2b411c, type: 3}

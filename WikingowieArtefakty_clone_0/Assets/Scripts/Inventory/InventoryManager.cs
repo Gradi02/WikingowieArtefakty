@@ -44,11 +44,12 @@ public class InventoryManager : NetworkBehaviour
 
         if (emptySlot != null)
         {
+            itemObj.GetComponent<ItemManager>().SetPickable(false);
             emptySlot.SetItem(itemObj);
         }
     }
 
-    private Slot FindEmptySlot()
+    public Slot FindEmptySlot()
     {
         for(int i = 0; i < slots.Count; i++)
         {
@@ -117,8 +118,8 @@ public class InventoryManager : NetworkBehaviour
 
             GameObject dropped = GetItemFromList(drop.GetItemName());
             int id = GetIdFromList(dropped);
-            SpawnItemServerRpc(id);
             drop.RemoveItem();
+            SpawnItemServerRpc(id);
         }
     }
 
