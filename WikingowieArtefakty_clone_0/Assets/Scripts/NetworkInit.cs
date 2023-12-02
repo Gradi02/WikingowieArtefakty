@@ -18,10 +18,11 @@ public class NetworkInit : NetworkBehaviour
     [SerializeField] private GameObject inputCode;
     [SerializeField] private TextMeshProUGUI code;
     [SerializeField] private GameObject mapButton;
+    [SerializeField] private GameObject inputName;
 
     private string joincode;
     public static int MaxPlayer = 2;
-
+    [HideInInspector] public string username;
     private async void Start()
     {
         await UnityServices.InitializeAsync();
@@ -80,9 +81,11 @@ public class NetworkInit : NetworkBehaviour
     {
         CreateRelay();
 
+        username = inputName.GetComponent<TMP_InputField>().text;
         joinButton.SetActive(false);
         inputCode.SetActive(false);
         hostButton.SetActive(false);
+        inputName.SetActive(false);
         mapButton.SetActive(true);
 
         Debug.Log(joincode);
@@ -92,6 +95,7 @@ public class NetworkInit : NetworkBehaviour
     {
         //joincode = code.text.Substring(0, 6);
         joincode = inputCode.GetComponent<TMP_InputField>().text;
+        username = inputName.GetComponent<TMP_InputField>().text;
         if (joincode.Length != 6)
         {
             Debug.Log("zly kod");
@@ -105,5 +109,6 @@ public class NetworkInit : NetworkBehaviour
         inputCode.SetActive(false);
         hostButton.SetActive(false);
         code.gameObject.SetActive(false);
+        inputName.SetActive(false);
     }
 }

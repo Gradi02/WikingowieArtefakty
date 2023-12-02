@@ -69,6 +69,7 @@ public class MapGenerator : NetworkBehaviour
         manager.GetComponent<Manager>().SetMiddle(middle);
         
         startPlane.transform.position = middle + new Vector3(0,0.25f,0);
+        startPlane.transform.localScale = new Vector3(size,1,size);
 
         waterLayer = Instantiate(waterLayerPrefab, transform.position, Quaternion.identity);
         //waterLayer.GetComponent<NetworkObject>().Spawn();
@@ -86,7 +87,7 @@ public class MapGenerator : NetworkBehaviour
         {
             isnew = true;
             waterLayer.SetActive(true);
-            startPlane.SetActive(false);
+            startPlane.transform.position = new Vector3(middle.x, -0.25f, middle.z);
             timeManager.StartDayOne();
         }
     }
@@ -323,7 +324,7 @@ public class MapGenerator : NetworkBehaviour
                                 tr.transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), -0.26f, Random.Range(-0.1f, 0.1f));
                                 //tr.transform.localEulerAngles.Set(0, Random.Range(0, 360), 0);
                                 tr.name = "water";
-                                tr.transform.parent = chunk.transform;
+                                
                             }
                         }
                     }
@@ -691,6 +692,6 @@ public class MapGenerator : NetworkBehaviour
     void EnableWaterClientRpc()
     {
         waterLayer.SetActive(true);
-        startPlane.SetActive(false);
+        //startPlane.SetActive(false);
     }
 }
