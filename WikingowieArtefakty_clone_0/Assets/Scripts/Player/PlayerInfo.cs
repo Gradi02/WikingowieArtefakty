@@ -9,7 +9,7 @@ public class PlayerInfo : NetworkBehaviour
     private InventoryManager inventoryManager;
     private GameObject itemToRemove;
     private GameObject sun;
-
+    private string username;
 
     private void Start()
     {
@@ -17,7 +17,16 @@ public class PlayerInfo : NetworkBehaviour
         inventoryManager = GetComponent<InventoryManager>();
         sun = GameObject.FindGameObjectWithTag("sun");
 
-        if (IsLocalPlayer) Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+        if (IsLocalPlayer)
+        {
+            Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+            username = GameObject.FindObjectOfType<NetworkInit>().username;
+
+            if(username.Length > 2)
+                SetNameServerRpc(username, GetComponent<NetworkObject>().NetworkObjectId);
+            else
+                SetNameServerRpc("No_Name", GetComponent<NetworkObject>().NetworkObjectId);
+        }
     }
     void Update()
     {
@@ -90,7 +99,8 @@ public class PlayerInfo : NetworkBehaviour
             }
             else if(hit.transform.GetComponent<ShipManager>() != null)
             {
-
+                hit.transform.GetComponent<ShipManager>().CheckForUseItem(selected);
+                return;
             }
         }
     }
@@ -143,5 +153,17 @@ public class PlayerInfo : NetworkBehaviour
     void DropItem()
     {
         inventoryManager.DropSelectedItem();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void SetNameServerRpc(string name, ulong id)
+    {
+        SetNameClientRpc(name, id);
+    }
+
+    [ClientRpc]
+    void SetNameClientRpc(string name, ulong id)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].transform.name = name;
     }
 }

@@ -8,6 +8,7 @@ public class MapRenderer : MonoBehaviour
     private Transform player;
     public bool showAll = false;
     private Camera cam;
+    private List<GameObject> chunks = new List<GameObject>();
 
     private void Start()
     {
@@ -17,9 +18,17 @@ public class MapRenderer : MonoBehaviour
     }
     void Update()
     {
+        if (chunks.Count == 0)
+        {
+            foreach (Transform child in gen.transform)
+            {
+                chunks.Add(child.gameObject);
+            }
+        }
+
         if (showAll)
         {
-            foreach (GameObject g in gen.GetChunks())
+            foreach (GameObject g in chunks)
             {
                 if (g != null)
                 {
@@ -30,23 +39,23 @@ public class MapRenderer : MonoBehaviour
             return;
         }
 
-            if (player != null)
+        if (player != null)
+        {
+            foreach (GameObject g in chunks)
             {
-                foreach (GameObject g in gen.GetChunks())
+                if (g != null)
                 {
-                    if (g != null)
+                    if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
                     {
-                        if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
-                        {
-                            g.SetActive(false);
-                        }
-                        else
-                        {
-                            g.SetActive(true);
-                        }
+                        g.SetActive(false);
+                    }
+                    else
+                    {
+                        g.SetActive(true);
                     }
                 }
             }
+        }
         
     }
 }
