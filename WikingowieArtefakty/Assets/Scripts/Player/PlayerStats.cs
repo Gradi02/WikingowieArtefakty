@@ -40,16 +40,18 @@ public class PlayerStats : MonoBehaviour
     /// /////////////////////////////////
     float normalizedValue;
     /// /////////////////////////////////
+    public GameObject button;
+    /// /////////////////////////////////
     private void Start()
     {
         SetHealth();
     }
-    void Update()
+    void FixedUpdate()
     {
         normalizedValue = 1f - ( Health / MaxHealth);
 
         HpSlider.value = Health;
-        HpText.text = Health.ToString();
+        HpText.text = Health.ToString("F0");
 
         if(PPV.profile.TryGetSettings(out Vig))
         {
@@ -65,6 +67,8 @@ public class PlayerStats : MonoBehaviour
 
         if (Health<0) Health = 0;
         if(Health > MaxHealth) Health = MaxHealth;
+
+        Health += 0.02f;
     }
 
 
@@ -72,6 +76,12 @@ public class PlayerStats : MonoBehaviour
     {
         HpSlider.minValue = 0;
         HpSlider.maxValue = MaxHealth;
+    }
+
+    public void HEALTHMINUS()
+    {
+        Health -= 1;
+        
     }
 
     public void HpPotion()
