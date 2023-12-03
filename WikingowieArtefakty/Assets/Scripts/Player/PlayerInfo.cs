@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using TMPro;
 
 public class PlayerInfo : NetworkBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerInfo : NetworkBehaviour
     private GameObject itemToRemove;
     private GameObject sun;
     private string username;
+    public GameObject HealthBar;
 
     private void Start()
     {
@@ -22,10 +24,15 @@ public class PlayerInfo : NetworkBehaviour
             Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
             username = GameObject.FindObjectOfType<NetworkInit>().username;
 
-            if(username.Length > 2)
+            if (username.Length > 2)
+            {
                 SetNameServerRpc(username, GetComponent<NetworkObject>().NetworkObjectId);
+            }
             else
+            {
                 SetNameServerRpc("No_Name", GetComponent<NetworkObject>().NetworkObjectId);
+                username = "No_Name";
+            }
         }
     }
     void Update()
@@ -45,6 +52,12 @@ public class PlayerInfo : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             DropItem();
+        }
+
+
+        if(HealthBar != null)
+        {
+            HealthBar.transform.Find("nick").GetComponent<TextMeshProUGUI>().text = username;
         }
     }
 

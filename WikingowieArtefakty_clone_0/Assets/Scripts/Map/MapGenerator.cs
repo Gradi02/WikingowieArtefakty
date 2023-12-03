@@ -106,6 +106,7 @@ public class MapGenerator : NetworkBehaviour
     public void GenerateWorldServerRpc()
     {
         menuManager.SetInventoryUIClientRpc();
+        manager.GetComponent<Manager>().StartGameServerRpc();
 
         SetRuins();
 

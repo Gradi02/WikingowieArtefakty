@@ -1,24 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Manager : MonoBehaviour
+public class Manager : NetworkBehaviour
 {
     public GameObject playerPref;
     public Camera cam;
     GameObject player;
     private Vector3 middle = new();
 
-    void Start()
-    {
-        //Invoke(nameof(SetPlayer), 1);
-        //Invoke(nameof(ResetCameraSmoothTime), 10);
-    }
+
+    public GameObject[] HealthBars;
+    private int playersCount;
+
 
     public void SetMiddle(Vector3 md)
     {
         middle = md;
     }
+
+    [ServerRpc]
+    public void StartGameServerRpc()
+    {
+        playersCount = NetworkManager.Singleton.ConnectedClients.Count;
+        StartGameClientRpc(playersCount);
+        AssignBarToPlayerClientRpc();
+    }
+
+    [ClientRpc]
+    void StartGameClientRpc(int pc)
+    {
+        for (int i=0; i<playersCount; i++)
+        {
+            HealthBars[i].SetActive(true);
+        }
+    }
+
+    [ClientRpc]
+    void AssignBarToPlayerClientRpc()
+    {
+        for(int i = 0; i < playersCount; i++)
+        {
+            NetworkManager.Singleton.ConnectedClientsList[i].PlayerObject.GetComponent<PlayerInfo>().HealthBar = HealthBars[i];
+        }
+    }
+
+
+
+
+
 
     private void SetPlayer()
     {
