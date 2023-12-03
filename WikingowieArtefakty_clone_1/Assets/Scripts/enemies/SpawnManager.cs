@@ -52,7 +52,7 @@ public class SpawnManager : NetworkBehaviour
         float posX;
         float posY;
         Vector3 spawn;
-
+        Vector3[] curPos = new Vector3[numOfEnemy];
 
         for (int i=0; i<numOfEnemy; i++)
         {
@@ -60,14 +60,15 @@ public class SpawnManager : NetworkBehaviour
                 posX = Random.Range(-10, 10);
                 posY = Random.Range(-10, 10);
                 spawn = new Vector3(posX, 0.25f, posY) + NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.ConnectedClientsList[Random.Range(0, playersNum)].ClientId].PlayerObject.transform.position;
-            } while (!CheckForSpawnPlace(spawn));
+            } while (!CheckForSpawnPlace(spawn, i, curPos));
 
+            curPos[i] = spawn;
             SpawnEnemyServerRpc(spawn);
         }
         nextSpawn = true;
     }
 
-    private bool CheckForSpawnPlace(Vector3 pos)
+    private bool CheckForSpawnPlace(Vector3 pos, int ij, Vector3[] tab)
     {
         RaycastHit hit;
         if(Physics.Raycast(pos + new Vector3(0,10,0), Vector3.down, out hit, 10))
@@ -82,6 +83,15 @@ public class SpawnManager : NetworkBehaviour
                 return false;
             }
         }
+
+        for(int i = 0; i < ij; i++)
+        {
+            if(pos == tab[i])
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -94,8 +104,22 @@ public class SpawnManager : NetworkBehaviour
             GameObject e = Instantiate(enemy1, transform.position, Quaternion.identity);
             e.GetComponent<NetworkObject>().Spawn();
             e.transform.position = pos; 
-            e.name = "enemy";
             enemiesList.Add(e);
+            SpawnEnemyClientRpc(e.GetComponent<NetworkObject>().NetworkObjectId, SelectType());
         }
+    }
+
+    [ClientRpc]
+    private void SpawnEnemyClientRpc(ulong id, int type)
+    {
+        GameObject e = NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].gameObject;
+        e.name = "spawner";
+        e.GetComponent<SpawnerManager>().monsterType = type;
+    }
+
+
+    int SelectType()
+    {
+        return Random.Range(0, 3);
     }
 }
