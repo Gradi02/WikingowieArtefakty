@@ -24,10 +24,15 @@ public class PlayerInfo : NetworkBehaviour
             Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
             username = GameObject.FindObjectOfType<NetworkInit>().username;
 
-            if(username.Length > 2)
+            if (username.Length > 2)
+            {
                 SetNameServerRpc(username, GetComponent<NetworkObject>().NetworkObjectId);
+            }
             else
+            {
                 SetNameServerRpc("No_Name", GetComponent<NetworkObject>().NetworkObjectId);
+                username = "No_Name";
+            }
         }
     }
     void Update()
