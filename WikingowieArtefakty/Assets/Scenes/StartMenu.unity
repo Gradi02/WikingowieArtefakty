@@ -15,12 +15,12 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogColor: {r: 0.08015308, g: 0.09559782, b: 0.1792453, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.15
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -367,7 +367,7 @@ MonoBehaviour:
   middleRadius: 7
   ruinRadius: 5
   treeOffset: 0.1
-  rockOffset: 0.1
+  rockOffset: 0
   oresChance: 5
   trees_variants1:
   - {fileID: 702579786378899497, guid: 05e04092ef566634982c15bec9dd0f48, type: 3}
@@ -376,7 +376,7 @@ MonoBehaviour:
   - {fileID: 5943939833704863935, guid: 5325f58af7a6e0b4ba9d42672b68af74, type: 3}
   - {fileID: 3787917506681028727, guid: 9fa5b968760e54742acb2a624c8fe48f, type: 3}
   rocks_variants1:
-  - {fileID: 133260629164837768, guid: d6bf4c43a24e9bc47aceb0154358aafd, type: 3}
+  - {fileID: 3795472807898652619, guid: c23c8cf353136f44599d6dff4b9360a4, type: 3}
   - {fileID: 133260629164837768, guid: 2665e047eb388a44892308669b67e40a, type: 3}
   - {fileID: 133260629164837768, guid: 544dce29792221f45857509f1daf6407, type: 3}
   - {fileID: 133260629164837768, guid: b89cde8447b187b48bcb6dda45e544af, type: 3}
@@ -401,7 +401,7 @@ MonoBehaviour:
   - {fileID: 2325429269887434811, guid: 1395954d750a2be4ca3779d9f1ca8032, type: 3}
   - {fileID: 161781281852981159, guid: b7649315c91843c4fa78bf01f574da8b, type: 3}
   oresPrefabs1:
-  - {fileID: 133260629164837768, guid: 950af5652e53de1458a88f9ec6669a95, type: 3}
+  - {fileID: 3795472807898652619, guid: c23c8cf353136f44599d6dff4b9360a4, type: 3}
   shipPrefab: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
   castlePrefab: {fileID: 1982504718959506274, guid: 9bb8bbaa4b3b179458a51bc98df5fb22, type: 3}
   waterLayerPrefab: {fileID: 6942782308479380561, guid: e81893c140be0d94c8f63d2cb05d2efc, type: 3}
@@ -8059,9 +8059,8 @@ MonoBehaviour:
   waveCountMax: 6
   maxEnemies: 10
   spawnPeriods: 3
-  enemy1: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
+  enemy1: {fileID: 5195717127060489316, guid: efc68bafcffa158499a0d8da8b31e1f5, type: 3}
   timeManager: {fileID: 2128734425}
-  night: 0
 --- !u!1 &1519469644
 GameObject:
   m_ObjectHideFlags: 0

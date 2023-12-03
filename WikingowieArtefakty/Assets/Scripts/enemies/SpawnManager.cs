@@ -10,14 +10,14 @@ public class SpawnManager : NetworkBehaviour
     public int waveCountMax;
     public int maxEnemies;
     public float spawnPeriods;
-    private List<GameObject> enemiesList = new List<GameObject> ();
+    private List<GameObject> enemiesList = new List<GameObject>();
 
     [Header("prefabs")]
     public GameObject enemy1;
 
     [Header("references")]
     public TimeManager timeManager;
-    public bool night = false;
+    private bool night = false;
     private bool nextSpawn = true;
 
     private void Update()
@@ -26,7 +26,7 @@ public class SpawnManager : NetworkBehaviour
 
         if(timeManager != null)
         {
-            if(timeManager.n_hour.Value > 22 && timeManager.n_hour.Value < 6)
+            if (timeManager.n_hour.Value > 22 || timeManager.n_hour.Value < 6)
             {
                 night = true;
             }
@@ -43,19 +43,48 @@ public class SpawnManager : NetworkBehaviour
         }
     }
 
+    [ContextMenu("Spawn")]
     private void SpawnEnemySetUp()
     {
-        int numOfEnemy = Random.Range(waveCountMin, waveCountMax+1);
+        int playersNum = NetworkManager.Singleton.ConnectedClients.Count;
+        int numOfEnemy = Random.Range(waveCountMin, waveCountMax+1) + playersNum;
 
-        for(int i=0; i<numOfEnemy; i++)
+        float posX;
+        float posY;
+        Vector3 spawn;
+
+
+        for (int i=0; i<numOfEnemy; i++)
         {
-            float posX = Random.Range(-10, 10);
-            float posY = Random.Range(-10, 10);
-            Vector3 spawn = new Vector3(posX, 0.25f, posY);
+            do {
+                posX = Random.Range(-10, 10);
+                posY = Random.Range(-10, 10);
+                spawn = new Vector3(posX, 0.25f, posY) + NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.ConnectedClientsList[Random.Range(0, playersNum)].ClientId].PlayerObject.transform.position;
+            } while (!CheckForSpawnPlace(spawn));
 
             SpawnEnemyServerRpc(spawn);
         }
+        nextSpawn = true;
     }
+
+    private bool CheckForSpawnPlace(Vector3 pos)
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(pos + new Vector3(0,10,0), Vector3.down, out hit, 10))
+        {
+            if (hit.transform.GetComponent<BlockManager>() != null)
+            {
+                return false;
+            }
+
+            if (hit.transform.GetComponent<Bridge>() != null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     [ServerRpc]
     private void SpawnEnemyServerRpc(Vector3 pos)
