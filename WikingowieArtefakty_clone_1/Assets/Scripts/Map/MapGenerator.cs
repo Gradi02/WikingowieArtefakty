@@ -487,8 +487,9 @@ public class MapGenerator : NetworkBehaviour
                         }
 
                         //Skala na bazie noise
-                        new_obj.transform.localScale = new Vector3(1, GetHeightByNoise(x, y), 1);
-                        new_obj.transform.localPosition = new Vector3(x, 0.5f, y);
+                        new_obj.transform.localScale = new Vector3(0.335f, GetHeightByNoise(x, y)/5.5f, 0.335f);
+                        new_obj.transform.localPosition = new Vector3(x, 0.25f, y);
+                        new_obj.transform.localRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
 
                         //Przypisanie do rodzica
                         new_obj.name = "Mountain" + x + y;
@@ -512,26 +513,6 @@ public class MapGenerator : NetworkBehaviour
                         dropManager.SetItem(true, x, y);
                     }
                 }
-            }
-        }
-    }
-
-    void AssignObjectToChunk(GameObject obj, List<GameObject> chunks)
-    {
-        Vector3 objPosition = obj.transform.localPosition;
-
-        foreach (GameObject chunk in chunks)
-        {
-            Vector3 chunkPosition = chunk.transform.position;
-            float chunkOffset = chunksize / 2;
-
-            bool isInsideX = objPosition.x >= chunkPosition.x - chunkOffset && objPosition.x < chunkPosition.x + chunkOffset;
-            bool isInsideZ = objPosition.z >= chunkPosition.z - chunkOffset && objPosition.z < chunkPosition.z + chunkOffset;
-
-            if (isInsideX && isInsideZ)
-            {
-                obj.transform.parent = chunk.transform;
-                break; // Zakoñcz pêtlê po znalezieniu odpowiedniego chunka
             }
         }
     }

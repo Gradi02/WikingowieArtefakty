@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class MapRenderer : MonoBehaviour
+using Unity.Netcode;
+public class MapRenderer : NetworkBehaviour
 {
     private MapGenerator gen;
     private Transform player;
@@ -12,9 +12,11 @@ public class MapRenderer : MonoBehaviour
 
     private void Start()
     {
+        gen = GameObject.Find("GeneratorManager").GetComponent<MapGenerator>();
+
+        if (!IsOwner) return;
         player = transform;
         cam = Camera.main;
-        gen = GameObject.Find("GeneratorManager").GetComponent<MapGenerator>();
     }
     void Update()
     {
