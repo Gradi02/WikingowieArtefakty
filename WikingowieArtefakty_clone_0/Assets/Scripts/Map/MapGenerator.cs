@@ -164,10 +164,11 @@ public class MapGenerator : NetworkBehaviour
         GenerateChunks();
 
         ClearMapServerRpc(middle, middleRadius);
-        SetShip();
+        SetShipServerRpc();
         started.Value = true;
         EnableWaterClientRpc();
         ClearMapServerRpc(ruinsPos, ruinRadius);
+        manager.GetComponent<Manager>().StartGameClientRpc(NetworkManager.Singleton.ConnectedClients.Count);
 
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
             g.GetComponent<PlayerMovement>().SetStartPosition(middle);
@@ -189,11 +190,11 @@ public class MapGenerator : NetworkBehaviour
                 chunk.transform.position = new Vector3(x * chunksize + chunkoffset, 0, y * chunksize + chunkoffset);
                 chunk.transform.parent = transform;
 
+                GenerateChunk(chunk, chunksize*x, chunksize*y);
                 ConfigureChunkClientRpc(chunk.GetComponent<NetworkObject>().NetworkObjectId, "chunk" + x + "_" + y);
                 //chunk.name = "chunk" + x + y;
                 //chunks.Add(chunk);
 
-                GenerateChunk(chunk, chunksize*x, chunksize*y);
             }
         }
     }
@@ -321,8 +322,8 @@ public class MapGenerator : NetworkBehaviour
                             {
                                 GameObject tr = Instantiate(waterPrefabs[(int)Random.Range(0, waterPrefabs.Length)], transform.position, Quaternion.identity);
                                 tr.GetComponent<NetworkObject>().Spawn();
-                                tr.transform.parent = a.transform;
                                 tr.transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), -0.26f, Random.Range(-0.1f, 0.1f));
+                                tr.transform.parent = a.transform;
                                 //tr.transform.localEulerAngles.Set(0, Random.Range(0, 360), 0);
                                 tr.name = "water";
                                 
@@ -621,7 +622,8 @@ public class MapGenerator : NetworkBehaviour
         return ruinsPos;
     }
 
-    void SetShip()
+    [ServerRpc]
+    void SetShipServerRpc()
     {
         //Przywo³aj statek na brzegu mapy w losowym miejscu
         GameObject ship = Instantiate(shipPrefab, transform.position, Quaternion.identity);
@@ -630,7 +632,13 @@ public class MapGenerator : NetworkBehaviour
 
         Vector3 shipPos = middle + GetPointOnCircle(size/2, Random.Range(0, 360));
 
-        ship.transform.position = shipPos;
+        SetShipClientRpc(ship.GetComponent<NetworkObject>().NetworkObjectId, shipPos);
+    }
+
+    [ClientRpc]
+    void SetShipClientRpc(ulong id, Vector3 pos)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].transform.position = pos;
     }
 
     public Vector3 GetPointOnCircle(float radius, float angleInDegrees)

@@ -8,7 +8,6 @@ public class MapRenderer : NetworkBehaviour
     private Transform player;
     public bool showAll = false;
     private Camera cam;
-    private List<GameObject> chunks = new List<GameObject>();
 
     private void Start()
     {
@@ -20,21 +19,13 @@ public class MapRenderer : NetworkBehaviour
     }
     void Update()
     {
-        if (chunks.Count == 0)
-        {
-            foreach (Transform child in gen.transform)
-            {
-                chunks.Add(child.gameObject);
-            }
-        }
-
         if (showAll)
         {
-            foreach (GameObject g in chunks)
+            foreach (Transform g in gen.transform)
             {
-                if (g != null)
+                if (g.gameObject != null)
                 {
-                    g.SetActive(true);
+                    g.gameObject.SetActive(true);
                 }
             }
 
@@ -43,17 +34,17 @@ public class MapRenderer : NetworkBehaviour
 
         if (player != null)
         {
-            foreach (GameObject g in chunks)
+            foreach (Transform g in gen.transform)
             {
-                if (g != null)
+                if (g.gameObject != null)
                 {
                     if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
                     {
-                        g.SetActive(false);
+                        g.gameObject.SetActive(false);
                     }
                     else
                     {
-                        g.SetActive(true);
+                        g.gameObject.SetActive(true);
                     }
                 }
             }
