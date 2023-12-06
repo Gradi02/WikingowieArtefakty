@@ -388,6 +388,7 @@ public class MapGenerator : NetworkBehaviour
                             //Offset drzewa na kratce
                             new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
                             new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
+                            new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
 
                             //Losowa skala
                             float randscale = Random.Range(0.5f, 0.7f);
@@ -466,6 +467,7 @@ public class MapGenerator : NetworkBehaviour
 
                             //Offset kamienia na kratce
                             new_obj.transform.localPosition += new Vector3(Random.Range(-rockOffset, rockOffset), 0, Random.Range(-rockOffset, rockOffset));
+                            new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
 
                             //Przypisanie do rodzica
                             new_obj.name = "Rock" + x + y;
@@ -493,6 +495,7 @@ public class MapGenerator : NetworkBehaviour
                             //Offset drzewa na kratce
                             new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
                             new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
+                            new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
 
                             //Losowa skala
                             float randscale = Random.Range(0.5f, 0.7f);
@@ -537,6 +540,7 @@ public class MapGenerator : NetworkBehaviour
                         //Skala na bazie noise
                         new_obj.transform.localScale = new Vector3(0.335f, GetHeightByNoise(x, y)/5.5f, 0.335f);
                         new_obj.transform.localPosition = new Vector3(x, 0.25f, y);
+                        new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
                         new_obj.transform.localRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
 
                         //Przypisanie do rodzica
@@ -704,6 +708,7 @@ public class MapGenerator : NetworkBehaviour
     {
         //if (!IsServer) return;
         GameObject b = Instantiate(campfire, middle + new Vector3(0,0.25f,0), Quaternion.identity);
+        b.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
         //b.GetComponent<NetworkObject>().Spawn();
         b.name = "campfire";
         return b;
