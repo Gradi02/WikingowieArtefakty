@@ -5,8 +5,8 @@ Shader "Custom/Outlined_ScaleXYZ"
 		_MainTex ("Texture", 2D) = "white" {}
 		_Color("Main Color", Color) = (1,1,1,1)
 		_OutlineColor ("Outline Color", Color) = (0,0,0,1)
-		_OutlineWidthX ("Outline X", Range (0.0, 2.0)) = 0.15
-		_OutlineWidthY ("Outline Y", Range (0.0, 2.0)) = 0.02
+		_OutlineWidthX ("Outline X", Range (0.0, 2.0)) = 0.07
+		_OutlineWidthY ("Outline Y", Range (0.0, 2.0)) = 0.00
 		_OutlineWidthZ ("Outline Z", Range (0.0, 2.0)) = 0.07
 	}
 
