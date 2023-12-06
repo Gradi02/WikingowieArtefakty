@@ -19,21 +19,7 @@ public class PlayerInfo : NetworkBehaviour
         inventoryManager = GetComponent<InventoryManager>();
         sun = GameObject.FindGameObjectWithTag("sun");
 
-        if (IsLocalPlayer)
-        {
-            Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
-            username = GameObject.FindObjectOfType<NetworkInit>().username;
-
-            if (username.Length > 2)
-            {
-                SetNameServerRpc(username, GetComponent<NetworkObject>().NetworkObjectId);
-            }
-            else
-            {
-                SetNameServerRpc("No_Name", GetComponent<NetworkObject>().NetworkObjectId);
-                username = "No_Name";
-            }
-        }
+        UpdateNicknamesServerRpc();
     }
     void Update()
     {
@@ -178,5 +164,32 @@ public class PlayerInfo : NetworkBehaviour
     void SetNameClientRpc(string name, ulong id)
     {
         NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].transform.name = name;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void UpdateNicknamesServerRpc()
+    {
+        UpdateNicknamesClientRpc();
+    }
+
+    [ClientRpc]
+    void UpdateNicknamesClientRpc()
+    {
+        if (IsLocalPlayer)
+        {
+            Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+            username = GameObject.FindObjectOfType<NetworkInit>().username;
+
+            if (username.Length > 2)
+            {
+                SetNameServerRpc(username, GetComponent<NetworkObject>().NetworkObjectId);
+            }
+            else
+            {
+                SetNameServerRpc("No_Name", GetComponent<NetworkObject>().NetworkObjectId);
+                username = "No_Name";
+            }
+
+        }
     }
 }

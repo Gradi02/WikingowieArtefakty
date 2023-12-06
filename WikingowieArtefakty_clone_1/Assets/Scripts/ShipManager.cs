@@ -32,7 +32,8 @@ public class ShipManager : NetworkBehaviour
         cam = Camera.main.GetComponent<CameraFollow>();
         current_resources = new int[needed_resources1.Length];
 
-        BuildingProgressUpdateClientRpc();
+        if(IsHost)
+            BuildingProgressUpdateServerRpc();
     }
     void Update()
     {
@@ -113,19 +114,13 @@ public class ShipManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void BuildingProgressUpdateServerRpc()
     {
-        BuildingProgressUpdateClientRpc();
-    }
-
-    [ClientRpc]
-    public void BuildingProgressUpdateClientRpc()
-    {
-        progressInfoName.text = "Boat - phase " + (buildingPhase+1).ToString();
         progressInfo.text = string.Empty;
 
         if (buildingPhase == 0)
         {
             for (int i = 0; i < needed_resources1.Length; i++)
             {
+                
                 if (needed_resources1[i] > 0 && current_resources[i] < needed_resources1[i])
                 {
                     progressInfo.text += current_resources[i] + "/" + needed_resources1[i].ToString();
@@ -165,6 +160,15 @@ public class ShipManager : NetworkBehaviour
         {
 
         }
+
+        BuildingProgressUpdateClientRpc(progressInfo.text);
+    }
+
+    [ClientRpc]
+    public void BuildingProgressUpdateClientRpc(string s)
+    {
+        progressInfoName.text = "Boat - phase " + (buildingPhase+1).ToString();
+        progressInfo.text = s;
     }
 
     [ServerRpc(RequireOwnership = false)]

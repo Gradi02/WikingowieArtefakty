@@ -24,12 +24,12 @@ public class Manager : NetworkBehaviour
     public void StartGameServerRpc()
     {
         playersCount = NetworkManager.Singleton.ConnectedClients.Count;
-        StartGameClientRpc(playersCount);
+        //StartGameClientRpc(playersCount);
         AssignBarToPlayerClientRpc();
     }
 
     [ClientRpc]
-    void StartGameClientRpc(int pc)
+    public void StartGameClientRpc(int pc)
     {
         for (int i=0; i<playersCount; i++)
         {

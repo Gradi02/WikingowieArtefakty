@@ -99,12 +99,13 @@ public class MapGenerator : NetworkBehaviour
         menuManager.FadeAnimationServerRpc(true);
         seed = Random.Range(100, 9999);
         Debug.Log("Seed: " + seed);
-        Invoke(nameof(GenerateWorldServerRpc), 2);
+
+        StartCoroutine(GenerateWorld());
     }
 
-    [ServerRpc]
-    public void GenerateWorldServerRpc()
+    IEnumerator GenerateWorld()
     {
+        yield return new WaitForSeconds(2);
         menuManager.SetInventoryUIClientRpc();
         manager.GetComponent<Manager>().StartGameServerRpc();
 
@@ -159,23 +160,29 @@ public class MapGenerator : NetworkBehaviour
                     att++;
                 }
             }
+            yield return null;
         }
 
-        GenerateChunks();
+        StartCoroutine( GenerateChunks() );      
+    }
 
+    IEnumerator EndGenerate()
+    {
         ClearMapServerRpc(middle, middleRadius);
-        SetShip();
+        SetShipServerRpc();
         started.Value = true;
         EnableWaterClientRpc();
         ClearMapServerRpc(ruinsPos, ruinRadius);
+        manager.GetComponent<Manager>().StartGameClientRpc(NetworkManager.Singleton.ConnectedClients.Count);
 
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
             g.GetComponent<PlayerMovement>().SetStartPosition(middle);
 
         menuManager.FadeAnimationServerRpc(false);
+        yield return null;
     }
 
-    void GenerateChunks()
+    IEnumerator GenerateChunks()
     {
         int numofchunk = Mathf.CeilToInt(size / chunksize);
 
@@ -189,13 +196,15 @@ public class MapGenerator : NetworkBehaviour
                 chunk.transform.position = new Vector3(x * chunksize + chunkoffset, 0, y * chunksize + chunkoffset);
                 chunk.transform.parent = transform;
 
+                GenerateChunk(chunk, chunksize*x, chunksize*y);
                 ConfigureChunkClientRpc(chunk.GetComponent<NetworkObject>().NetworkObjectId, "chunk" + x + "_" + y);
                 //chunk.name = "chunk" + x + y;
                 //chunks.Add(chunk);
-
-                GenerateChunk(chunk, chunksize*x, chunksize*y);
+                yield return null;
             }
         }
+
+        StartCoroutine(EndGenerate());
     }
 
     [ClientRpc]
@@ -222,14 +231,14 @@ public class MapGenerator : NetworkBehaviour
                 if (Vector3.Distance(temppos, middle) >= size/2 - 9) id = 1;
                 if (Vector3.Distance(temppos, middle) >= size / 2 - 7) id = 0;
 
-                if ((Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius) || (Vector3.Distance(ruinsPos, new Vector3(x, 0, y)) < ruinRadius)) id = 1;
-                if ((Vector3.Distance(middle, new Vector3(x, 0, y)) < middleRadius + 1 && id > 2) || (Vector3.Distance(ruinsPos, new Vector3(x, 0, y)) < ruinRadius + 1 && id > 2)) id = 2;
+                if ((Vector3.Distance(middle, temppos) < middleRadius) || (Vector3.Distance(ruinsPos, temppos) < ruinRadius)) id = 2;
+                if ((Vector3.Distance(middle, temppos) < middleRadius + 1 && id > 2) || (Vector3.Distance(ruinsPos, temppos) < ruinRadius + 1 && id > 2)) id = 3;
 
                 for (int i = 0; i < 5; i++)
                 {
-                    if (Vector3.Distance(treeArea[i], new Vector3(x, 0, y)) < treeAreaSize)
+                    if (Vector3.Distance(treeArea[i], temppos) < treeAreaSize)
                     {
-                        id = 1;
+                        id = 2;
                         ifempty = Random.Range(0, 2);
                     }
                 }
@@ -252,7 +261,7 @@ public class MapGenerator : NetworkBehaviour
                         else if (Vector3.Distance(temppos, middle) >= size / 2 - 2)
                         {
                             int rand = Random.Range(1, 3);
-
+                            
                             if (rand == 2)
                             {
                                 GameObject gr = Instantiate(ground_prefabs1[0], transform.position, Quaternion.identity);
@@ -319,8 +328,9 @@ public class MapGenerator : NetworkBehaviour
 
                             if (ifobj == 0)
                             {
-                                GameObject tr = Instantiate(waterPrefabs[(int)Random.Range(0, waterPrefabs.Length)], transform.position, Quaternion.identity);
+                                GameObject tr = Instantiate(waterPrefabs[Random.Range(0, waterPrefabs.Length)], transform.position, Quaternion.identity);
                                 tr.GetComponent<NetworkObject>().Spawn();
+                                //tr.transform.localPosition = new Vector3(x + Random.Range(-0.1f, 0.1f), -0.25f, y + Random.Range(-0.1f, 0.1f));
                                 tr.transform.parent = a.transform;
                                 tr.transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), -0.26f, Random.Range(-0.1f, 0.1f));
                                 //tr.transform.localEulerAngles.Set(0, Random.Range(0, 360), 0);
@@ -329,7 +339,44 @@ public class MapGenerator : NetworkBehaviour
                             }
                         }
                     }
-                    else if (id == 1) //Blok Trawy/Drzewa 
+                    else if (id == 1)
+                    {
+                        int ifgrass = Random.Range(0, 3);
+
+                        if (ifgrass == 0)
+                        {
+                            int num = Random.Range(2, 4);
+                            int type = (int)Random.Range(0, plantsPrefabs.Length);
+                            for (int i = 0; i < num; i++)
+                            {
+                                Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
+                                float width = Random.Range(0.3f, 0.6f);
+
+                                SetFlowerClientRpc(type, rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
+                            }
+                        }
+                        else if (ifgrass == 1)
+                        {
+                            int num = Random.Range(7, 10);
+                            for (int i = 0; i < num; i++)
+                            {
+                                Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
+                                float width = Random.Range(0.02f, 0.04f);
+
+                                SetGrassClientRpc(rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
+                            }
+                        }
+
+                        //Pod這瞠
+                        int rand2 = Random.Range(0, 2);
+                        GameObject gr = Instantiate(ground_prefabs1[rand2 == 1 ? id : 7], transform.position, Quaternion.identity);
+                        gr.GetComponent<NetworkObject>().Spawn();
+                        gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                        gr.name = "Ground" + x + y;
+                        ground.Add(gr);
+                        gr.transform.parent = chunk.transform;
+                    }
+                    else if (id == 2) //Blok Trawy/Drzewa 
                     {
                         if (ifempty == 1)
                         {
@@ -343,7 +390,7 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
 
                             //Losowa skala
-                            float randscale = Random.Range(0.6f, 0.8f);
+                            float randscale = Random.Range(0.5f, 0.7f);
                             new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
 
                             //Losowa rotacja
@@ -394,7 +441,7 @@ public class MapGenerator : NetworkBehaviour
 
                             //Pod這瞠
                             int rand2 = Random.Range(0, 2);
-                            GameObject gr = Instantiate(ground_prefabs1[rand2 == 1 ? id : 7], transform.position, Quaternion.identity);
+                            GameObject gr = Instantiate(ground_prefabs1[rand2 == 1 ? id-1 : 7], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
@@ -402,7 +449,7 @@ public class MapGenerator : NetworkBehaviour
                             gr.transform.parent = chunk.transform;
                         }
                     }
-                    else if (id == 2) //Blok ma貫go kamienia
+                    else if (id == 3) //Blok ma貫go kamienia
                     {
                         if (ifempty != 1 && ifempty != 2)
                         {
@@ -428,7 +475,7 @@ public class MapGenerator : NetworkBehaviour
 
 
                             //Pod這瞠
-                            GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity);
+                            GameObject gr = Instantiate(ground_prefabs1[id-1], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
@@ -448,7 +495,7 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
 
                             //Losowa skala
-                            float randscale = Random.Range(0.6f, 0.8f);
+                            float randscale = Random.Range(0.5f, 0.7f);
                             new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
 
                             //Losowa rotacja
@@ -500,7 +547,7 @@ public class MapGenerator : NetworkBehaviour
 
 
                         //Pod這瞠
-                        GameObject gr = Instantiate(ground_prefabs1[id], transform.position, Quaternion.identity);
+                        GameObject gr = Instantiate(ground_prefabs1[id-1], transform.position, Quaternion.identity);
                         gr.GetComponent<NetworkObject>().Spawn();
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
@@ -521,9 +568,9 @@ public class MapGenerator : NetworkBehaviour
     {
         float nx = (seed + x * 0.15f);
         float ny = (seed + y * 0.15f);
-        float perlin = Mathf.PerlinNoise(nx, ny) * (5+1);
+        float perlin = Mathf.PerlinNoise(nx, ny) * (5+2);
 
-        return Mathf.Clamp(Mathf.FloorToInt(perlin), 0, 5);
+        return Mathf.Clamp(Mathf.FloorToInt(perlin), 0, 6);
     }
 
     float GetHeightByNoise(int x, int y)
@@ -621,7 +668,8 @@ public class MapGenerator : NetworkBehaviour
         return ruinsPos;
     }
 
-    void SetShip()
+    [ServerRpc]
+    void SetShipServerRpc()
     {
         //Przywo豉j statek na brzegu mapy w losowym miejscu
         GameObject ship = Instantiate(shipPrefab, transform.position, Quaternion.identity);
@@ -630,7 +678,13 @@ public class MapGenerator : NetworkBehaviour
 
         Vector3 shipPos = middle + GetPointOnCircle(size/2, Random.Range(0, 360));
 
-        ship.transform.position = shipPos;
+        SetShipClientRpc(ship.GetComponent<NetworkObject>().NetworkObjectId, shipPos);
+    }
+
+    [ClientRpc]
+    void SetShipClientRpc(ulong id, Vector3 pos)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].transform.position = pos;
     }
 
     public Vector3 GetPointOnCircle(float radius, float angleInDegrees)

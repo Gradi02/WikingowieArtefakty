@@ -58,7 +58,8 @@ public class BlockManager : NetworkBehaviour
         float x = Random.Range(-1, 1);
         float z = Random.Range(-1, 1);
 
-        StartCoroutine(Hitting(x, z));
+        if(gameObject.activeSelf)
+            StartCoroutine(Hitting(x, z));
     }
 
     IEnumerator Hitting(float xin, float zin)

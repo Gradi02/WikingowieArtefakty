@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1798719852971885404}
   - component: {fileID: 2527576578639669494}
   m_Layer: 0
-  m_Name: default
+  m_Name: mountain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
