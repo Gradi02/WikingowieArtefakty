@@ -30,7 +30,7 @@ public class Bridge : NetworkBehaviour
     public void BuildBridgeClientRpc()
     {
         bridgeObj = Instantiate(bridgePrefab, transform.position, Quaternion.identity, transform);
-        bridgeObj.transform.localPosition -= new Vector3(0, 0.5f, 0);
+        bridgeObj.transform.localPosition -= new Vector3(0, 1, 0);
         buildParticle.Play();
         GetComponent<BoxCollider>().enabled = false;
     }

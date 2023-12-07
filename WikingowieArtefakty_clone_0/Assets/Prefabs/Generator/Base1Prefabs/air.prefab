@@ -4954,7 +4954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c2973f7f16f4297a18f9a8cdbe1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bridgePrefab: {fileID: 3945946977855608217, guid: 95f6876ae50775d428ad10732e0deac0, type: 3}
+  bridgePrefab: {fileID: 5694281557056775747, guid: 26a7595162577794c8ecfd37d41a0813, type: 3}
   buildParticle: {fileID: 2081955019264123588}
 --- !u!114 &-1546798759279616067
 MonoBehaviour:
