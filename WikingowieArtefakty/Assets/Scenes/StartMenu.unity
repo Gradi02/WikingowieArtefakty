@@ -362,10 +362,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   islandLevel: 0
-  size: 200
-  chunksize: 10
+  size: 128
+  chunksize: 8
   middleRadius: 7
-  ruinRadius: 5
+  enemiesBasesSize: 7
+  enemiesBasesCount: 3
   treeOffset: 0.1
   rockOffset: 0
   oresChance: 5
