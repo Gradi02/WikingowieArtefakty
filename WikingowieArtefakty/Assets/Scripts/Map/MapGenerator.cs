@@ -11,7 +11,8 @@ public class MapGenerator : NetworkBehaviour
     [Min(1)] public int chunksize;
     private int seed;
     public int middleRadius;
-    public int ruinRadius;
+    public int enemiesBasesSize;
+    public int enemiesBasesCount;
     [Range(0, 0.5f)] public float treeOffset;
     [Range(0, 0.5f)] public float rockOffset;
     [Range(1, 100)]  public int oresChance;
@@ -43,7 +44,7 @@ public class MapGenerator : NetworkBehaviour
     public TimeManager timeManager;
     public MenuManager menuManager;
 
-    private Vector3 ruinsPos;
+    private Vector3[] enemiesBasesPos;
     private Vector3[] treeArea = new Vector3[5];
     private int treeAreaSize = 9;
 
@@ -64,6 +65,8 @@ public class MapGenerator : NetworkBehaviour
     {
         start = this.gameObject;
         dropManager = manager.GetComponent<ItemsDropManager>();
+
+        enemiesBasesPos = new Vector3[enemiesBasesCount];
 
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
         manager.GetComponent<Manager>().SetMiddle(middle);
@@ -168,11 +171,11 @@ public class MapGenerator : NetworkBehaviour
 
     IEnumerator EndGenerate()
     {
-        ClearMapServerRpc(middle, middleRadius);
+        //ClearMapServerRpc(middle, middleRadius);
         SetShipServerRpc();
         started.Value = true;
         EnableWaterClientRpc();
-        ClearMapServerRpc(ruinsPos, ruinRadius);
+        //ClearMapServerRpc(ruinsPos, ruinRadius);
         manager.GetComponent<Manager>().StartGameClientRpc(NetworkManager.Singleton.ConnectedClients.Count);
 
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
@@ -231,8 +234,8 @@ public class MapGenerator : NetworkBehaviour
                 if (Vector3.Distance(temppos, middle) >= size/2 - 9) id = 1;
                 if (Vector3.Distance(temppos, middle) >= size / 2 - 7) id = 0;
 
-                if ((Vector3.Distance(middle, temppos) < middleRadius) || (Vector3.Distance(ruinsPos, temppos) < ruinRadius)) id = 2;
-                if ((Vector3.Distance(middle, temppos) < middleRadius + 1 && id > 2) || (Vector3.Distance(ruinsPos, temppos) < ruinRadius + 1 && id > 2)) id = 3;
+                if ((Vector3.Distance(middle, temppos) < middleRadius)) id = 1;
+                if ((Vector3.Distance(middle, temppos) < middleRadius + 1 && id > 3)) id = 3;
 
                 for (int i = 0; i < 5; i++)
                 {
@@ -243,6 +246,18 @@ public class MapGenerator : NetworkBehaviour
                     }
                 }
 
+                for(int i = 0; i < enemiesBasesCount; i++)
+                {
+                    if (Vector3.Distance(enemiesBasesPos[i], temppos) < enemiesBasesSize)
+                    {
+                        id = 1;
+                    }
+                    else if(Vector3.Distance(enemiesBasesPos[i], temppos) < enemiesBasesSize + 1 && id > 3)
+                    {
+                        id = 3;
+                    }
+                }
+               
                 if (id >= 0)
                 {
                     GameObject new_obj = null;
@@ -651,25 +666,43 @@ public class MapGenerator : NetworkBehaviour
         return pos;
     }
 
-    Vector3 SetRuins()
+    void SetRuins()
     {
-        int offset = size / 4;
-        int x, y;
+        for (int i = 0; i < enemiesBasesCount; i++)
+        {
+            int offset = size / 4;
+            int x, y;
+            int counter = 0;
 
-        do {
+            do
+            {
+                counter++;
 
-            x = Random.Range(0 + offset, size - 2 * offset);
-            y = Random.Range(0 + offset, size - 2 * offset);
-            ruinsPos = new Vector3(x, 0, y);
+                x = Random.Range(0 + offset, size - offset);
+                y = Random.Range(0 + offset, size - offset);
+                enemiesBasesPos[i] = new Vector3(x, 0, y);
 
-        } while (Vector3.Distance(ruinsPos, middle) < offset);
+                if (counter > 20) break;
+
+            } while (Vector3.Distance(enemiesBasesPos[i], middle) < offset || CheckForBase(enemiesBasesPos[i], i, offset));
 
 
-        GameObject ship = Instantiate(castlePrefab, ruinsPos, Quaternion.identity);
-        ship.GetComponent<NetworkObject>().Spawn();
-        ship.name = "ruina";
-        
-        return ruinsPos;
+            GameObject ship = Instantiate(castlePrefab, enemiesBasesPos[i], Quaternion.identity);
+            ship.GetComponent<NetworkObject>().Spawn();
+        }
+    }
+
+    bool CheckForBase(Vector3 pos, int j, int offset)
+    {
+        for(int i=0; i<j; i++)
+        {
+            if (Vector3.Distance(enemiesBasesPos[i], pos) < offset)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     [ServerRpc]
