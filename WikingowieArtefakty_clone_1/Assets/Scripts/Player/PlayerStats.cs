@@ -4,8 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
+using Unity.Netcode;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : NetworkBehaviour
 {
     public float Health = 20;
     public float MaxHealth = 20;
@@ -40,20 +41,19 @@ public class PlayerStats : MonoBehaviour
     /// /////////////////////////////////
     float normalizedValue;
     /// /////////////////////////////////
-    public GameObject button;
+    public GameObject healthBar;
     /// /////////////////////////////////
+
+
     private void Start()
     {
-        SetHealth();
+        PPV = GameObject.FindGameObjectWithTag("ppv").GetComponent<PostProcessVolume>();
     }
     void FixedUpdate()
     {
-        normalizedValue = 1f - ( Health / MaxHealth);
+        if (!IsOwner) return;
 
-        HpSlider.value = Health;
-        HpText.text = Health.ToString("F0");
-
-        if(PPV.profile.TryGetSettings(out Vig))
+        if (PPV.profile.TryGetSettings(out Vig))
         {
             Vig.intensity.value = normalizedValue;
         }
@@ -63,12 +63,18 @@ public class PlayerStats : MonoBehaviour
             ColorGrade.saturation.value = 0 - normalizedValue * 100;
         }
 
+        if (HpSlider != null && HpText != null)
+        {
+            normalizedValue = 1f - ( Health / MaxHealth);
 
+            HpSlider.value = Health;
+            HpText.text = Health.ToString("F0");
 
-        if (Health<0) Health = 0;
-        if(Health > MaxHealth) Health = MaxHealth;
+            if (Health < 0) Health = 0;
+            if (Health > MaxHealth) Health = MaxHealth;
 
-        Health += 0.02f;
+            Health += 0.02f;
+        }
     }
 
 
@@ -78,10 +84,11 @@ public class PlayerStats : MonoBehaviour
         HpSlider.maxValue = MaxHealth;
     }
 
+
+    [ContextMenu("pp")]
     public void HEALTHMINUS()
     {
-        Health -= 1;
-        
+        Health -= 5;       
     }
 
     public void HpPotion()
@@ -96,5 +103,29 @@ public class PlayerStats : MonoBehaviour
     public float GetHealth()
     {
         return Health;
+    }
+
+    public void SetHPinfo(GameObject hb)
+    {
+        healthBar = hb;
+        HpSlider = hb.GetComponent<Slider>();
+        HpText = hb.transform.Find("value").GetComponent<TextMeshProUGUI>();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SyncBarNicksServerRpc()
+    {
+        SyncBarNicksClientRpc(GetComponent<NetworkObject>().NetworkObjectId, GetComponent<PlayerInfo>().GetNickname());
+    }
+
+    [ClientRpc]
+    void SyncBarNicksClientRpc(ulong id, string nick)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].GetComponent<PlayerStats>().SetNick(nick);
+    }
+
+    public void SetNick(string n)
+    {
+        healthBar.GetComponent<HealthController>().SetName(n);
     }
 }

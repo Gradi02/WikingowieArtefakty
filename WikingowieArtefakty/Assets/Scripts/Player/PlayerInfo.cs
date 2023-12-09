@@ -11,7 +11,6 @@ public class PlayerInfo : NetworkBehaviour
     private GameObject itemToRemove;
     private GameObject sun;
     private string username;
-    public GameObject HealthBar;
 
     private void Start()
     {
@@ -38,12 +37,6 @@ public class PlayerInfo : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             DropItem();
-        }
-
-
-        if(HealthBar != null)
-        {
-            HealthBar.transform.Find("nick").GetComponent<TextMeshProUGUI>().text = username;
         }
     }
 
@@ -164,6 +157,7 @@ public class PlayerInfo : NetworkBehaviour
     void SetNameClientRpc(string name, ulong id)
     {
         NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].transform.name = name;
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].GetComponent<PlayerInfo>().username = name;
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -183,6 +177,7 @@ public class PlayerInfo : NetworkBehaviour
             if (username.Length > 2)
             {
                 SetNameServerRpc(username, GetComponent<NetworkObject>().NetworkObjectId);
+                
             }
             else
             {
@@ -191,5 +186,10 @@ public class PlayerInfo : NetworkBehaviour
             }
 
         }
+    }
+
+    public string GetNickname()
+    {
+        return username;
     }
 }

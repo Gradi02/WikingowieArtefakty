@@ -9,7 +9,6 @@ public class Manager : NetworkBehaviour
 {
     public GameObject playerPref;
     public Camera cam;
-    GameObject player;
     private Vector3 middle = new();
 
     public GameObject[] HealthBars;
@@ -26,13 +25,11 @@ public class Manager : NetworkBehaviour
         playersCount = NetworkManager.Singleton.ConnectedClients.Count;
         StartGameClientRpc(playersCount);
 
-        ulong[] playersList = new ulong[playersCount];
-        for(int i=0; i<playersCount; i++)
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        for(int i = 0; i < playersCount; i++)
         {
-            playersList[i] = NetworkManager.Singleton.ConnectedClientsIds[i];
+            AssignBarToPlayerClientRpc(players[i].GetComponent<NetworkObject>().NetworkObjectId, i);
         }
-            
-        AssignBarToPlayerClientRpc(playersCount, playersList);
     }
 
     [ClientRpc]
@@ -45,21 +42,9 @@ public class Manager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void AssignBarToPlayerClientRpc(int pc, ulong[] list)
+    void AssignBarToPlayerClientRpc(ulong p, int num)
     {
-        for(int i = 0; i < pc; i++)
-        {
-            NetworkManager.Singleton.SpawnManager.SpawnedObjects[list[i]].GetComponent<PlayerInfo>().HealthBar = HealthBars[i];
-            transform.Find("nick").GetComponent<TextMeshPro>().text = NetworkManager.Singleton.SpawnManager.SpawnedObjects[list[i]].name;
-        }
-    }
-
-    private void Update()
-    {
-        foreach(GameObject g in HealthBars)
-        {
-            //transform.Find("nick").GetComponent<TextMeshPro>().text = 
-            //g.GetComponent<Slider>().
-        }
+        GameObject player = NetworkManager.Singleton.SpawnManager.SpawnedObjects[p].gameObject;
+        HealthBars[num].GetComponent<HealthController>().AssignPlayer(player);
     }
 }

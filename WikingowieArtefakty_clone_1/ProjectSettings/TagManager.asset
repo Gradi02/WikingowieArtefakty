@@ -9,6 +9,7 @@ TagManager:
   - slots
   - manager
   - sun
+  - ppv
   layers:
   - Default
   - TransparentFX
