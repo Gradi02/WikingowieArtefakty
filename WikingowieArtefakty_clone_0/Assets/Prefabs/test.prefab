@@ -396,15 +396,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       propertyPath: m_LocalPosition.x
@@ -448,7 +448,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       propertyPath: m_Name
@@ -496,6 +496,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7384005572743226908}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5610334495217918658}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8284996101558446875}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 185e7a5c5273a454bb7bf4622c63cc57, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8598074862864183878}
@@ -583,6 +589,51 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-5610334495217918658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109623774569656646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776cca362547cb742bdbded194720a6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableBattleAxe: 0
+--- !u!114 &8284996101558446875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109623774569656646}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa3482e4fd82a947839522f83fc9516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 20
+  MaxHealth: 20
+  Speed: 1
+  damage: 3
+  DashCooldown: 3
+  DashPower: 5
+  axeCooldown: 1
+  BowCooldown: 1
+  ChoppingSpeed: 1
+  MiningSpeed: 1
+  AxeCrit: 5
+  BowCrit: 5
+  ChoppingCrit: 0
+  MiningCrit: 0
+  ChanceOfRandomOre: 0
+  PotionHp: 20
+  PPV: {fileID: 0}
+  HpSlider: {fileID: 0}
+  HpText: {fileID: 0}
+  button: {fileID: 0}
 --- !u!114 &8598074862864183878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -644,7 +695,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5109623774569656646}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 136a5f5dd7760654085b993a23a902e3, type: 3}
   m_Name: 
@@ -652,6 +703,7 @@ MonoBehaviour:
   arrow: {fileID: 3801025252728983425, guid: 4afe140b983acb24a96c03648f1a17e9, type: 3}
   bowPowerUI: {fileID: 4080495242878233011, guid: 77d4917f5ba44b044bfbee2896eeaab4, type: 3}
   bpParent: {fileID: 0}
+  offset: {x: -0.5, y: 0.5, z: 0}
   enableBow: 0
 --- !u!114 &-3711129333227404882
 MonoBehaviour:

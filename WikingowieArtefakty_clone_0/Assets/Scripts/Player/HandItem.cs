@@ -34,11 +34,13 @@ public class HandItem : NetworkBehaviour
         //battleaxe
         if (selectedItemSlot.GetItemName() == "battleaxe")
         {
+            GetComponent<PlayerAttack>().enableBattleAxe = true;
             HandModelsPrefabs[0].SetActive(true);
             SetItemOnPlayerServerRpc(GetComponent<NetworkObject>().NetworkObjectId, 0);
         }
         else
         {
+            GetComponent<PlayerAttack>().enableBattleAxe = false;
             HandModelsPrefabs[0].SetActive(false);
         }
 

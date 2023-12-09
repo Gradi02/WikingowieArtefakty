@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UIElements;
+using TMPro;
 
 public class Manager : NetworkBehaviour
 {
@@ -10,10 +12,8 @@ public class Manager : NetworkBehaviour
     GameObject player;
     private Vector3 middle = new();
 
-
     public GameObject[] HealthBars;
     private int playersCount;
-
 
     public void SetMiddle(Vector3 md)
     {
@@ -24,44 +24,42 @@ public class Manager : NetworkBehaviour
     public void StartGameServerRpc()
     {
         playersCount = NetworkManager.Singleton.ConnectedClients.Count;
-        //StartGameClientRpc(playersCount);
-        AssignBarToPlayerClientRpc();
+        StartGameClientRpc(playersCount);
+
+        ulong[] playersList = new ulong[playersCount];
+        for(int i=0; i<playersCount; i++)
+        {
+            playersList[i] = NetworkManager.Singleton.ConnectedClientsIds[i];
+        }
+            
+        AssignBarToPlayerClientRpc(playersCount, playersList);
     }
 
     [ClientRpc]
     public void StartGameClientRpc(int pc)
     {
-        for (int i=0; i<playersCount; i++)
+        for (int i=0; i<pc; i++)
         {
             HealthBars[i].SetActive(true);
         }
     }
 
     [ClientRpc]
-    void AssignBarToPlayerClientRpc()
+    void AssignBarToPlayerClientRpc(int pc, ulong[] list)
     {
-        for(int i = 0; i < playersCount; i++)
+        for(int i = 0; i < pc; i++)
         {
-            NetworkManager.Singleton.ConnectedClientsList[i].PlayerObject.GetComponent<PlayerInfo>().HealthBar = HealthBars[i];
+            NetworkManager.Singleton.SpawnManager.SpawnedObjects[list[i]].GetComponent<PlayerInfo>().HealthBar = HealthBars[i];
+            transform.Find("nick").GetComponent<TextMeshPro>().text = NetworkManager.Singleton.SpawnManager.SpawnedObjects[list[i]].name;
         }
     }
 
-
-
-
-
-
-    private void SetPlayer()
+    private void Update()
     {
-        player = Instantiate(playerPref, middle + new Vector3(-5,0.75f,0), Quaternion.identity);
-        //player.GetComponent<PlayerMovement>().SetStartPosition(middle);
-
-        cam.GetComponent<CameraFollow>().Target = player.transform;
-    }
-
-    private void ResetCameraSmoothTime()
-    {
-        cam.GetComponent<CameraFollow>().ResetSmooth();
-        player.GetComponent<PlayerMovement>().enabled = true;
+        foreach(GameObject g in HealthBars)
+        {
+            //transform.Find("nick").GetComponent<TextMeshPro>().text = 
+            //g.GetComponent<Slider>().
+        }
     }
 }
