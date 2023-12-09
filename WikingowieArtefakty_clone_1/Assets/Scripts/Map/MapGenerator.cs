@@ -110,7 +110,7 @@ public class MapGenerator : NetworkBehaviour
     {
         yield return new WaitForSeconds(2);
         menuManager.SetInventoryUIClientRpc();
-        manager.GetComponent<Manager>().StartGameServerRpc();
+        //manager.GetComponent<Manager>().StartGameServerRpc();
 
         SetRuins();
 
@@ -181,6 +181,7 @@ public class MapGenerator : NetworkBehaviour
         foreach (var g in GameObject.FindGameObjectsWithTag("Player"))
             g.GetComponent<PlayerMovement>().SetStartPosition(middle);
 
+        manager.GetComponent<Manager>().StartGameServerRpc();
         menuManager.FadeAnimationServerRpc(false);
         yield return null;
     }
@@ -407,7 +408,7 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
 
                             //Losowa skala
-                            float randscale = Random.Range(0.5f, 0.6f);
+                            float randscale = Random.Range(0.6f, 0.7f);
                             new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
 
                             //Losowa rotacja
@@ -514,7 +515,7 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
 
                             //Losowa skala
-                            float randscale = Random.Range(0.5f, 0.6f);
+                            float randscale = Random.Range(0.6f, 0.7f);
                             new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
 
                             //Losowa rotacja

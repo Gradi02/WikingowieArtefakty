@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class BowShooting : MonoBehaviour
+public class BowShooting : NetworkBehaviour
 {
     private float ShotCooldown = 0.5f;
     public GameObject arrow;
     public GameObject bowPowerUI;
     public Transform bpParent;
+    public Vector3 offset;
 
     private float nextShot;
     private float power = 1;
@@ -23,7 +25,8 @@ public class BowShooting : MonoBehaviour
     }
     void Update()
     {
-        if (!enableBow) return;
+        if (!enableBow || !IsOwner) return;
+
         if (Input.GetKeyUp(KeyCode.Mouse0) && !next)
         {
             next = true;
@@ -39,6 +42,7 @@ public class BowShooting : MonoBehaviour
                     bp = Instantiate(bowPowerUI, transform.position, Quaternion.identity, bpParent);
                 }
 
+                GetComponent<AnimController>().animator.SetBool("bow", true);
                 power += power * 0.04f;
 
                 if(power > maxPower)
@@ -49,6 +53,10 @@ public class BowShooting : MonoBehaviour
                     nextShot = Time.time;
                     return;
                 }
+            }
+            else
+            {
+                GetComponent<AnimController>().animator.SetBool("bow", false);
             }
 
             if(Input.GetKeyUp(KeyCode.Mouse0))
@@ -61,7 +69,7 @@ public class BowShooting : MonoBehaviour
     void ShotArrow()
     {
         Destroy(bp);
-        GameObject a = Instantiate(arrow, transform.position, Quaternion.identity);
+        GameObject a = Instantiate(arrow, transform.position + offset, Quaternion.identity);
         a.GetComponent<BulletManager>().SetDamage(power);
 
         Vector3 mousePosition = Input.mousePosition;
