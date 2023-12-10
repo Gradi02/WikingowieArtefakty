@@ -10,6 +10,7 @@ TagManager:
   - manager
   - sun
   - ppv
+  - minimap
   layers:
   - Default
   - TransparentFX

@@ -172,6 +172,8 @@ public class PlayerInfo : NetworkBehaviour
         if (IsLocalPlayer)
         {
             Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+            GameObject.FindGameObjectWithTag("minimap").GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+
             username = GameObject.FindObjectOfType<NetworkInit>().username;
 
             if (username.Length > 2)
