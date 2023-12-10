@@ -10,6 +10,8 @@ public class PlayerStats : NetworkBehaviour
 {
     public float Health = 20;
     public float MaxHealth = 20;
+    private float healthLastFrame = 0;
+    
     public float Speed = 1;
 
     public int damage = 3;
@@ -66,17 +68,33 @@ public class PlayerStats : NetworkBehaviour
         if (HpSlider != null && HpText != null)
         {
             normalizedValue = 1f - ( Health / MaxHealth);
-
-            HpSlider.value = Health;
-            HpText.text = Health.ToString("F0");
-
+            
+            Health += 0.02f;
             if (Health < 0) Health = 0;
             if (Health > MaxHealth) Health = MaxHealth;
 
-            Health += 0.02f;
+            if (healthLastFrame != Health)
+            {
+                SyncHPvalueServerRpc(Health, Health.ToString("F0"), GetComponent<NetworkObject>().NetworkObjectId);
+                healthLastFrame = Health;
+            }
         }
     }
 
+    [ServerRpc]
+    public void SyncHPvalueServerRpc(float hp_in, string hpstr_in, ulong id)
+    {
+        SyncHPvalueClientRpc(hp_in, hpstr_in, id);
+    }
+
+    [ClientRpc]
+    public void SyncHPvalueClientRpc(float hp_in, string hpstr_in, ulong id)
+    {
+        PlayerStats ps = NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].GetComponent<PlayerStats>();
+
+        ps.HpSlider.value = hp_in;
+        ps.HpText.text = hpstr_in;
+    }
 
     public void SetHealth()
     {
@@ -110,6 +128,7 @@ public class PlayerStats : NetworkBehaviour
         healthBar = hb;
         HpSlider = hb.GetComponent<Slider>();
         HpText = hb.transform.Find("value").GetComponent<TextMeshProUGUI>();
+        SetHealth();
     }
 
     [ServerRpc(RequireOwnership = false)]
