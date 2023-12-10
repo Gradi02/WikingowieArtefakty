@@ -356,7 +356,7 @@ public class MapGenerator : NetworkBehaviour
                             }
                         }
                     }
-                    else if (id == 1)
+                    else if (id == 1) //blok trawy
                     {
                         int ifgrass = Random.Range(0, 3);
 
@@ -392,6 +392,8 @@ public class MapGenerator : NetworkBehaviour
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
                         gr.transform.parent = chunk.transform;
+
+                        SpawnSomething();
                     }
                     else if (id == 2) //Blok Trawy/Drzewa 
                     {
@@ -769,5 +771,10 @@ public class MapGenerator : NetworkBehaviour
     {
         waterLayer.SetActive(true);
         //startPlane.SetActive(false);
+    }
+
+    private void SpawnSomething()
+    {
+
     }
 }

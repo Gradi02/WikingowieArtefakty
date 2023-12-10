@@ -21,6 +21,8 @@ public class SpawnerManager : NetworkBehaviour
         Debug.Log("Spawned: " + monsterType + " at position " + transform.position);
 
         /// 
+        //GameObject e = Instantiate(enemiesPrefab[monsterType], transform.position, Quaternion.identity);
+        
 
         gameObject.GetComponent<NetworkObject>().Despawn();
     }

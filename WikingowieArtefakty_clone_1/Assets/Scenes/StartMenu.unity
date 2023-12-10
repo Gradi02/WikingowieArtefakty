@@ -2773,6 +2773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceca815186c59af4cb652613ad477f87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!1 &430699449
 GameObject:
   m_ObjectHideFlags: 0
@@ -3065,6 +3066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceca815186c59af4cb652613ad477f87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!1 &457013142
 GameObject:
   m_ObjectHideFlags: 0
@@ -3245,6 +3247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceca815186c59af4cb652613ad477f87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!1 &490607796
 GameObject:
   m_ObjectHideFlags: 0
@@ -13712,7 +13715,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1502539006}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39d801c5cadf8494baba7c15e5cd05cc, type: 3}
   m_Name: 
@@ -15367,6 +15370,7 @@ GameObject:
   - component: {fileID: 1751882903}
   - component: {fileID: 1751882904}
   - component: {fileID: 1751882905}
+  - component: {fileID: 1751882906}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -15546,6 +15550,19 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &1751882906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751882899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25e5f0869392f9943a5e693be1abb0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showAll: 0
 --- !u!1 &1799781134
 GameObject:
   m_ObjectHideFlags: 0

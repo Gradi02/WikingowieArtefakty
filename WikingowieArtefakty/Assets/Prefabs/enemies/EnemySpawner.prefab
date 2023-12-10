@@ -68,6 +68,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterType: 0
+  enemiesPrefab:
+  - {fileID: 3452009746167908326, guid: a0ca7a46937f85444a136ca406798cc9, type: 3}
+  - {fileID: 1084736004840188399, guid: d1412d1a0efec554f83df58ca989aac7, type: 3}
 --- !u!198 &4325536549330177017
 ParticleSystem:
   m_ObjectHideFlags: 0
