@@ -5,7 +5,6 @@ using Unity.Netcode;
 public class MapRenderer : NetworkBehaviour
 {
     private MapGenerator gen;
-    private Transform player;
     public bool showAll = false;
     private Camera cam;
 
@@ -13,9 +12,7 @@ public class MapRenderer : NetworkBehaviour
     {
         gen = GameObject.Find("GeneratorManager").GetComponent<MapGenerator>();
 
-        if (!IsOwner) return;
-        player = transform;
-        cam = Camera.main;
+        cam = GetComponent<Camera>();
     }
     void Update()
     {
@@ -32,13 +29,14 @@ public class MapRenderer : NetworkBehaviour
             return;
         }
 
-        if (player != null)
+        if (cam != null)
         {
             foreach (Transform g in gen.transform)
             {
                 if (g.gameObject != null)
                 {
-                    if (Vector3.Distance(g.transform.position, player.position + new Vector3(5, 0, 0)) >= 20)
+
+                    if (Vector3.Distance(g.transform.position, cam.transform.position - GetComponent<CameraFollow>().Offset) >= 25)
                     {
                         g.gameObject.SetActive(false);
                     }

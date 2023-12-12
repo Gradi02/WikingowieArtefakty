@@ -11,17 +11,27 @@ public class SpawnerManager : NetworkBehaviour
 
     private void Awake()
     {
-        Invoke("SpawnEnemyServerRpc", 2);
+        if(!IsClient)
+            Invoke("SpawnEnemyServerRpc", 4);
     }
 
     [ServerRpc]
     void SpawnEnemyServerRpc()
     {
-        //spawn enemy animation
-        Debug.Log("Spawned: " + monsterType + " at position " + transform.position);
+        //Debug.Log("Spawned: " + monsterType + " at position " + transform.position);
 
-        /// 
+        GameObject e = Instantiate(enemiesPrefab[monsterType], transform.position, Quaternion.identity);
+        e.GetComponent<NetworkObject>().Spawn();
 
+        //SpawnEnemyClientRpc(e.GetComponent<NetworkObject>().NetworkObjectId);
         gameObject.GetComponent<NetworkObject>().Despawn();
     }
+
+    [ClientRpc]
+    void SpawnEnemyClientRpc(ulong id)
+    {
+        GameObject e = NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].gameObject;
+        
+    }
+
 }

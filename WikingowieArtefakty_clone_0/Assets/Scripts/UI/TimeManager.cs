@@ -26,6 +26,8 @@ public class TimeManager : NetworkBehaviour
     //int min = 0;
     //int day = 1;
 
+
+
     [HideInInspector] public NetworkVariable<int> n_hour = new NetworkVariable<int>(8, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [HideInInspector] public NetworkVariable<int> n_min = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [HideInInspector] public NetworkVariable<int> n_day = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -36,6 +38,12 @@ public class TimeManager : NetworkBehaviour
     void Start()
     {
         //fogDensity = RenderSettings.fogDensity;
+        RenderSettings.fog = true;
+        RenderSettings.fogMode = FogMode.ExponentialSquared;
+        RenderSettings.fogColor = Color.white;
+        RenderSettings.fogDensity = 0.0f;
+
+
         PreviousDayTMP.gameObject.SetActive(false);
         NextDayTMP.gameObject.SetActive(false);
         DayChangeTMP.gameObject.SetActive(false);
@@ -77,18 +85,19 @@ public class TimeManager : NetworkBehaviour
         //Debug.Log("Day: " + n_day.Value + " | Hours: " + n_hour.Value + " | Min: " + n_min.Value);
         SetTimeData();
         //pauza
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Debug.Log("KLIKAM PAUZE");
             if (paused == false)
             {
-                //Time.timeScale = 0f;
+                Time.timeScale = 0f;
                 paused = true;
             }
 
             else if (paused == true)
             {
-                //Time.timeScale = 1f;
+                Time.timeScale = 1f;
                 paused = false;
             }
         }
@@ -146,6 +155,8 @@ public class TimeManager : NetworkBehaviour
             //Debug.Log("Fog Density: " + RenderSettings.fogDensity);
             LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay*48)-0.01f));
             //Sun.Rotate(Vector3.right, 360f / 480f);
+
+            
         }
     }
 
@@ -172,6 +183,17 @@ public class TimeManager : NetworkBehaviour
             }
             n_min.Value = 0;
             n_hour.Value++;
+            
+            double timeNormalized = 1.0*n_hour.Value / 24;
+            float sinAngle = (Mathf.Sin((float)timeNormalized * Mathf.PI)) ;
+            float cosAngle = (float)0.05*Mathf.Abs(Mathf.Cos((float)timeNormalized * Mathf.PI)) ;
+            
+            RenderSettings.ambientIntensity = sinAngle;
+            RenderSettings.fogDensity = cosAngle ;
+
+            //Debug.Log("hour:" + n_hour.Value + " ambient:" + sinAngle + " fog:" + cosAngle);
+            //Debug.Log(n_hour.Value);
+
             //SetTimeDataServerRpc();
         }
     }

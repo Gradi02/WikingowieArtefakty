@@ -91,13 +91,13 @@ public class TimeManager : NetworkBehaviour
             Debug.Log("KLIKAM PAUZE");
             if (paused == false)
             {
-                //Time.timeScale = 0f;
+                Time.timeScale = 0f;
                 paused = true;
             }
 
             else if (paused == true)
             {
-                //Time.timeScale = 1f;
+                Time.timeScale = 1f;
                 paused = false;
             }
         }

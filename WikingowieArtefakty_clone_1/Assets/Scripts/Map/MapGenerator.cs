@@ -21,13 +21,14 @@ public class MapGenerator : NetworkBehaviour
     public GameObject[] trees_variants1;
     public GameObject[] rocks_variants1;
     public GameObject[] ground_prefabs1;
-    public GameObject grassPrefab;
+    public GameObject[] grassPrefab;
     public GameObject[] plantsPrefabs;
     public GameObject[] waterPrefabs;
     //public Material defaultMaterial1;
     public GameObject[] oresPrefabs1;
     public GameObject shipPrefab;
     public GameObject castlePrefab;
+    public GameObject grassObjectPrefab;
     //public Material grassMaterial;
 
     [Header("Other Prefabs")]
@@ -322,9 +323,10 @@ public class MapGenerator : NetworkBehaviour
                             }
                             else
                             {
-                                int rand2 = Random.Range(0, 2);
-                                GameObject gr = Instantiate(ground_prefabs1[rand2 == 1 ? id : 7], transform.position, Quaternion.identity);
+                                //int rand2 = Random.Range(0, 2);
+                                GameObject gr = Instantiate(grassPrefab[Random.Range(6, grassPrefab.Length)], transform.position, Quaternion.identity);
                                 gr.GetComponent<NetworkObject>().Spawn();
+                                gr.transform.rotation = Quaternion.Euler(0, Random.Range(0,4) * 90, 0);
                                 gr.transform.localPosition = new Vector3(x, -0.25f, y);
                                 gr.name = "Ground" + x + y;
                                 ground.Add(gr);
@@ -356,7 +358,7 @@ public class MapGenerator : NetworkBehaviour
                             }
                         }
                     }
-                    else if (id == 1)
+                    else if (id == 1) //blok trawy
                     {
                         int ifgrass = Random.Range(0, 3);
 
@@ -386,12 +388,15 @@ public class MapGenerator : NetworkBehaviour
 
                         //Pod³o¿e
                         int rand2 = Random.Range(0, 2);
-                        GameObject gr = Instantiate(ground_prefabs1[rand2 == 1 ? id : 7], transform.position, Quaternion.identity);
+                        GameObject gr = Instantiate(grassPrefab[Random.Range(6, grassPrefab.Length)], transform.position, Quaternion.identity);
                         gr.GetComponent<NetworkObject>().Spawn();
+                        gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
                         gr.transform.localPosition = new Vector3(x, -0.25f, y);
                         gr.name = "Ground" + x + y;
                         ground.Add(gr);
                         gr.transform.parent = chunk.transform;
+
+                        SpawnSomething();
                     }
                     else if (id == 2) //Blok Trawy/Drzewa 
                     {
@@ -422,8 +427,9 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.transform.parent = chunk.transform;
 
 
-                            GameObject gr = Instantiate(ground_prefabs1[6], transform.position, Quaternion.identity);
+                            GameObject gr = Instantiate(grassPrefab[Random.Range(0, 6)], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
+                            gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
@@ -459,8 +465,9 @@ public class MapGenerator : NetworkBehaviour
 
                             //Pod³o¿e
                             int rand2 = Random.Range(0, 2);
-                            GameObject gr = Instantiate(ground_prefabs1[rand2 == 1 ? id-1 : 7], transform.position, Quaternion.identity);
+                            GameObject gr = Instantiate(grassPrefab[Random.Range(6, grassPrefab.Length)], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
+                            gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
@@ -529,8 +536,9 @@ public class MapGenerator : NetworkBehaviour
                             new_obj.transform.parent = chunk.transform;
 
 
-                            GameObject gr = Instantiate(ground_prefabs1[6], transform.position, Quaternion.identity);
+                            GameObject gr = Instantiate(grassPrefab[Random.Range(0, 6)], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
+                            gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
                             gr.name = "Ground" + x + y;
                             ground.Add(gr);
@@ -612,7 +620,7 @@ public class MapGenerator : NetworkBehaviour
     [ClientRpc]
     void SetGrassClientRpc(Vector3 pos, float width, ulong chunkId)
     {
-        GameObject tr = Instantiate(grassPrefab, transform.position, Quaternion.identity);
+        GameObject tr = Instantiate(grassObjectPrefab, transform.position, Quaternion.identity);
         tr.transform.localPosition = pos;
         tr.transform.localScale = new Vector3(width, Random.Range(0.1f, 0.3f), width);
         tr.transform.parent = NetworkManager.Singleton.SpawnManager.SpawnedObjects[chunkId].transform;
@@ -769,5 +777,10 @@ public class MapGenerator : NetworkBehaviour
     {
         waterLayer.SetActive(true);
         //startPlane.SetActive(false);
+    }
+
+    private void SpawnSomething()
+    {
+
     }
 }
