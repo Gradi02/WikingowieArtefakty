@@ -101,9 +101,9 @@ public class SpawnManager : NetworkBehaviour
     {
         if (enemiesList.Count <= maxEnemies)
         {
-            GameObject e = Instantiate(enemy1, transform.position, Quaternion.identity);
+            GameObject e = Instantiate(enemy1, pos, Quaternion.identity);
             e.GetComponent<NetworkObject>().Spawn();
-            e.transform.position = pos; 
+            //e.transform.position = pos; 
             enemiesList.Add(e);
             SpawnEnemyClientRpc(e.GetComponent<NetworkObject>().NetworkObjectId, SelectType());
         }
@@ -120,6 +120,6 @@ public class SpawnManager : NetworkBehaviour
 
     int SelectType()
     {
-        return Random.Range(0, 3);
+        return Random.Range(0, 2);
     }
 }
