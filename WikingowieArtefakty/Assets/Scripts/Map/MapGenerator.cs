@@ -57,6 +57,7 @@ public class MapGenerator : NetworkBehaviour
     [SerializeField] private MenuManager menuManager;
     [SerializeField] private TextMeshProUGUI islandName;
     [SerializeField] private TextMeshProUGUI islandSub;
+    [SerializeField] private GameObject lobby;
 
     private Vector3[] enemiesBasesPos;
     private Vector3[] treeArea = new Vector3[5];
@@ -64,6 +65,7 @@ public class MapGenerator : NetworkBehaviour
 
     private GameObject start;
     public static Vector3 middle = Vector3.zero;
+    private Vector3 startPosition = Vector3.zero;
     private List<GameObject> blocks = new List<GameObject>();
     private List<GameObject> ground = new List<GameObject>();
     private List<GameObject> airBlocks = new List<GameObject>();
@@ -93,8 +95,8 @@ public class MapGenerator : NetworkBehaviour
         waterLayer.transform.localScale = new Vector3(size / 5, size / 5, size / 5);
         waterLayer.transform.position = middle + new Vector3(0, 0, 0);
 
-        GameObject campfire1 = SpawnBase();
-        cam.GetComponent<CameraFollow>().Target = campfire1.transform;
+        //GameObject campfire1 = SpawnBase();
+        //cam.GetComponent<CameraFollow>().Target = lobby.transform;
     }
 
     private void Update()
@@ -247,6 +249,7 @@ public class MapGenerator : NetworkBehaviour
         started.Value = true;
         EnableWaterClientRpc();
         SetIslandNameServerRpc();
+        SetCameraServerRpc();
 
         manager.GetComponent<Manager>().StartGameClientRpc(NetworkManager.Singleton.ConnectedClients.Count);
 
@@ -582,32 +585,35 @@ public class MapGenerator : NetworkBehaviour
                         }
                         else
                         {
-                            //Losowanie drzewa
-                            int randvar = Random.Range(0, trees_variants1.Length);
-                            new_obj = Instantiate(trees_variants1[randvar], transform.position, Quaternion.identity);
-                            new_obj.GetComponent<NetworkObject>().Spawn();
+                            int ifgrass = Random.Range(0, 3);
 
-                            //Offset drzewa na kratce
-                            new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
-                            new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
-                            new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
+                            if (ifgrass == 0)
+                            {
+                                int num = Random.Range(2, 4);
+                                int type = (int)Random.Range(0, plantsPrefabs1.Length);
+                                for (int i = 0; i < num; i++)
+                                {
+                                    Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
+                                    float width = Random.Range(0.3f, 0.6f);
 
-                            //Losowa skala
-                            float randscale = Random.Range(0.6f, 0.7f);
-                            new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
+                                    SetFlowerClientRpc(type, rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
+                                }
+                            }
+                            else if (ifgrass == 1)
+                            {
+                                int num = Random.Range(7, 10);
+                                for (int i = 0; i < num; i++)
+                                {
+                                    Vector3 rand = new Vector3(x + Random.Range(-0.4f, 0.4f), 0.25f, y + Random.Range(-0.4f, 0.4f));
+                                    float width = Random.Range(0.02f, 0.04f);
 
-                            //Losowa rotacja
-                            int randrot = Random.Range(1, 360);
-                            new_obj.transform.rotation = Quaternion.Euler(0, randrot, 0);
+                                    SetGrassClientRpc(rand, width, chunk.GetComponent<NetworkObject>().NetworkObjectId);
+                                }
+                            }
 
-                            //Przypisanie do rodzica
-                            new_obj.name = "Tree" + x + y;
-                            //new_obj.transform.parent = Trees.transform;
-                            blocks.Add(new_obj);
-                            new_obj.transform.parent = chunk.transform;
-
-
-                            GameObject gr = Instantiate(grassPrefab1[Random.Range(0, 6)], transform.position, Quaternion.identity);
+                            //Pod³o¿e
+                            int rand2 = Random.Range(0, 2);
+                            GameObject gr = Instantiate(grassPrefab1[Random.Range(6, grassPrefab1.Length)], transform.position, Quaternion.identity);
                             gr.GetComponent<NetworkObject>().Spawn();
                             gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
                             gr.transform.localPosition = new Vector3(x, -0.25f, y);
@@ -794,7 +800,9 @@ public class MapGenerator : NetworkBehaviour
         ship.GetComponent<NetworkObject>().Spawn();
         ship.name = "Ship";
 
-        Vector3 shipPos = middle + GetPointOnCircle(size/2, Random.Range(0, 360));
+        int rand = Random.Range(0, 360);
+        Vector3 shipPos = middle + GetPointOnCircle(size / 2, rand);
+        startPosition = middle + GetPointOnCircle((size / 2) - 5, rand);
 
         SetShipClientRpc(ship.GetComponent<NetworkObject>().NetworkObjectId, shipPos);
     }
@@ -820,7 +828,6 @@ public class MapGenerator : NetworkBehaviour
 
     GameObject SpawnBase()
     {
-        //if (!IsServer) return;
         GameObject b = Instantiate(campfire, middle + new Vector3(0,0.25f,0), Quaternion.identity);
         b.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
         //b.GetComponent<NetworkObject>().Spawn();
@@ -850,6 +857,11 @@ public class MapGenerator : NetworkBehaviour
         //startPlane.SetActive(false);
     }
 
+    public Transform GetLobbyPos()
+    {
+        return lobby.transform;
+    }
+
     private void SpawnSomething()
     {
 
@@ -871,7 +883,20 @@ public class MapGenerator : NetworkBehaviour
     [ClientRpc]
     private void SetIslandNameClientRpc(string title, string subtitle)
     {
+        //wylaczenie bordera
+        lobby.SetActive(false);
+
         islandName.text = title;
         islandSub.text = subtitle;
+    }
+
+    [ServerRpc]
+    private void SetCameraServerRpc()
+    {
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            g.GetComponent<PlayerInfo>().SetCameraTargerClientRpc();
+            g.GetComponent<PlayerMovement>().SetStartPositionClientRpc(startPosition);
+        }
     }
 }

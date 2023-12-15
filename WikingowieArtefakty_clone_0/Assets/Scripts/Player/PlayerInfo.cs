@@ -171,7 +171,7 @@ public class PlayerInfo : NetworkBehaviour
     {
         if (IsLocalPlayer)
         {
-            Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+            //Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
             GameObject.FindGameObjectWithTag("minimap").GetComponent<CameraFollow>().SetTarget(gameObject.transform);
 
             username = GameObject.FindObjectOfType<NetworkInit>().username;
@@ -190,6 +190,14 @@ public class PlayerInfo : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    public void SetCameraTargerClientRpc()
+    {
+        if (IsLocalPlayer)
+        {
+            Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+        }
+    }
     public string GetNickname()
     {
         return username;
