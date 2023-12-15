@@ -107,16 +107,19 @@ public class PlayerMovement : NetworkBehaviour
     {
         return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
-    public void SetStartPosition(Vector3 pos)
+
+    [ClientRpc]
+    public void SetStartPositionClientRpc(Vector3 pos)
     {
         Vector3 startPos = pos;
         startPos.y = 0.75f;
         player.transform.position = startPos;
+        Camera.main.transform.position = startPos;
     }
 
     public override void OnNetworkSpawn()
     {
-        transform.position = MapGenerator.middle;
+        transform.position = new Vector3(3, 1, 0);
         base.OnNetworkSpawn();
     }
 }
