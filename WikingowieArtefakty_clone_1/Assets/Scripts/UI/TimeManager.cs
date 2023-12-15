@@ -188,8 +188,8 @@ public class TimeManager : NetworkBehaviour
             float sinAngle = (Mathf.Sin((float)timeNormalized * Mathf.PI)) ;
             float cosAngle = (float)0.05*Mathf.Abs(Mathf.Cos((float)timeNormalized * Mathf.PI)) ;
             
-            RenderSettings.ambientIntensity = sinAngle;
-            RenderSettings.fogDensity = cosAngle ;
+            //RenderSettings.ambientIntensity = sinAngle;
+            //RenderSettings.fogDensity = cosAngle ;
 
             //Debug.Log("hour:" + n_hour.Value + " ambient:" + sinAngle + " fog:" + cosAngle);
             //Debug.Log(n_hour.Value);

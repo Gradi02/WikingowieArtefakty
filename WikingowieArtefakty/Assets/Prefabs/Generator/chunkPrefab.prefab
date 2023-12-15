@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3013775405381964509}
   - component: {fileID: 6521349175345939468}
+  - component: {fileID: 7697817831815025537}
   m_Layer: 0
   m_Name: chunkPrefab
-  m_TagString: Untagged
+  m_TagString: chunk
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +30,8 @@ Transform:
   m_LocalPosition: {x: 40.731647, y: 16.24392, z: 63.41699}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8275105114464246318}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6521349175345939468
@@ -52,3 +54,83 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &7697817831815025537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5124363132739042628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620a19995f64b1a4d92f302783c18d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rainObj: {fileID: 935231051640078769}
+--- !u!1001 &8707476114474632166
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3013775405381964509}
+    m_Modifications:
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8371541672078180951, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+      propertyPath: m_Name
+      value: rainSystem
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+--- !u!1 &935231051640078769 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8371541672078180951, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+  m_PrefabInstance: {fileID: 8707476114474632166}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8275105114464246318 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 720645374160493000, guid: 91f7b75cdb8d58d4b8d898111a49b161, type: 3}
+  m_PrefabInstance: {fileID: 8707476114474632166}
+  m_PrefabAsset: {fileID: 0}

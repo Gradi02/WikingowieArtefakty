@@ -9,6 +9,7 @@ using Unity.Netcode;
 using Unity.Networking.Transport.Relay;
 using Unity.Netcode.Transports.UTP;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class NetworkInit : NetworkBehaviour
 {
@@ -23,9 +24,22 @@ public class NetworkInit : NetworkBehaviour
     private string joincode;
     public static int MaxPlayer = 2;
     [HideInInspector] public string username;
+
+    public GameObject networkManagerPrefab;
+    private static GameObject networkManagerInstance = null;
+
+    private void Awake()
+    {
+        if(networkManagerInstance == null)
+        {
+            networkManagerInstance = Instantiate(networkManagerPrefab, Vector3.zero, Quaternion.identity);
+        }
+    }
     private async void Start()
     {
+
         await UnityServices.InitializeAsync();
+        if (AuthenticationService.Instance.IsSignedIn) return;
 
         AuthenticationService.Instance.SignedIn += () =>
         {
@@ -87,8 +101,6 @@ public class NetworkInit : NetworkBehaviour
         hostButton.SetActive(false);
         inputName.SetActive(false);
         mapButton.SetActive(true);
-
-        Debug.Log(joincode);
     }
 
     public void JoinGame()
