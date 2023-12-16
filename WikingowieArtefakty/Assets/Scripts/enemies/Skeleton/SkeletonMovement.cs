@@ -47,12 +47,14 @@ public class SkeletonMovement : NetworkBehaviour
         if (target != null)
         {
             Vector3 direction = target.transform.position - transform.position;
-            rb.MovePosition(transform.position + speed * Time.fixedDeltaTime * direction);
+            transform.position += speed * Time.fixedDeltaTime * direction;
+            //rb.MovePosition(transform.position + speed * Time.fixedDeltaTime * direction);
             //Debug.Log(direction);
 
-            if(Vector3.Distance(target.transform.position, transform.position) > seeDistance)
+            if (Vector3.Distance(target.transform.position, transform.position) > seeDistance)
             {
-                StartCoroutine(TargetAbandonTime());
+                target = null;
+                searchForNewTarget = true;
             }
         }
     }
@@ -71,10 +73,13 @@ public class SkeletonMovement : NetworkBehaviour
         if(target != null)
         {
             //rotacja
-            float angle = Mathf.Atan2(target.transform.position.x, target.transform.position.z);
-            float angleDegrees = Mathf.Rad2Deg * angle;
-            Quaternion targetRotation = Quaternion.Euler(0, angleDegrees, 0);
+            float angle = -AngleBetweenTwoPoints(target.transform.position, transform.position);
+            Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5 * speed * Time.deltaTime);
         }
+    }
+    float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
+    {
+        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
 }
