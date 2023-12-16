@@ -629,7 +629,7 @@ public class MapGenerator : NetworkBehaviour
                         if (rand == 0)
                         {
                             //Spawn kamienia rudy
-                            new_obj = Instantiate(oresPrefabs1[0], transform.position, Quaternion.identity);
+                            new_obj = Instantiate(oresPrefabs1[Random.Range(0, oresPrefabs1.Length)], transform.position, Quaternion.identity);
                             new_obj.GetComponent<NetworkObject>().Spawn();
                         }
                         else
