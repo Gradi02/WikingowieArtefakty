@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.15
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -10296,6 +10296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 53929050}
+  timeManager: {fileID: 0}
 --- !u!1 &1519469644
 GameObject:
   m_ObjectHideFlags: 0
@@ -14491,6 +14492,8 @@ MonoBehaviour:
   AccDayTMP: {fileID: 1957958107}
   Sun: {fileID: 696168447}
   Player: {fileID: 96891937399687568, guid: f7e8370cd0333dd42aaa6b15637ca261, type: 3}
+  isFog: 0
+  lockFog: 0
   n_hour:
     m_InternalValue: 8
   n_min:
