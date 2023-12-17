@@ -474,7 +474,7 @@ MonoBehaviour:
   enemiesBasesCount: 3
   treeOffset: 0.1
   rockOffset: 0
-  oresChance: 5
+  oresChance: 7
   trees_variants1:
   - {fileID: 702579786378899497, guid: 05e04092ef566634982c15bec9dd0f48, type: 3}
   - {fileID: 6996199665656639706, guid: 6e74ad658ea75dc41962de32c9e5394a, type: 3}
@@ -524,23 +524,10 @@ MonoBehaviour:
   - {fileID: 3203876696842814802, guid: c375794bb41278d42b4d4599f2b6e5db, type: 3}
   - {fileID: 2325429269887434811, guid: 1395954d750a2be4ca3779d9f1ca8032, type: 3}
   - {fileID: 161781281852981159, guid: b7649315c91843c4fa78bf01f574da8b, type: 3}
-  oresPrefabs1:
-  - {fileID: 456718213349803837, guid: 16e2fd476526bb249bc07995f1102e87, type: 3}
-  - {fileID: 1931672516101185596, guid: 62bc23c43d966084184b9231d731c1e6, type: 3}
-  - {fileID: 261426854690537655, guid: de529cdf785346a4094db5d7c95a55b8, type: 3}
+  oresPrefabs1: {fileID: 456718213349803837, guid: 16e2fd476526bb249bc07995f1102e87, type: 3}
   shipPrefab1: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
   castlePrefab1: {fileID: 1982504718959506274, guid: 9bb8bbaa4b3b179458a51bc98df5fb22, type: 3}
   grassObjectPrefab1: {fileID: 4936650255284283978, guid: 2046e217c2721044982fdc0e95747f72, type: 3}
-  trees_variants2: []
-  rocks_variants2: []
-  ground_prefabs2: []
-  grassPrefab2: []
-  plantsPrefabs2: []
-  waterPrefabs2: []
-  oresPrefabs2: []
-  shipPrefab2: {fileID: 0}
-  castlePrefab2: {fileID: 0}
-  grassObjectPrefab2: {fileID: 0}
   waterLayerPrefab: {fileID: 6942782308479380561, guid: e81893c140be0d94c8f63d2cb05d2efc, type: 3}
   waterLayer: {fileID: 0}
   campfire: {fileID: 5117925673290852196, guid: 53fa9b6008eecef49b21de14a5a4cc47, type: 3}
@@ -10273,7 +10260,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1502539006}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39d801c5cadf8494baba7c15e5cd05cc, type: 3}
   m_Name: 

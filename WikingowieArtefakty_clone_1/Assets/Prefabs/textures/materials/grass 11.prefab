@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 230343063663825598}
   - component: {fileID: 1377306318485912098}
   - component: {fileID: -4325221106320687915}
+  - component: {fileID: -1099803102435057633}
   m_Layer: 0
   m_Name: grass 11
   m_TagString: Untagged
@@ -126,3 +127,20 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-1099803102435057633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4936650255284283978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a503c8a1ce98f064ab1f6a8f26a2f801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ifGround: 1
+  MeshFilter: {fileID: 0}
+  normalMesh: {fileID: 0}
+  iceMesh: {fileID: 0}
+  iceMaterial: {fileID: 2100000, guid: fdad965ec5c49c84fb7d6400f8c1c285, type: 2}

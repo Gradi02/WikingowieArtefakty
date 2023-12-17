@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1798719852971885404}
   - component: {fileID: 2527576578639669494}
   - component: {fileID: 6308205740617165583}
+  - component: {fileID: -6610336244467464460}
   m_Layer: 0
   m_Name: mountain
   m_TagString: Untagged
@@ -5001,3 +5002,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6, y: 1.6, z: 1.6}
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &-6610336244467464460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3795472807898652619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a503c8a1ce98f064ab1f6a8f26a2f801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ifGround: 0
+  MeshFilter: {fileID: 8925706451014498381}
+  normalMesh: {fileID: -2432090755550338912, guid: 6e74d6c28321a6a438c7ec49d5d199a3, type: 3}
+  iceMesh: {fileID: -2432090755550338912, guid: 5f794f64bca140748b690ff52ec4cf31, type: 3}
+  iceMaterial: {fileID: 0}
