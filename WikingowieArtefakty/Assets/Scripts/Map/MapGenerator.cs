@@ -25,22 +25,22 @@ public class MapGenerator : NetworkBehaviour
     public GameObject[] grassPrefab1;
     public GameObject[] plantsPrefabs1;
     public GameObject[] waterPrefabs1;
-    public GameObject[] oresPrefabs1;
+    public GameObject oresPrefabs1;
     public GameObject shipPrefab1;
     public GameObject castlePrefab1;
     public GameObject grassObjectPrefab1;
 
-    [Header("Niflheim Prefabs")]
+/*    [Header("Niflheim Prefabs")]
     public GameObject[] trees_variants2;
     public GameObject[] rocks_variants2;
     public GameObject[] ground_prefabs2;
     public GameObject[] grassPrefab2;
     public GameObject[] plantsPrefabs2;
     public GameObject[] waterPrefabs2;
-    public GameObject[] oresPrefabs2;
+    public GameObject oresPrefabs2;
     public GameObject shipPrefab2;
     public GameObject castlePrefab2;
-    public GameObject grassObjectPrefab2;
+    public GameObject grassObjectPrefab2;*/
 
     [Header("Other Prefabs")]
     [SerializeField] private GameObject waterLayerPrefab;
@@ -583,6 +583,41 @@ public class MapGenerator : NetworkBehaviour
                             ground.Add(gr);
                             gr.transform.parent = chunk.transform;
                         }
+                        else if(ifempty != 1)
+                        {
+                            //Losowanie drzewa
+                            int randvar = Random.Range(0, trees_variants1.Length);
+                            new_obj = Instantiate(trees_variants1[randvar], transform.position, Quaternion.identity);
+                            new_obj.GetComponent<NetworkObject>().Spawn();
+
+                            //Offset drzewa na kratce
+                            new_obj.transform.localPosition = new Vector3(x, 0.75f, y);
+                            new_obj.transform.localPosition += new Vector3(Random.Range(-treeOffset, treeOffset), -0.5f, Random.Range(-treeOffset, treeOffset));
+                            new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
+
+                            //Losowa skala
+                            float randscale = Random.Range(0.6f, 0.7f);
+                            new_obj.transform.localScale = new Vector3(randscale, randscale, randscale);
+
+                            //Losowa rotacja
+                            int randrot = Random.Range(1, 360);
+                            new_obj.transform.rotation = Quaternion.Euler(0, randrot, 0);
+
+                            //Przypisanie do rodzica
+                            new_obj.name = "Tree" + x + y;
+                            //new_obj.transform.parent = Trees.transform;
+                            blocks.Add(new_obj);
+                            new_obj.transform.parent = chunk.transform;
+
+
+                            GameObject gr = Instantiate(grassPrefab1[Random.Range(0, 6)], transform.position, Quaternion.identity);
+                            gr.GetComponent<NetworkObject>().Spawn();
+                            gr.transform.rotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
+                            gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                            gr.name = "Ground" + x + y;
+                            ground.Add(gr);
+                            gr.transform.parent = chunk.transform;
+                        }
                         else
                         {
                             int ifgrass = Random.Range(0, 3);
@@ -629,7 +664,7 @@ public class MapGenerator : NetworkBehaviour
                         if (rand == 0)
                         {
                             //Spawn kamienia rudy
-                            new_obj = Instantiate(oresPrefabs1[Random.Range(0, oresPrefabs1.Length)], transform.position, Quaternion.identity);
+                            new_obj = Instantiate(oresPrefabs1, transform.position, Quaternion.identity);
                             new_obj.GetComponent<NetworkObject>().Spawn();
                         }
                         else

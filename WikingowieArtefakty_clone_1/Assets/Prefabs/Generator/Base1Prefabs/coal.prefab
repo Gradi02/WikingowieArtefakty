@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8281794891187466048}
   - component: {fileID: 2457430004802233883}
   - component: {fileID: 4949971503173519010}
+  - component: {fileID: 7829072134299542015}
   m_Layer: 0
   m_Name: coal
   m_TagString: Untagged
@@ -102,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxBreakStatus: 5
   breakingTool: 1
-  loot: {fileID: 1855252431164562674, guid: 2b4e4a2eeb6b38948926ecef5fd1fe58, type: 3}
+  loot: {fileID: 1855252431164562674, guid: 75aeb841fb9003744ba1ec8952065f2f, type: 3}
   destroyParticles: {fileID: 3066103022588316011, guid: 7ada4bcc0e46e5142a8c8a688e5ddb87, type: 3}
   treeParticles: {fileID: 0}
   stoneParticles: {fileID: 2457430004802233883}
@@ -5001,3 +5002,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6, y: 1.6, z: 1.6}
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &7829072134299542015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456718213349803837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a503c8a1ce98f064ab1f6a8f26a2f801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ifGround: 0
+  MeshFilter: {fileID: 7688177598008104398}
+  normalMesh: {fileID: -2432090755550338912, guid: 84b9a1ebf8299b24db16d9b1d76b3813, type: 3}
+  iceMesh: {fileID: -2432090755550338912, guid: 053998678ac0e53459eb02595d55467a, type: 3}
+  iceMaterial: {fileID: 0}

@@ -12,6 +12,7 @@ TagManager:
   - ppv
   - minimap
   - chunk
+  - grass
   layers:
   - Default
   - TransparentFX
