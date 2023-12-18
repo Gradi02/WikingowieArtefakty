@@ -23,12 +23,12 @@ public class TimeManager : NetworkBehaviour
     public GameObject Player;
 
     public bool isFog = false;
+    public bool lockFog = false;
 
     private float delay = 1f;
     //int hour = 8;
     //int min = 0;
     //int day = 1;
-
 
 
     [HideInInspector] public NetworkVariable<int> n_hour = new NetworkVariable<int>(8, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -55,7 +55,6 @@ public class TimeManager : NetworkBehaviour
         DescTMP.gameObject.transform.localPosition = new Vector3(0, +150, 0);
         ClockTMP.gameObject.transform.localPosition = new Vector3(0, +200, 0);
         AccDayTMP.gameObject.transform.localPosition = new Vector3(0, +250, 0);
-        
     }
 
     public void StartDayOne()
@@ -105,9 +104,6 @@ public class TimeManager : NetworkBehaviour
                 paused = false;
             }
         }
-
-
-
     }
 
 
@@ -179,16 +175,20 @@ public class TimeManager : NetworkBehaviour
                 yield return new WaitForSeconds(delay);
                 temp++;
                 n_min.Value += 30;
-                if(n_min.Value == 60) n_min.Value = 0;
+                if (n_min.Value == 60) n_min.Value = 0;
                 //SetTimeDataServerRpc();
             }
             n_min.Value = 0;
             n_hour.Value++;
-            if (n_hour.Value == 17)  StartCoroutine(FogON());
-            if (n_hour.Value == 5) StartCoroutine(FogOFF());
 
-
-
+            if (n_hour.Value == 17)
+            {
+                if (!isFog && !lockFog) StartCoroutine(FogON());
+            }
+            if (n_hour.Value == 5)
+            {
+                if (isFog && !lockFog) StartCoroutine(FogOFF());
+            }
 
 
             //double timeNormalized = 1.0*n_hour.Value / 24;
@@ -205,25 +205,30 @@ public class TimeManager : NetworkBehaviour
         }
     }
 
-    private IEnumerator FogON() {
+    public IEnumerator FogON() {
         float xFogDen = 0f;
-        while (xFogDen<0.1f) { 
-            yield return new WaitForSeconds(0.01f);
+        isFog = true;
+        while (xFogDen<0.03f) { 
+            yield return new WaitForSeconds(0.05f);
             xFogDen += 0.0001f;
             RenderSettings.fogDensity = xFogDen;
-            Debug.Log("    " + xFogDen);
+           
+            RenderSettings.ambientIntensity -= 0.0001f;
+            //Debug.Log("    " + xFogDen);
         }
     }
 
-    private IEnumerator FogOFF()
+    public IEnumerator FogOFF()
     {
-        float xFogDen = 0.1f;
+        float xFogDen = 0.03f;
+        isFog = false;
         while (xFogDen >= 0f)
         {
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.05f);
             xFogDen -= 0.0001f;
             RenderSettings.fogDensity = xFogDen;
-            Debug.Log("    " + xFogDen);
+            RenderSettings.ambientIntensity += 0.0001f;
+            //Debug.Log("    " + xFogDen);
         }
     }
 

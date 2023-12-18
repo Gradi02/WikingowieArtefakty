@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -21,11 +22,13 @@ public class TimeManager : NetworkBehaviour
     public Transform Sun;
     public GameObject Player;
 
+    public bool isFog = false;
+    public bool lockFog = false;
+
     private float delay = 1f;
     //int hour = 8;
     //int min = 0;
     //int day = 1;
-
 
 
     [HideInInspector] public NetworkVariable<int> n_hour = new NetworkVariable<int>(8, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -52,7 +55,6 @@ public class TimeManager : NetworkBehaviour
         DescTMP.gameObject.transform.localPosition = new Vector3(0, +150, 0);
         ClockTMP.gameObject.transform.localPosition = new Vector3(0, +200, 0);
         AccDayTMP.gameObject.transform.localPosition = new Vector3(0, +250, 0);
-        
     }
 
     public void StartDayOne()
@@ -84,8 +86,9 @@ public class TimeManager : NetworkBehaviour
     {
         //Debug.Log("Day: " + n_day.Value + " | Hours: " + n_hour.Value + " | Min: " + n_min.Value);
         SetTimeData();
-        //pauza
 
+
+        //PAUZA
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Debug.Log("KLIKAM PAUZE");
@@ -113,7 +116,6 @@ public class TimeManager : NetworkBehaviour
 
     IEnumerator StartTransInfo()
     {
-        //Debug.Log("anim");
         yield return new WaitForSeconds(0.2f);
         LeanTween.moveLocalY(AccDayTMP.gameObject, -250f, 0.5f).setEase(LeanTweenType.easeInCirc);
         yield return new WaitForSeconds(0.2f);
@@ -151,12 +153,7 @@ public class TimeManager : NetworkBehaviour
         for (int i = 0; i < 10; i++)
         {
             yield return new WaitForSeconds((delay-0.01f)/10);
-            //RenderSettings.fogDensity += 0.1f;
-            //Debug.Log("Fog Density: " + RenderSettings.fogDensity);
-            LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay*48)-0.01f));
-            //Sun.Rotate(Vector3.right, 360f / 480f);
-
-            
+            LeanTween.rotateAround(Sun.gameObject, Vector3.right, 360, ((delay*48)-0.01f));        
         }
     }
 
@@ -178,18 +175,28 @@ public class TimeManager : NetworkBehaviour
                 yield return new WaitForSeconds(delay);
                 temp++;
                 n_min.Value += 30;
-                if(n_min.Value == 60) n_min.Value = 0;
+                if (n_min.Value == 60) n_min.Value = 0;
                 //SetTimeDataServerRpc();
             }
             n_min.Value = 0;
             n_hour.Value++;
-            
-            double timeNormalized = 1.0*n_hour.Value / 24;
-            float sinAngle = (Mathf.Sin((float)timeNormalized * Mathf.PI)) ;
-            float cosAngle = (float)0.05*Mathf.Abs(Mathf.Cos((float)timeNormalized * Mathf.PI)) ;
+
+            if (n_hour.Value == 17)
+            {
+                if (!isFog && !lockFog) StartCoroutine(FogON());
+            }
+            if (n_hour.Value == 5)
+            {
+                if (isFog && !lockFog) StartCoroutine(FogOFF());
+            }
+
+
+            //double timeNormalized = 1.0*n_hour.Value / 24;
+            //float sinAngle = (Mathf.Sin((float)timeNormalized * Mathf.PI)) ;
+            //float cosAngle = (float)0.05*Mathf.Abs(Mathf.Cos((float)timeNormalized * Mathf.PI)) ;
             
             //RenderSettings.ambientIntensity = sinAngle;
-            //RenderSettings.fogDensity = cosAngle ;
+           //RenderSettings.fogDensity = cosAngle ;
 
             //Debug.Log("hour:" + n_hour.Value + " ambient:" + sinAngle + " fog:" + cosAngle);
             //Debug.Log(n_hour.Value);
@@ -197,6 +204,34 @@ public class TimeManager : NetworkBehaviour
             //SetTimeDataServerRpc();
         }
     }
+
+    public IEnumerator FogON() {
+        float xFogDen = 0f;
+        isFog = true;
+        while (xFogDen<0.03f) { 
+            yield return new WaitForSeconds(0.05f);
+            xFogDen += 0.0001f;
+            RenderSettings.fogDensity = xFogDen;
+           
+            RenderSettings.ambientIntensity -= 0.0001f;
+            //Debug.Log("    " + xFogDen);
+        }
+    }
+
+    public IEnumerator FogOFF()
+    {
+        float xFogDen = 0.03f;
+        isFog = false;
+        while (xFogDen >= 0f)
+        {
+            yield return new WaitForSeconds(0.05f);
+            xFogDen -= 0.0001f;
+            RenderSettings.fogDensity = xFogDen;
+            RenderSettings.ambientIntensity += 0.0001f;
+            //Debug.Log("    " + xFogDen);
+        }
+    }
+
 
     void SetTimeData()
     {
