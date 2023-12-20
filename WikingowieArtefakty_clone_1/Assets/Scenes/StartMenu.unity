@@ -471,7 +471,7 @@ MonoBehaviour:
   chunksize: 8
   middleRadius: 7
   enemiesBasesSize: 7
-  enemiesBasesCount: 3
+  enemiesBasesCount: 1
   treeOffset: 0.1
   rockOffset: 0
   oresChance: 7
@@ -10126,6 +10126,7 @@ GameObject:
   - component: {fileID: 1502539012}
   - component: {fileID: 1502539015}
   - component: {fileID: 1502539016}
+  - component: {fileID: 1502539017}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: manager
@@ -10297,6 +10298,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   generator: {fileID: 53929050}
   timeManager: {fileID: 0}
+--- !u!114 &1502539017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502539006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717417197c9cf5c44a6fd1bcd8953a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 10
+  middlePosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1519469644
 GameObject:
   m_ObjectHideFlags: 0
