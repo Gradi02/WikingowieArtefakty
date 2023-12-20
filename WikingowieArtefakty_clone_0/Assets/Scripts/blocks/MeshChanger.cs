@@ -30,12 +30,34 @@ public class MeshChanger : MonoBehaviour
         ice
     }
 
-    public void ChangeMesh(MeshType type)
+    public void RequestChangeMesh(MeshType type)
     {
+        StartCoroutine(ChangeAnimation(type));    
+    }
 
-        if(type == MeshType.normal)
+    private IEnumerator ChangeAnimation(MeshType type)
+    {
+        Vector3 startScale = transform.localScale;
+        for(int i=0; i<10; i++)
         {
-            if(ifGround)
+            yield return new WaitForSeconds(0.02f);
+
+            Vector3 newScale = new Vector3(
+                Mathf.Abs(Random.Range(-0.1f, 0.1f) + transform.localScale.x),
+                Mathf.Abs(Random.Range(-0.1f, 0.1f) + transform.localScale.y),
+                Mathf.Abs(Random.Range(-0.1f, 0.1f) + transform.localScale.z));
+
+            transform.localScale = newScale;
+        }
+        transform.localScale = startScale;
+        ChangeMesh(type);
+    }
+
+    private void ChangeMesh(MeshType type)
+    {
+        if (type == MeshType.normal)
+        {
+            if (ifGround)
             {
                 GetComponent<MeshRenderer>().material = normalMaterial;
                 return;
@@ -43,7 +65,7 @@ public class MeshChanger : MonoBehaviour
 
             MeshFilter.mesh = normalMesh;
         }
-        else if(type == MeshType.ice)
+        else if (type == MeshType.ice)
         {
             if (ifGround)
             {

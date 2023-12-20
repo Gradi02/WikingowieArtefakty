@@ -4,6 +4,42 @@ using UnityEngine;
 
 public class BiomesManager : MonoBehaviour
 {
+    [SerializeField] private float distance;
+    [SerializeField] private Vector3 middlePosition;
+    private List<GameObject> newBiomeObjects = new List<GameObject>();
+
+    [ContextMenu("change0")]
+    public void SetBiomWithMiddle()
+    {
+        Collider[] objects = Physics.OverlapSphere(middlePosition, distance);
+
+        foreach (Collider col in objects)
+        {       
+            if (col.GetComponent<MeshChanger>() != null)
+            {
+                newBiomeObjects.Add(col.gameObject);
+            }
+        }
+
+        StartCoroutine(SetBiom());
+    }
+
+    private IEnumerator SetBiom()
+    {
+        int num = newBiomeObjects.Count;
+        for (int i=0; i<num; i++)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            int rand = Random.Range(0, newBiomeObjects.Count);
+            newBiomeObjects[rand].GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.ice);
+            newBiomeObjects.Remove(newBiomeObjects[rand]);
+        }
+    }
+
+
+
+
 
 
 
@@ -15,7 +51,7 @@ public class BiomesManager : MonoBehaviour
         {
             if (m.GetComponent<MeshChanger>() != null)
             {
-                m.GetComponent<MeshChanger>().ChangeMesh(MeshChanger.MeshType.ice);
+                m.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.ice);
             }
             else if(m.CompareTag("grass"))
             {
@@ -27,7 +63,7 @@ public class BiomesManager : MonoBehaviour
                 {
                     if (n.GetComponent<MeshChanger>() != null)
                     {
-                        n.GetComponent<MeshChanger>().ChangeMesh(MeshChanger.MeshType.ice);
+                        n.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.ice);
                     }
                 }
             }
@@ -41,7 +77,7 @@ public class BiomesManager : MonoBehaviour
         {
             if (m.GetComponent<MeshChanger>() != null)
             {
-                m.GetComponent<MeshChanger>().ChangeMesh(MeshChanger.MeshType.normal);
+                m.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.normal);
             }
             else if (m.CompareTag("grass"))
             {
@@ -53,7 +89,7 @@ public class BiomesManager : MonoBehaviour
                 {
                     if (n.GetComponent<MeshChanger>() != null)
                     {
-                        n.GetComponent<MeshChanger>().ChangeMesh(MeshChanger.MeshType.normal);
+                        n.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.normal);
                     }
                 }
             }

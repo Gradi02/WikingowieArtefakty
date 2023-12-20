@@ -675,7 +675,7 @@ public class MapGenerator : NetworkBehaviour
                         }
 
                         //Skala na bazie noise
-                        new_obj.transform.localScale = new Vector3(0.67f, GetHeightByNoise(x, y)/4f, 0.67f);
+                        new_obj.transform.localScale = new Vector3(0.625f, GetHeightByNoise(x, y)/4f, 0.625f);
                         new_obj.transform.localPosition = new Vector3(x, 0.25f, y);
                         new_obj.transform.localPosition += new Vector3(0, 0.01f, 0); //eliminacja z-fighting
                         new_obj.transform.localRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90, 0);
