@@ -467,14 +467,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   islandLevel: 0
-  size: 128
+  size: 64
   chunksize: 8
-  middleRadius: 7
-  enemiesBasesSize: 7
-  enemiesBasesCount: 1
+  structuresSize: 3
+  structuresCount: 3
+  treeAreaSize: 7
   treeOffset: 0.1
   rockOffset: 0
-  oresChance: 7
+  oresChance: 1
   trees_variants1:
   - {fileID: 702579786378899497, guid: 05e04092ef566634982c15bec9dd0f48, type: 3}
   - {fileID: 6996199665656639706, guid: 6e74ad658ea75dc41962de32c9e5394a, type: 3}
@@ -528,11 +528,14 @@ MonoBehaviour:
   shipPrefab1: {fileID: 1982504718959506274, guid: d2235e700798b3c46a2ddda9fb34b9f2, type: 3}
   castlePrefab1: {fileID: 1982504718959506274, guid: 9bb8bbaa4b3b179458a51bc98df5fb22, type: 3}
   grassObjectPrefab1: {fileID: 4936650255284283978, guid: 2046e217c2721044982fdc0e95747f72, type: 3}
+  pathObjectPrefab: {fileID: 3776711458049546244, guid: 0b77532dcfe423d449e7eb6e9715c56e, type: 3}
   waterLayerPrefab: {fileID: 6942782308479380561, guid: e81893c140be0d94c8f63d2cb05d2efc, type: 3}
   waterLayer: {fileID: 0}
   campfire: {fileID: 5117925673290852196, guid: 53fa9b6008eecef49b21de14a5a4cc47, type: 3}
   air: {fileID: 3945946977855608217, guid: 1a9aa9d5d8031b543b9de3e153aba9fb, type: 3}
   chunkPrefab: {fileID: 5124363132739042628, guid: 2c28db4661ea95445b52c2c562356e5a, type: 3}
+  spawnerPrefab: {fileID: 843265801024923960, guid: 5b601b70a02071346a76638125880ffa, type: 3}
+  pathPointPrefab: {fileID: 7904474650908921046, guid: 0172d6b971b205f43971ed0864ee1adf, type: 3}
   cam: {fileID: 1751882901}
   manager: {fileID: 1502539006}
   startPlane: {fileID: 1062793399}
@@ -541,6 +544,9 @@ MonoBehaviour:
   islandName: {fileID: 1950302142}
   islandSub: {fileID: 1644760191}
   lobby: {fileID: 1409020773}
+  amplitude: 10
+  frequency: 0.2
+  density: 0.71
   started:
     m_InternalValue: 0
 --- !u!4 &53929052
@@ -10312,6 +10318,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distance: 10
   middlePosition: {x: 0, y: 0, z: 0}
+  materials:
+  - {fileID: 2100000, guid: 933614b6d5374134ba45a52970fff055, type: 2}
+  - {fileID: 2100000, guid: 727983ef8444582448228bbb89396b35, type: 2}
+  - {fileID: 2100000, guid: 8d05d35fa416ac8418c8422b5d60b3c3, type: 2}
+  - {fileID: 2100000, guid: 105e5e0436853944586dd3a0b2597217, type: 2}
+  - {fileID: 2100000, guid: 71d55b0411b12aa4d8cb1e32e4a82f61, type: 2}
+  - {fileID: 2100000, guid: 20a54b338f2fdd24fb589548c9b88c74, type: 2}
 --- !u!1 &1519469644
 GameObject:
   m_ObjectHideFlags: 0
@@ -12052,7 +12065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   camTransform: {fileID: 1751882902}
-  Offset: {x: -4, y: 6, z: 0}
+  Offset: {x: -6, y: 8, z: 0}
   Rotation: {x: 50, y: 90, z: 0}
   SmoothTime: 0.3
 --- !u!114 &1751882904
@@ -12147,7 +12160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e5f0869392f9943a5e693be1abb0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showAll: 0
+  showAll: 1
 --- !u!1 &1799781134
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,14 +30,17 @@ public class MeshChanger : MonoBehaviour
         ice
     }
 
-    public void RequestChangeMesh(MeshType type)
+    public void RequestChangeMesh(MeshType type, Material[] mats)
     {
-        StartCoroutine(ChangeAnimation(type));    
+        if (transform.gameObject.activeSelf) StartCoroutine(ChangeAnimation(type, mats));
+        else ChangeMesh(type);
     }
 
-    private IEnumerator ChangeAnimation(MeshType type)
+    private IEnumerator ChangeAnimation(MeshType type, Material[] mats)
     {
         Vector3 startScale = transform.localScale;
+        Material startMaterial = ifGround ? GetComponent<MeshRenderer>().material : MeshFilter.transform.GetComponent<MeshRenderer>().material;
+
         for(int i=0; i<10; i++)
         {
             yield return new WaitForSeconds(0.02f);
@@ -46,10 +49,16 @@ public class MeshChanger : MonoBehaviour
                 Mathf.Abs(Random.Range(-0.1f, 0.1f) + transform.localScale.x),
                 Mathf.Abs(Random.Range(-0.1f, 0.1f) + transform.localScale.y),
                 Mathf.Abs(Random.Range(-0.1f, 0.1f) + transform.localScale.z));
-
             transform.localScale = newScale;
+
+            if(ifGround) GetComponent<MeshRenderer>().material = mats[Random.Range(0, mats.Length)];
+            else MeshFilter.transform.GetComponent<MeshRenderer>().material = mats[Random.Range(0,mats.Length)];
         }
+
         transform.localScale = startScale;
+        if (ifGround) GetComponent<MeshRenderer>().material = startMaterial;
+        else MeshFilter.transform.GetComponent<MeshRenderer>().material = startMaterial;
+
         ChangeMesh(type);
     }
 

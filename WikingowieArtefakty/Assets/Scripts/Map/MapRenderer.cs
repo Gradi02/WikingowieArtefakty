@@ -36,7 +36,8 @@ public class MapRenderer : NetworkBehaviour
                 if (g.gameObject != null)
                 {
 
-                    if (Vector3.Distance(g.transform.position, cam.transform.position - GetComponent<CameraFollow>().Offset) >= 25)
+                    //if(Vector3.SqrMagnitude(g.transform.position - (cam.transform.position - GetComponent<CameraFollow>().Offset)) >= 625)
+                    if (Vector3.Distance(g.transform.position, cam.transform.position - GetComponent<CameraFollow>().Offset) >= 35)
                     {
                         g.gameObject.SetActive(false);
                     }

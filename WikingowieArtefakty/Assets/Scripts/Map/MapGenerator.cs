@@ -11,12 +11,19 @@ public class MapGenerator : NetworkBehaviour
     [Min(1)] public int size;
     [Min(1)] public int chunksize;
     private int seed;
-    [SerializeField] private int middleRadius;
-    [SerializeField] private int enemiesBasesSize;
-    [SerializeField] private int enemiesBasesCount;
+    //[SerializeField]
+    private int middleRadius;
+    [SerializeField] private int structuresSize;
+    [SerializeField] private int structuresCount;
+    [SerializeField] private int treeAreaSize = 5;
     [Range(0, 0.5f)] public float treeOffset;
     [Range(0, 0.5f)] public float rockOffset;
     [Range(1, 100)]  public int oresChance;
+    private List<GameObject> structs = new List<GameObject>();
+    private List<GameObject> path = new List<GameObject>();
+
+    private Vector3 startPoint;
+    private Vector3 endPoint;
 
     [Header("Midgard Prefabs")]
     public GameObject[] trees_variants1;
@@ -29,6 +36,7 @@ public class MapGenerator : NetworkBehaviour
     public GameObject shipPrefab1;
     public GameObject castlePrefab1;
     public GameObject grassObjectPrefab1;
+    public GameObject pathObjectPrefab;
 
 /*    [Header("Niflheim Prefabs")]
     public GameObject[] trees_variants2;
@@ -48,6 +56,8 @@ public class MapGenerator : NetworkBehaviour
     [SerializeField] private GameObject campfire;
     [SerializeField] private GameObject air;
     [SerializeField] private GameObject chunkPrefab;
+    [SerializeField] private GameObject spawnerPrefab;
+    [SerializeField] private GameObject pathPointPrefab;
 
     [Header("Others")]
     [SerializeField] private Camera cam;
@@ -58,10 +68,15 @@ public class MapGenerator : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI islandName;
     [SerializeField] private TextMeshProUGUI islandSub;
     [SerializeField] private GameObject lobby;
+    private GameObject shipObj;
 
-    private Vector3[] enemiesBasesPos;
+    private int pathLength = 50; // D³ugoœæ œcie¿ki
+    public float amplitude = 5f; // Amplituda fali
+    public float frequency = 0.05f; // Czêstotliwoœæ fali
+    public float density = 0.1f; // Gêstoœæ punktów na œcie¿ce
+
+    private Vector3[] structuresPos;
     private Vector3[] treeArea = new Vector3[5];
-    private int treeAreaSize = 9;
 
     private GameObject start;
     public static Vector3 middle = Vector3.zero;
@@ -81,7 +96,7 @@ public class MapGenerator : NetworkBehaviour
         start = this.gameObject;
         dropManager = manager.GetComponent<ItemsDropManager>();
 
-        enemiesBasesPos = new Vector3[enemiesBasesCount];
+        structuresPos = new Vector3[structuresCount];
 
         middle = start.transform.position + new Vector3(size / 2, 0, size / 2);
         manager.GetComponent<Manager>().SetMiddle(middle);
@@ -118,7 +133,6 @@ public class MapGenerator : NetworkBehaviour
         Debug.Log("Seed: " + seed);
 
         if(islandLevel == 0) StartCoroutine(GenerateWorld1());
-        //else if(islandLevel == 1) StartCoroutine(GenerateWorld2());
     }
 
     IEnumerator GenerateWorld1()
@@ -126,10 +140,12 @@ public class MapGenerator : NetworkBehaviour
         yield return new WaitForSeconds(2);
         menuManager.SetInventoryUIClientRpc();
 
-        SetRuins();
+        SetShipServerRpc();
+        GenerateSparseWavePath();
+        //SetRuins();
 
         int att = 0;
-        for(int i=0; i<5; i++)
+        for(int i=0; i<3; i++)
         {
             if (att >= 20) break;
 
@@ -166,86 +182,15 @@ public class MapGenerator : NetworkBehaviour
                     att++;
                 }
             }
-            else if (i == 4)
-            {
-                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 3]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 4]) < 20)
-                {
-                    i--;
-                    att++;
-                }
-            }
+
             yield return null;
         }
 
         StartCoroutine( GenerateChunks() );      
     }
-    IEnumerator GenerateWorld2()
-    {
-        yield return new WaitForSeconds(2);
-        //menuManager.SetInventoryUIClientRpc();
-
-        SetRuins();
-
-        int att = 0;
-        for (int i = 0; i < 5; i++)
-        {
-            if (att >= 20) break;
-
-            do
-            {
-                att++;
-                treeArea[i] = RandomXY();
-            } while (Vector3.Distance(treeArea[i], middle) >= size / 2 - 13);
-
-            if (i == 1)
-            {
-                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20)
-                {
-                    i--;
-                    att++;
-                }
-            }
-            else if (i == 2)
-            {
-                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20)
-                {
-                    i--;
-                    att++;
-                }
-            }
-            else if (i == 3)
-            {
-                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 3]) < 20)
-                {
-                    i--;
-                    att++;
-                }
-            }
-            else if (i == 4)
-            {
-                if (Vector3.Distance(treeArea[i], treeArea[i - 1]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 2]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 3]) < 20 ||
-                    Vector3.Distance(treeArea[i], treeArea[i - 4]) < 20)
-                {
-                    i--;
-                    att++;
-                }
-            }
-            yield return null;
-        }
-
-        StartCoroutine(GenerateChunks());
-    }
     IEnumerator EndGenerate()
     {
-        SetShipServerRpc();
+       
         started.Value = true;
         EnableWaterClientRpc();
         SetIslandNameServerRpc();
@@ -310,7 +255,9 @@ public class MapGenerator : NetworkBehaviour
                 if (Vector3.Distance(temppos, middle) >= size/2 - 9) id = 1;
                 if (Vector3.Distance(temppos, middle) >= size / 2 - 7) id = 0;
 
-                for (int i = 0; i < 5; i++)
+                
+
+                for (int i = 0; i < 3; i++)
                 {
                     if (Vector3.Distance(treeArea[i], temppos) < treeAreaSize)
                     {
@@ -319,22 +266,44 @@ public class MapGenerator : NetworkBehaviour
                     }
                 }
 
-                if ((Vector3.Distance(middle, temppos) < middleRadius)) id = 1;
-                if ((Vector3.Distance(middle, temppos) < middleRadius + 1 && id > 3)) id = 3;
+                //if ((Vector3.Distance(middle, temppos) < middleRadius)) id = 1;
+                //if ((Vector3.Distance(middle, temppos) < middleRadius + 1 && id > 3)) id = 3;
 
 
-                for(int i = 0; i < enemiesBasesCount; i++)
+                for(int i = 0; i < structuresCount; i++)
                 {
-                    if (Vector3.Distance(enemiesBasesPos[i], temppos) < enemiesBasesSize)
+                    if (Vector3.Distance(structuresPos[i], temppos) < structuresSize)
                     {
                         id = 1;
                     }
-                    else if(Vector3.Distance(enemiesBasesPos[i], temppos) < enemiesBasesSize + 1 && id > 3)
+                    else if(Vector3.Distance(structuresPos[i], temppos) < structuresSize + 1 && id > 3)
                     {
                         id = 3;
                     }
                 }
-               
+
+                if (Vector3.Distance(temppos, middle) >= size / 2 - 9) id = 1;
+                if (Vector3.Distance(temppos, middle) >= size / 2 - 7) id = 0;
+
+                for(int i=0; i<path.Count; i++)
+                {
+                    float d = Vector3.Distance(temppos, path[i].transform.position);
+                    if (d <= 1.5f)
+                    {
+                        GameObject gr = Instantiate(pathObjectPrefab, transform.position, Quaternion.identity);
+                        gr.GetComponent<NetworkObject>().Spawn();
+                        gr.transform.localPosition = new Vector3(x, -0.25f, y);
+                        gr.name = "path" + x + y;
+                        ground.Add(gr);
+                        gr.transform.parent = chunk.transform;
+
+                        id = -1;
+                    } 
+                    else if (d <= 3 && id > 3) id = 3;                  
+                }
+
+
+
                 if (id >= 0)
                 {
                     GameObject new_obj = null;
@@ -659,7 +628,7 @@ public class MapGenerator : NetworkBehaviour
                     }
                     else //Blok ska³y
                     {
-                        int rand = Random.Range(0, 10);
+                        int rand = 1; //Random.Range(0, 10);
 
                         if (rand == 0)
                         {
@@ -705,6 +674,56 @@ public class MapGenerator : NetworkBehaviour
             }
         }
     }
+
+    void GenerateSparseWavePath()
+    {
+        Vector3 direction = endPoint - startPoint;
+        Vector3 perpendicularDirection = new Vector3(-direction.z, 0, direction.x).normalized;
+
+        Vector3[] pathPoints = new Vector3[pathLength];
+
+        for (int i = 0; i < pathLength; i++)
+        {
+            float t = i / (float)(pathLength - 1); // Parametr czasu normalizowany do przedzia³u [0, 1]
+            float x = Mathf.Lerp(startPoint.x, endPoint.x, t);
+            float z = Mathf.Lerp(startPoint.z, endPoint.z, t);
+
+            if (Mathf.Abs(endPoint.z - startPoint.z) > 32f)
+            {
+                //Debug.Log("x");
+                float y = amplitude * Mathf.Sin(frequency * i);
+                Vector3 nextPoint = new Vector3(x + y, 0, z);
+                //nextPoint += perpendicularDirection * y;
+
+                pathPoints[i] = nextPoint;
+            }
+            else
+            {
+                //Debug.Log("z");
+                float y = amplitude * Mathf.Sin(frequency * i);
+                Vector3 nextPoint = new Vector3(x, 0, z + y);
+                //nextPoint += perpendicularDirection * y;
+
+                pathPoints[i] = nextPoint;
+            }
+        }
+        
+
+        // Renderowanie klocków na œcie¿ce
+        foreach (Vector3 point in pathPoints)
+        {
+            GameObject p = Instantiate(pathPointPrefab, point, Quaternion.identity);
+            path.Add(p);
+        }
+        CreatePathClientRpc(path[path.Count-1].transform.position);
+    }
+
+    [ClientRpc]
+    void CreatePathClientRpc(Vector3 pos)
+    {
+        shipObj.transform.position = pos;
+    }
+
     int GetIdPerlinNoise(int x, int y)
     {
         float nx = (seed + x * 0.15f);
@@ -790,7 +809,7 @@ public class MapGenerator : NetworkBehaviour
 
     void SetRuins()
     {
-        for (int i = 0; i < enemiesBasesCount; i++)
+        for (int i = 0; i < structuresCount; i++)
         {
             int offset = size / 4;
             int x, y;
@@ -802,15 +821,16 @@ public class MapGenerator : NetworkBehaviour
 
                 x = Random.Range(0 + offset, size - offset);
                 y = Random.Range(0 + offset, size - offset);
-                enemiesBasesPos[i] = new Vector3(x, 0, y);
+                structuresPos[i] = new Vector3(x, 0, y);
 
                 if (counter > 20) break;
 
-            } while (Vector3.Distance(enemiesBasesPos[i], middle) < offset || CheckForBase(enemiesBasesPos[i], i, offset));
+            } while (Vector3.Distance(structuresPos[i], middle) < offset || CheckForBase(structuresPos[i], i, offset));
 
-
-            GameObject ship = Instantiate(castlePrefab1, enemiesBasesPos[i], Quaternion.identity);
-            ship.GetComponent<NetworkObject>().Spawn();
+            /*
+            GameObject str = Instantiate(castlePrefab1, structuresPos[i], Quaternion.identity);
+            str.GetComponent<NetworkObject>().Spawn();
+            structs.Add(str);*/
         }
     }
 
@@ -818,7 +838,7 @@ public class MapGenerator : NetworkBehaviour
     {
         for(int i=0; i<j; i++)
         {
-            if (Vector3.Distance(enemiesBasesPos[i], pos) < offset)
+            if (Vector3.Distance(structuresPos[i], pos) < offset)
             {
                 return true;
             }
@@ -836,16 +856,30 @@ public class MapGenerator : NetworkBehaviour
         ship.name = "Ship";
 
         int rand = Random.Range(0, 360);
-        Vector3 shipPos = middle + GetPointOnCircle(size / 2, rand);
-        startPosition = middle + GetPointOnCircle((size / 2) - 5, rand);
+        Vector3 shipPos = middle + GetPointOnCircle(size / 2 - 5, rand);
+        startPosition = middle + GetPointOnCircle((size / 2) - 7, rand);
 
-        SetShipClientRpc(ship.GetComponent<NetworkObject>().NetworkObjectId, shipPos);
+        //bifrost
+        GameObject bfr = Instantiate(spawnerPrefab, transform.position, Quaternion.identity);
+        bfr.GetComponent<NetworkObject>().Spawn();
+        bfr.name = "Spawner";
+
+        rand += 180;
+        if (rand > 360) rand -= 360;
+        Vector3 bfrPos = middle + GetPointOnCircle(size / 2 - 5, rand);
+
+        startPoint = bfrPos;
+        endPoint = shipPos;
+        SetShipClientRpc(ship.GetComponent<NetworkObject>().NetworkObjectId, bfr.GetComponent<NetworkObject>().NetworkObjectId, shipPos, bfrPos);
     }
 
     [ClientRpc]
-    void SetShipClientRpc(ulong id, Vector3 pos)
+    void SetShipClientRpc(ulong id, ulong id2, Vector3 pos, Vector3 pos2)
     {
         NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].transform.position = pos;
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[id2].transform.position = pos2;
+
+        shipObj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[id].gameObject;
     }
 
     public Vector3 GetPointOnCircle(float radius, float angleInDegrees)
