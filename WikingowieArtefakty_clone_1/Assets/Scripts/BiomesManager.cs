@@ -4,20 +4,36 @@ using UnityEngine;
 
 public class BiomesManager : MonoBehaviour
 {
+    [Header("General Settings")]
     [SerializeField] private float distance;
     [SerializeField] private Vector3 middlePosition;
     private List<GameObject> newBiomeObjects = new List<GameObject>();
 
-    [ContextMenu("change0")]
+    [Header("Materials")]
+    public Material[] materials;
+
+
+    [ContextMenu("change")]
     public void SetBiomWithMiddle()
     {
-        Collider[] objects = Physics.OverlapSphere(middlePosition, distance);
+        /*Collider[] objects = Physics.OverlapSphere(middlePosition, distance);
 
         foreach (Collider col in objects)
         {       
             if (col.GetComponent<MeshChanger>() != null)
             {
                 newBiomeObjects.Add(col.gameObject);
+            }
+        }*/
+
+        RaycastHit[] hits = Physics.SphereCastAll(middlePosition, distance, Vector3.up, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            MeshChanger meshChanger = hit.collider.GetComponent<MeshChanger>();
+            if (meshChanger != null)
+            {
+                newBiomeObjects.Add(hit.collider.gameObject);
             }
         }
 
@@ -29,70 +45,13 @@ public class BiomesManager : MonoBehaviour
         int num = newBiomeObjects.Count;
         for (int i=0; i<num; i++)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.01f);
 
             int rand = Random.Range(0, newBiomeObjects.Count);
-            newBiomeObjects[rand].GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.ice);
+            newBiomeObjects[rand].GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.ice, materials);
             newBiomeObjects.Remove(newBiomeObjects[rand]);
         }
     }
 
-
-
-
-
-
-
-
-    [ContextMenu("change")]
-    public void ChangeBiome()
-    {
-        foreach(Transform m in GetComponentInChildren<Transform>())
-        {
-            if (m.GetComponent<MeshChanger>() != null)
-            {
-                m.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.ice);
-            }
-            else if(m.CompareTag("grass"))
-            {
-                m.gameObject.SetActive(false);
-            }
-            else
-            {
-                foreach (Transform n in m.GetComponentInChildren<Transform>())
-                {
-                    if (n.GetComponent<MeshChanger>() != null)
-                    {
-                        n.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.ice);
-                    }
-                }
-            }
-        }
-    }
-
-    [ContextMenu("change2")]
-    public void ChangeBackBiome()
-    {
-        foreach (Transform m in GetComponentInChildren<Transform>())
-        {
-            if (m.GetComponent<MeshChanger>() != null)
-            {
-                m.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.normal);
-            }
-            else if (m.CompareTag("grass"))
-            {
-                m.gameObject.SetActive(true);
-            }
-            else
-            {
-                foreach (Transform n in m.GetComponentInChildren<Transform>())
-                {
-                    if (n.GetComponent<MeshChanger>() != null)
-                    {
-                        n.GetComponent<MeshChanger>().RequestChangeMesh(MeshChanger.MeshType.normal);
-                    }
-                }
-            }
-        }
-    }
+    
 }
